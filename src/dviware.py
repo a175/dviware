@@ -1,4 +1,7 @@
 class DVI:
+    """
+    constants for DVI and pDVI.
+    """
     set_char_MIN = 0
     set_char_MAX = 127
     fnt_num_MIN = 171
@@ -262,7 +265,7 @@ class DVI:
 
 class DviInterpreter:
     def __init__(self):
-        self.dvimachine=
+        self.dvimachine=None
         
     def read_u(self,file,l):
         """
