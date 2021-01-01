@@ -260,30 +260,56 @@ class DVI:
     dir = 255
 
 
-class DviFileReader:
+class DviInterpreter:
     def __init__(self):
         self.dvimachine=
         
     def read_u(self,file,l):
+        """
+        function to read l bytes from file as an unsigned int.
+        """
         return int.from_bytes(file.read(l),byteorder='big',signed=False)
+    
     def read_ux(self,file,code,base):
+        """
+        function to read code-base+1 bytes from file as an unsigned int.
+        returns the pair of int and length of bytes.
+        """
         len_param=code-base+1
         c=self.read_u(file,len_param)
         return (c,len_param)
-    def read_s(self,file,l):
-        return int.from_bytes(file.read(l),byteorder='big',signed=True)
+
     def read_d(self,file,l):
+        """
+        function to read l bytes from file as a dimension.
+        """
         return int.from_bytes(file.read(l),byteorder='big',signed=True)
+    
     def read_dx(self,file,code,base):
+        """
+        function to read code-base+1 bytes from file as a dimension.
+        returns the pair of dimension and length of bytes.
+        """
         len_param=code-base+1
         b=self.read_d(file,len_param)
         return (b,len_param)
-    def read_p(self,file,l):
-        return int.from_bytes(file.read(l),byteorder='big',signed=True)
+    
+    def read_p(self,file):
+        """
+        function to read 4 bytes from file as a pointer.
+        """
+        return int.from_bytes(file.read(4),byteorder='big',signed=True)
+    
     def read_str(self,file,l):
+        """
+        function to read l bytes from file as a string.
+        """
         return file.read(l).decode()
 
     def readCodeAndParam(self,file):
+        """
+        function to read one code and its parameters.
+        """
         code=self.read_u(file,1)
         if DVI.set_char_MIN <= code and code <= DVI.set_char_MAX:
             self.dvimachine.set(code,0)
@@ -314,7 +340,7 @@ class DviFileReader:
             c7=self.read_d(file,4)
             c8=self.read_d(file,4)
             c9=self.read_d(file,4)
-            p=self.read_p(file,4)
+            p=self.read_p(file)
             self.dvimachine.bop(c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,p)
         elif code == DVI.eop:
             self.dvimachine.eop()
@@ -355,7 +381,7 @@ class DviFileReader:
             self.dvimachine.fnt(k,len_param)
         elif DVI.xxx1 <= code and code <= DVI.xxx4:
             (k,len_param)=self.read_ux(file,code,DVI.xxx1)
-            x=self.read_dx(file,code,DVI.z1)
+            x=self.read_str(file,k)
             self.dvimachine.xxx(k,x,len_param)
         elif DVI.fnt_def1 <= code and code <= DVI.fnt_def4:
             (k,len_param)=self.read_ux(file,code,DVI.fnt_def1)
@@ -375,7 +401,7 @@ class DviFileReader:
             x=self.read_str(file,k)
             self.dvimachine.pre(i,num,den,mag,k,x)
         elif code == DVI.post:
-            p=self.read_p(file,4)
+            p=self.read_p(file)
             num=self.read_u(file,4)
             den=self.read_u(file,4)
             mag=self.read_u(file,4)
@@ -385,7 +411,7 @@ class DviFileReader:
             t=self.read_u(file,2)
             self.dvimachine.post(p,num,den,mag,l,u,s,t)
         elif code == DVI.post_post:
-            q=self.read_p(file,4)
+            q=self.read_p(file)
             i=self.read_u(file,1)
             self.dvimachine.post_post(q,i)
         elif code == DVI.dir:
