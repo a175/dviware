@@ -260,4 +260,182 @@ class DVI:
     dir = 255
 
 
+class DviFileReader:
+    def __init__(self):
+        self.dvimachine=
+        
+    def read_u(self,file,l):
+        return int.from_bytes(file.read(l),byteorder='big',signed=False)
+    def read_ux(self,file,code,base):
+        len_param=code-base+1
+        c=self.read_u(file,len_param)
+        return (c,len_param)
+    def read_s(self,file,l):
+        return int.from_bytes(file.read(l),byteorder='big',signed=True)
+    def read_d(self,file,l):
+        return int.from_bytes(file.read(l),byteorder='big',signed=True)
+    def read_dx(self,file,code,base):
+        len_param=code-base+1
+        b=self.read_d(file,len_param)
+        return (b,len_param)
+    def read_p(self,file,l):
+        return int.from_bytes(file.read(l),byteorder='big',signed=True)
+    def read_str(self,file,l):
+        return file.read(l).decode()
+
+    def readCodeAndParam(self,file):
+        code=self.read_u(file,1)
+        if DVI.set_char_MIN <= code and code <= DVI.set_char_MAX:
+            self.dvimachine.set(code,0)
+        elif DVI.set1 <= code and code <= DVI.set4:
+            (c,len_param)=self.read_ux(file,code,DVI.set1)
+            self.dvimachine.set(c,len_param)
+        elif code == DVI.set_rule:
+            a=self.read_d(file,4)
+            b=self.read_d(file,4)
+            self.dvimachine.set_rule(a,b)
+        elif DVI.put1 <= code and code <= DVI.put4:
+            (c,len_param)=self.read_ux(file,code,DVI.put1)
+            self.dvimachine.put(c,len_param)
+        elif code == DVI.put_rule:
+            a=self.read_d(file,4)
+            b=self.read_d(file,4)
+            self.dvimachine.put_rule(a,b)
+        elif code == DVI.nop:
+            self.dvimachine.nop()
+        elif code == DVI.bop:
+            c0=self.read_d(file,4)
+            c1=self.read_d(file,4)
+            c2=self.read_d(file,4)
+            c3=self.read_d(file,4)
+            c4=self.read_d(file,4)
+            c5=self.read_d(file,4)
+            c6=self.read_d(file,4)
+            c7=self.read_d(file,4)
+            c8=self.read_d(file,4)
+            c9=self.read_d(file,4)
+            p=self.read_p(file,4)
+            self.dvimachine.bop(c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,p)
+        elif code == DVI.eop:
+            self.dvimachine.eop()
+        elif code == DVI.push:
+            self.dvimachine.push()
+        elif code == DVI.pop:
+            self.dvimachine.pop()
+        elif DVI.right1 <= code and code <= DVI.right4:
+            (b,len_param)=self.read_dx(file,code,DVI.right1)
+            self.dvimachine.right(b,len_param)
+        elif code == DVI.w0:
+            self.dvimachine.w(0,0)
+        elif DVI.w1 <= code and code <= DVI.w4:
+            (b,len_param)=self.read_dx(file,code,DVI.w1)
+            self.dvimachine.w(b,len_param)
+        elif code == DVI.x0:
+            self.dvimachine.x(0,0)
+        elif DVI.x1 <= code and code <= DVI.x4:
+            (b,len_param)=self.read_dx(file,code,DVI.x1)
+            self.dvimachine.x(b,len_param)
+        elif DVI.down1 <= code and code <= DVI.down4:
+            (b,len_param)=self.read_dx(file,code,DVI.down1)
+            self.dvimachine.down(b,len_param)
+        elif code == DVI.y0:
+            self.dvimachine.y(0,0)
+        elif DVI.y1 <= code and code <= DVI.y4:
+            (b,len_param)=self.read_dx(file,code,DVI.y1)
+            self.dvimachine.y(b,len_param)
+        elif code == DVI.z0:
+            self.dvimachine.z(0,0)
+        elif DVI.z1 <= code and code <= DVI.z4:
+            (b,len_param)=self.read_dx(file,code,DVI.z1)
+            self.dvimachine.z(b,len_param)        
+        elif DVI.fnt_num_MIN <= code and code <= DVI.fnt_num_MAX: 
+            self.dvimachine.fnt(code-DVI.fnt_num_MIN,0)
+        elif DVI.fnt1 <= code and code <= DVI.fnt4:
+            (k,len_param)=self.read_ux(file,code,DVI.fnt1)
+            self.dvimachine.fnt(k,len_param)
+        elif DVI.xxx1 <= code and code <= DVI.xxx4:
+            (k,len_param)=self.read_ux(file,code,DVI.xxx1)
+            x=self.read_dx(file,code,DVI.z1)
+            self.dvimachine.xxx(k,x,len_param)
+        elif DVI.fnt_def1 <= code and code <= DVI.fnt_def4:
+            (k,len_param)=self.read_ux(file,code,DVI.fnt_def1)
+            c=self.read_u(file,4)
+            s=self.read_d(file,4)
+            d=self.read_d(file,4)
+            a=self.read_u(file,1)
+            l=self.read_u(file,1)
+            n=self.read_str(file,a+l)
+            self.dvimachine.fnt_def(k,c,s,d,a,l,n,len_param)
+        elif code == DVI.pre:
+            i=self.read_u(file,1)
+            num=self.read_u(file,4)
+            den=self.read_u(file,4)
+            mag=self.read_u(file,4)
+            k=self.read_u(file,1)
+            x=self.read_str(file,k)
+            self.dvimachine.pre(i,num,den,mag,k,x)
+        elif code == DVI.post:
+            p=self.read_p(file,4)
+            num=self.read_u(file,4)
+            den=self.read_u(file,4)
+            mag=self.read_u(file,4)
+            l=self.read_d(file,4)
+            u=self.read_d(file,4)
+            s=self.read_u(file,2)
+            t=self.read_u(file,2)
+            self.dvimachine.post(p,num,den,mag,l,u,s,t)
+        elif code == DVI.post_post:
+            q=self.read_p(file,4)
+            i=self.read_u(file,1)
+            self.dvimachine.post_post(q,i)
+        elif code == DVI.dir:
+            d=self.read_u(file,1)
+            self.dvimachine.d(d)
+
+class DviStackMachine:
+    def set(self):
+        pass
+    def set_rule(self):
+        pass
+    def put(self):
+        pass
+    def put_rule(self):
+        pass
+    def nop(self):
+        pass
+    def bop(self):
+        pass
+    def eop(self):
+        pass
+    def push(self):
+        pass
+    def pop(self):
+        pass
+    def right(self):
+        pass
+    def w(self):
+        pass
+    def x(self):
+        pass
+    def down(self):
+        pass
+    def y(self):
+        pass
+    def z(self):
+        pass
+    def fnt(self):
+        pass
+    def xxx(self):
+        pass
+    def fnt_def(self):
+        pass
+    def pre(self):
+        pass
+    def post(self):
+        pass
+    def post_post(self):
+        pass
+    def d(self):
+        pass
+
         
