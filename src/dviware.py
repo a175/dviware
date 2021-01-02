@@ -479,11 +479,13 @@ class DviInterpreter:
         return (code,arg,version,r)
 
     def readCodes(self):
-        (code,arg,version,r)=self.readCodeAndArg()
-        while code>0:
-            print(code)
+        while True:
             (code,arg,version,r)=self.readCodeAndArg()
+            print("%%%%",code,arg,version,r)
+            if code==DVI.post_post:
+                break
 
+        
 class DVIStackMemory:
     def __init__(self,cc,p):
         self.stack=[]
@@ -497,6 +499,7 @@ class DVIStackMemory:
         self.shipout_cc=cc
         self.previous_bop=p
         self.direction=0
+
     def set_direction(d):
         self.direction=d
     def add_to_h(self,b):
@@ -533,25 +536,83 @@ class DVIStackMemory:
         """
         data=self.stack.pop()
         (self.h,self.v,self.w,self.x,self.y,self.z,self.f)=data
-        
+
+class FontList:
+    def __init__(self):
+        self.fonts={}
+
+    def fnt_def(self,k,directory,name,s,d,c):
+        self.fonts[k]=FontDictionary(directory,name,s,d,c)
+
+    def get_unicode(self,fnt_num,c):
+        return self.fonts[fnt_num].get_unicode(c)
+
+    def get_width(self,fnt_num,c):
+        return self.fonts[fnt_num].get_width(c)
+
+class FontDictionary:
+    def __init__(self,directory,name,s,d,c):
+        self.directory=directory
+        self.name=name
+        self.scaledsize=s
+        self.designsize=d
+        self.checksum=c
+
+    def get_unicode(self,c):
+        return chr(c)
+
+    def get_width(self,c):
+        return 0
+
 class DviStackMachine:
     """
     Stack Machine for DVI.
     """
     def __init__(self):
-        self.fonts={}
-        
+        self.fonts=FontList()
+        self.stackmemory=None
+    def draw_box(self,h,v,a,b):
+        print("%% box at:", h, v)
+        print("%% box size:", a, b)
+    def draw_char(self,h,v,c):
+        print("%% char at:", h, v)
+        string=self.fonts.get_unicode(self.stackmemory.f,c)
+        width=self.fonts.get_width(self.stackmemory.f,c)
+        print("%% char:", string)
+        return(width)
+    
     def set(self,c,version):
         """
-        function for DVI.set.
+        function for DVI.put.
+        this function calls self.draw_char().
         """
-        pass
+        print("% set", c)
+        width=self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
+        self.stackmemory.add_to_h(width)
     def set_rule(self,a,b):
-        pass
+        """
+        function for DVI.set_rule.
+        this function calls self.draw_box().
+        """
+        print("% set rule")
+        self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
+        self.stackmemory.add_to_h(b)
     def put(self,c,version):
-        pass
+        """
+        function for DVI.put.
+        this function calls self.draw_char().
+        """
+        print("% put", c)
+        self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
+
     def put_rule(self,a,b):
-        pass
+        """
+        function for DVI.put_rule
+        this function calls self.draw_box().
+        """
+        print("% put rule")
+        print("%%",a,b)
+        self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
     def nop(self):
         """
         function for DVI.nop.
@@ -675,8 +736,8 @@ class DviStackMachine:
         print("%% design size =",d)
         print("%% dir :",n[:a])
         print("%% name :",n[a:])
-        self.fonts[k]=(n[:a],n[a:],s,d,c)
-        pass
+        self.fonts.fnt_def(k,n[:a],n[a:],s,d,c)
+
     def pre(self,i,num,den,mag,k,x):
         """
         function for DVI.pre.
