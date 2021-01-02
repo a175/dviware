@@ -1,4 +1,4 @@
-import os
+import sys
 
 
 class DVI:
@@ -481,7 +481,6 @@ class DviInterpreter:
     def readCodes(self):
         while True:
             (code,arg,version,r)=self.readCodeAndArg()
-            print("%%%%",code,arg,version,r)
             if code==DVI.post_post:
                 break
 
@@ -542,12 +541,21 @@ class FontList:
         self.fonts={}
 
     def fnt_def(self,k,directory,name,s,d,c):
+        """
+        add a new font to list.
+        """
         self.fonts[k]=FontDictionary(directory,name,s,d,c)
 
     def get_unicode(self,fnt_num,c):
+        """
+        returns unicode string of c as fnt_num.
+        """
         return self.fonts[fnt_num].get_unicode(c)
 
     def get_width(self,fnt_num,c):
+        """
+        returns width of c.
+        """
         return self.fonts[fnt_num].get_width(c)
 
 class FontDictionary:
@@ -559,26 +567,50 @@ class FontDictionary:
         self.checksum=c
 
     def get_unicode(self,c):
+        """
+        translate c to unicode.
+        """
         return chr(c)
 
     def get_width(self,c):
+        """
+        returns width of c.
+        """
         return 0
 
 class DviStackMachine:
     """
     Stack Machine for DVI.
     """
-    def __init__(self):
+    def __init__(self,debugmode=False):
         self.fonts=FontList()
         self.stackmemory=None
+        self.is_debugmode=debugmode
+        
+    def log(self,*s):
+        """
+        print log if is_debugmode
+        """
+        if self.is_debugmode:
+            print(*s)
+            
     def draw_box(self,h,v,a,b):
-        print("%% box at:", h, v)
-        print("%% box size:", a, b)
+        """
+        primitive function to draw a box.
+        """
+        self.log("%% box at:", h, v)
+        self.log("%% box size:", a, b)
+        print("box of size ",a,b)
     def draw_char(self,h,v,c):
-        print("%% char at:", h, v)
+        """
+        primitive function to draw a character.
+        returns width of character.
+        """
+        self.log("%% char at:", h, v)
         string=self.fonts.get_unicode(self.stackmemory.f,c)
         width=self.fonts.get_width(self.stackmemory.f,c)
-        print("%% char:", string)
+        self.log("%% char:", string)
+        print(string)
         return(width)
     
     def set(self,c,version):
@@ -586,15 +618,16 @@ class DviStackMachine:
         function for DVI.put.
         this function calls self.draw_char().
         """
-        print("% set", c)
+        self.log("% set", c)
         width=self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
         self.stackmemory.add_to_h(width)
+        
     def set_rule(self,a,b):
         """
         function for DVI.set_rule.
         this function calls self.draw_box().
         """
-        print("% set rule")
+        self.log("% set rule")
         self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
         self.stackmemory.add_to_h(b)
     def put(self,c,version):
@@ -602,7 +635,7 @@ class DviStackMachine:
         function for DVI.put.
         this function calls self.draw_char().
         """
-        print("% put", c)
+        self.log("% put", c)
         self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
 
     def put_rule(self,a,b):
@@ -610,29 +643,29 @@ class DviStackMachine:
         function for DVI.put_rule
         this function calls self.draw_box().
         """
-        print("% put rule")
-        print("%%",a,b)
+        self.log("% put rule")
+        self.log("%%",a,b)
         self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
     def nop(self):
         """
         function for DVI.nop.
         """
-        print("% nop")
+        self.log("% nop")
     def bop(self,cc,p):
         """
         functio for DVI.bop.
         """
         self.stackmemory=DVIStackMemory(cc,p)
         
-        print("% bop")
-        print("%% counters:",cc)
-        print("%% previous bop:", p)
+        self.log("% bop")
+        self.log("%% counters:",cc)
+        self.log("%% previous bop:", p)
 
     def eop(self):
         """
         function for DVI.eop
         """
-        print("% eop")
+        self.log("% eop")
 
     def push(self):
         """
@@ -640,7 +673,7 @@ class DviStackMachine:
         function for DVI.push.
         """
         self.stackmemory.push()
-        print("% push")
+        self.log("% push")
         
     def pop(self):
         """
@@ -648,7 +681,7 @@ class DviStackMachine:
         function for DVI.pop
         """
         self.stackmemory.pop()
-        print("% pop")
+        self.log("% pop")
 
     def right(self,b,version):
         """
@@ -656,7 +689,7 @@ class DviStackMachine:
         function for DVI.right*
         """
         self.stackmemory.add_to_h(b)
-        print("% right:", b)
+        self.log("% right:", b)
     def w(self,b,version):
         """
         funtion for stack.
@@ -667,7 +700,7 @@ class DviStackMachine:
         else:
             self.stackmemory.set_w(b)
             self.stackmemory.add_to_h(b)
-        print("% w:", self.stackmemory.w)
+        self.log("% w:", self.stackmemory.w)
         
     def x(self,b,version):
         """
@@ -679,7 +712,7 @@ class DviStackMachine:
         else:
             self.stackmemory.set_x(b)
             self.stackmemory.add_to_h(b)
-        print("% x:", self.stackmemory.x)
+        self.log("% x:", self.stackmemory.x)
 
     def down(self,a,version):
         """
@@ -687,7 +720,7 @@ class DviStackMachine:
         function for DVI.down*
         """
         self.stackmemory.add_to_v(a)
-        print("% down:", a)
+        self.log("% down:", a)
         pass
     def y(self,a,version):
         """
@@ -699,7 +732,7 @@ class DviStackMachine:
         else:
             self.stackmemory.set_y(a)
             self.stackmemory.add_to_v(a)
-        print("% y:", self.stackmemory.y)
+        self.log("% y:", self.stackmemory.y)
 
         pass
     def z(self,a,version):
@@ -712,7 +745,7 @@ class DviStackMachine:
         else:
             self.stackmemory.set_z(a)
             self.stackmemory.add_to_v(a)
-        print("% z:", self.stackmemory.z)
+        self.log("% z:", self.stackmemory.z)
 
         pass
     def fnt(self,x,version):
@@ -720,7 +753,7 @@ class DviStackMachine:
         function for DVI.fnt*
         """
         self.stackmemory.set_f(x)
-        print("% fnt:", self.stackmemory.f)
+        self.log("% fnt:", self.stackmemory.f)
 
 
     def xxx(self,k,x,version):
@@ -729,13 +762,13 @@ class DviStackMachine:
         """
         function for DVI.fnt_def**
         """
-        print("% fnt_def")
-        print("%% font_num =",k)
-        print("%% check_sum =",c)
-        print("%% scaled size =",s)
-        print("%% design size =",d)
-        print("%% dir :",n[:a])
-        print("%% name :",n[a:])
+        self.log("% fnt_def")
+        self.log("%% font_num =",k)
+        self.log("%% check_sum =",c)
+        self.log("%% scaled size =",s)
+        self.log("%% design size =",d)
+        self.log("%% dir :",n[:a])
+        self.log("%% name :",n[a:])
         self.fonts.fnt_def(k,n[:a],n[a:],s,d,c)
 
     def pre(self,i,num,den,mag,k,x):
@@ -748,10 +781,10 @@ class DviStackMachine:
         self.den=den
         self.mag=mag
         self.comment=x
-        print("% pre")
-        print("%% version :",i)
-        print("%% mag * num * 1000 / den = ",self.mag,"*",self.num,"*1000/",self.den)
-        print("%% Comment :",self.comment)
+        self.log("% pre")
+        self.log("%% version :",i)
+        self.log("%% mag * num * 1000 / den = ",self.mag,"*",self.num,"*1000/",self.den)
+        self.log("%% Comment :",self.comment)
         return self.check_version_of_dvi(i)
         
     def post(self,p,num,den,mag,l,u,s,t):
@@ -766,14 +799,14 @@ class DviStackMachine:
         self.max_width=u
         self.max_depth_of_stack=s
         self.total_pages=t
-        print("% post")
-        print("%% mag * num * 1000 / den = ",self.mag,"*",self.num,"*1000/",self.den)
+        self.log("% post")
+        self.log("%% mag * num * 1000 / den = ",self.mag,"*",self.num,"*1000/",self.den)
 
-        print("%% max height+depth =", self.max_height_depth)
-        print("%% max width =", self.max_width)
-        print("%% max depth of stack =", self.max_depth_of_stack)
-        print("%% num of pages =", self.total_pages)
-        print("%% previous bop =", p)
+        self.log("%% max height+depth =", self.max_height_depth)
+        self.log("%% max width =", self.max_width)
+        self.log("%% max depth of stack =", self.max_depth_of_stack)
+        self.log("%% num of pages =", self.total_pages)
+        self.log("%% previous bop =", p)
         pass
     def post_post(self,q,i):
         """
@@ -781,9 +814,9 @@ class DviStackMachine:
         read postamble.
         """
         self.version=i
-        print("% post_post")
-        print("%% post =",q)
-        print("%% self =",self.version)
+        self.log("% post_post")
+        self.log("%% post =",q)
+        self.log("%% self =",self.version)
         return self.check_version_of_dvi(i)
 
     def d(self,d):
@@ -791,19 +824,23 @@ class DviStackMachine:
         function for DVI.d for pDVI format.
         """
         self.stackmemory.set_direction(d)
-        print("% d:", d)
+        self.log("% d:", d)
         
     def check_version_of_dvi(self,ver):
         """
         return True if ver is acceptable version of DVI.
         """
         return True
-        
+
 def test():
-    with open('x.dvi', mode='r+b') as file:
-        dviinterpreter=DviInterpreter(file,DviStackMachine())
+    if len(sys.argv)<2:
+        print("usage: python3 "+sys.argv[0]+" dvifile")
+        return
+    filename=sys.argv[1]
+    with open(filename, mode='r+b') as file:
+        dvistackmachine=DviStackMachine()
+        dviinterpreter=DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
-    pass
 
 if __name__=="__main__":
     test()
