@@ -1,6 +1,5 @@
 import sys
 
-
 class DVI:
     """
     constants for DVI and pDVI.
@@ -630,7 +629,19 @@ class DviStackMachine:
         width=self.fonts.get_width(self.stackmemory.f,c)
         self.log("%% char:", string)
         return(width)
-        
+
+    def add_to_h(self,b,call_from_set=False):
+        """
+        add d to stackmemory.add_to_h.
+        """
+        self.stackmemory.add_to_h(b)
+    
+    def add_to_v(self,a):
+        """
+        add a to stackmemory.add_to_v.
+        """
+        self.stackmemory.add_to_v(a)
+    
     def set(self,c,version):
         """
         function for DVI.put.
@@ -638,7 +649,7 @@ class DviStackMachine:
         """
         self.log("% set", c)
         width=self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
-        self.stackmemory.add_to_h(width)
+        self.add_to_h(width,call_from_set=True)
         
     def set_rule(self,a,b):
         """
@@ -647,7 +658,7 @@ class DviStackMachine:
         """
         self.log("% set rule")
         self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
-        self.stackmemory.add_to_h(b)
+        self.add_to_h(b)
     
     def put(self,c,version):
         """
@@ -709,7 +720,7 @@ class DviStackMachine:
         funtion for stack.
         function for DVI.right*
         """
-        self.stackmemory.add_to_h(b)
+        self.add_to_h(b)
         self.log("% right:", b)
 
     def w(self,b,version):
@@ -718,10 +729,10 @@ class DviStackMachine:
         function for DVI.w*
         """
         if version==0:
-            self.stackmemory.add_to_h(self.stackmemory.w)
+            self.add_to_h(self.stackmemory.w)
         else:
             self.stackmemory.set_w(b)
-            self.stackmemory.add_to_h(b)
+            self.add_to_h(b)
         self.log("% w:", self.stackmemory.w)
         
     def x(self,b,version):
@@ -730,10 +741,10 @@ class DviStackMachine:
         function for DVI.x*
         """
         if version==0:
-            self.stackmemory.add_to_h(self.stackmemory.x)
+            self.add_to_h(self.stackmemory.x)
         else:
             self.stackmemory.set_x(b)
-            self.stackmemory.add_to_h(b)
+            self.add_to_h(b)
         self.log("% x:", self.stackmemory.x)
 
     def down(self,a,version):
@@ -741,7 +752,7 @@ class DviStackMachine:
         funtion for stack.
         function for DVI.down*
         """
-        self.stackmemory.add_to_v(a)
+        self.add_to_v(a)
         self.log("% down:", a)
 
     def y(self,a,version):
@@ -750,10 +761,10 @@ class DviStackMachine:
         function for DVI.y*
         """
         if version==0:
-            self.stackmemory.add_to_v(self.stackmemory.y)
+            self.add_to_v(self.stackmemory.y)
         else:
             self.stackmemory.set_y(a)
-            self.stackmemory.add_to_v(a)
+            self.add_to_v(a)
         self.log("% y:", self.stackmemory.y)
 
     def z(self,a,version):
@@ -762,10 +773,10 @@ class DviStackMachine:
         function for DVI.z*
         """
         if version==0:
-            self.stackmemory.add_to_v(self.stackmemory.z)
+            self.add_to_v(self.stackmemory.z)
         else:
             self.stackmemory.set_z(a)
-            self.stackmemory.add_to_v(a)
+            self.add_to_v(a)
         self.log("% z:", self.stackmemory.z)
     
     def fnt(self,x,version):
@@ -782,7 +793,7 @@ class DviStackMachine:
         function for spectial
         """
         self.log("%spectial", x)
-        #print("%spectial", x)
+
 
     def fnt_def(self,k,c,s,d,a,l,n,version):
         """
