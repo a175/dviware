@@ -7,7 +7,9 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         super().__init__(debugmode)
         self.document = docx.Document()
         self.p = None
-        
+        self.r = None
+        self.is_mathmode = False
+
     def bop(self,cc,p):
         """
         functio for DVI.bop.
@@ -22,11 +24,12 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         """
         ans=super().draw_char(h,v,c)
         string=self.fonts.get_unicode(self.stackmemory.f,c)
-        if self.p:
-            self.p.add_run(string)
-        else:
-            self.p=self.document.add_paragraph("")
-            self.p.add_run(string)
+        if not self.is_mathmode:
+            if self.r:
+                self.r.add_text(string)
+            else:
+                self.p=self.document.add_paragraph()
+                self.r=self.p.add_run(string)
         return(ans)
 
     def add_to_h(self,b,call_from_set=False):
@@ -38,7 +41,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             if b>0:
                 if self.p:
                     if b>100000:
-                        self.p.add_run(" ")
+                        self.r.add_text(" ")
 
     def add_to_v(self,a):
         """
@@ -47,7 +50,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         super().add_to_v(a)
         if a > 0:
             if self.p:
-                self.p.add_run(" ")
+                self.r.add_text(" ")
     def xxx(self,k,x,version):
         """
         function for spectial
@@ -56,15 +59,24 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if x.startswith("texstructure:"):
             lit=x[13:]
             if lit=="begin_par":
-                self.p = self.document.add_paragraph("")
-            elif lit=="begin_math":
+                self.p = self.document.add_paragraph()
+                self.r=self.p.add_run()
+            elif lit.startswith("begin_math"):
+                mathnum=lit[10:]
                 self.is_mathmode=True
+                self.r=self.p.add_run()
+                self.r.add_text("[inline math"+mathnum+"]")
             elif lit=="end_math":
                 self.is_mathmode=False
+                self.r=self.p.add_run()
             elif lit=="begin_display":
+                mathnum=lit[13:]
                 self.is_mathmode=True
+                self.r=self.p.add_run()
+                self.r.add_text("[display math"+mathnum+"]")
             elif lit=="end_display":
                 self.is_mathmode=False
+                self.r=self.p.add_run()
         return(ans)
     
 def test():
