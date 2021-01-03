@@ -58,7 +58,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         ans=super().xxx(k,x,version)
         if x.startswith("texstructure:"):
             lit=x[13:]
-            if lit=="begin_par":
+            if lit=="par":
                 self.p = self.document.add_paragraph()
                 self.r=self.p.add_run()
             elif lit.startswith("begin_math"):

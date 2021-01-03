@@ -1,0 +1,14 @@
+%\usepackage[T1]{fontenc}
+%\usepackage{lmodern}
+%\usepackage{textcomp}
+%\usepackage{unicode-math}
+\usepackage{everyhook}
+\newcommand{\xxxBeginMath}{\special{texstructure:begin_math}}
+\newcommand{\xxxEndMath}{\special{texstructure:end_math}}
+\newcommand{\xxxBeginDisplay}{\special{texstructure:begin_display}}
+\newcommand{\xxxEndDisplay}{\special{texstructure:end_display}}
+\newcommand{\xxxPar}{\special{texstructure:par}}
+\PushPostHook{math}{\xxxBeginMath\aftergroup\xxxEndMath}
+\PushPostHook{display}{\xxxBeginDisplay\aftergroup\xxxEndDisplay}
+\PushPostHook{par}{\xxxPar}
+
