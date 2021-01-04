@@ -626,19 +626,23 @@ class DviStackMachine:
     def draw_char(self,h,v,c):
         """
         primitive function to draw a character.
-        returns width of character.
         """
         self.log("%% char at:", h, v)
         string=self.fonts.get_unicode(self.stackmemory.f,c)
-        width=self.fonts.get_width(self.stackmemory.f,c)
         self.log("%% char:", string)
-        return(width)
 
-    def add_to_h(self,b,call_from_set=False):
+    def add_to_h(self,b):
         """
         add d to stackmemory.add_to_h.
         """
         self.stackmemory.add_to_h(b)
+    
+    def add_width_to_h(self,c):
+        """
+        add width of c to stackmemory.add_to_h.
+        """
+        width=self.fonts.get_width(self.stackmemory.f,c)
+        self.stackmemory.add_to_h(width)
     
     def add_to_v(self,a):
         """
@@ -652,8 +656,7 @@ class DviStackMachine:
         this function calls self.draw_char().
         """
         self.log("% set", c)
-        width=self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
-        self.add_to_h(width,call_from_set=True)
+        self.add_width_to_h(c)
         
     def set_rule(self,a,b,bb):
         """

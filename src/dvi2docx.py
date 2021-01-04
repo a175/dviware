@@ -37,11 +37,10 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         add d to stackmemory.add_to_h.
         """
         super().add_to_h(b)
-        if not call_from_set:
-            if b>0:
-                if self.p:
-                    if b>100000:
-                        self.r.add_text(" ")
+        if b>0:
+            if self.p:
+                if b>100000:
+                    self.r.add_text(" ")
 
     def add_to_v(self,a):
         """
