@@ -10,11 +10,11 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.r = None
         self.is_mathmode = False
 
-    def bop(self,cc,p):
+    def bop(self,cc,p,bb):
         """
         functio for DVI.bop.
         """
-        ans=super().bop(cc,p)
+        ans=super().bop(cc,p,bb)
         if self.p:
             document.add_page_break()
 
@@ -51,11 +51,12 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if a > 0:
             if self.p:
                 self.r.add_text(" ")
-    def xxx(self,k,x,version):
+
+    def xxx(self,k,x,version,bb):
         """
         function for spectial
         """
-        ans=super().xxx(k,x,version)
+        ans=super().xxx(k,x,version,bb)
         if x.startswith("texstructure:"):
             lit=x[13:]
             if lit=="par":

@@ -274,7 +274,8 @@ class DviInterpreter:
         """
         function to read l bytes from file as an unsigned int.
         """
-        return int.from_bytes(self.file.read(l),byteorder='big',signed=False)
+        bb=self.file.read(l)
+        return (int.from_bytes(bb,byteorder='big',signed=False),bb)
     
     def read_ux(self,code,base):
         """
@@ -282,14 +283,15 @@ class DviInterpreter:
         returns the pair of int and length of bytes.
         """
         len_param=code-base+1
-        c=self.read_u(len_param)
-        return (c,len_param)
+        (c,bb)=self.read_u(len_param)
+        return (c,len_param,bb)
 
     def read_d(self,l):
         """
         function to read l bytes from file as a dimension.
         """
-        return int.from_bytes(self.file.read(l),byteorder='big',signed=True)
+        bb=self.file.read(l)
+        return (int.from_bytes(bb,byteorder='big',signed=True),bb)
     
     def read_dx(self,code,base):
         """
@@ -297,189 +299,191 @@ class DviInterpreter:
         returns the pair of dimension and length of bytes.
         """
         len_param=code-base+1
-        b=self.read_d(len_param)
-        return (b,len_param)
+        (b,bb)=self.read_d(len_param)
+        return (b,len_param,bb)
     
     def read_p(self):
         """
         function to read 4 bytes from file as a pointer.
         """
-        return int.from_bytes(self.file.read(4),byteorder='big',signed=True)
+        bb=self.file.read(4)
+        return (int.from_bytes(bb,byteorder='big',signed=True),bb)
     
     def read_str(self,l):
         """
         function to read l bytes from file as a string.
         """
-        return self.file.read(l).decode()
+        bb=self.file.read(l)
+        return (bb.decode(),bb)
 
     def readCodeAndArgFromFile(self):
         """
         function to read one code and its parameters.
         """
-        code=self.read_u(1)
+        (code,bb)=self.read_u(1)
         if DVI.set_char_MIN <= code and code <= DVI.set_char_MAX:
-            return(code, [code],0) 
+            return(code, [code],0,bb) 
         elif DVI.set1 <= code and code <= DVI.set4:
-            (c,len_param)=self.read_ux(code,DVI.set1)
-            return(code, [c],len_param)
+            (c,len_param,bb1)=self.read_ux(code,DVI.set1)
+            return(code, [c],len_param,bb+bb1)
         elif code == DVI.set_rule:
-            a=self.read_d(4)
-            b=self.read_d(4)
-            return(code,[a,b],0)
+            (a,bb1)=self.read_d(4)
+            (b,bb2)=self.read_d(4)
+            return(code,[a,b],0,bb+bb1+bb2)
         elif DVI.put1 <= code and code <= DVI.put4:
-            (c,len_param)=self.read_ux(code,DVI.put1)
-            return(code,[c],len_param)
+            (c,len_param,bb1)=self.read_ux(code,DVI.put1)
+            return(code,[c],len_param,bb+bb1)
         elif code == DVI.put_rule:
-            a=self.read_d(4)
-            b=self.read_d(4)
-            return(code,[a,b],0)
+            (a,bb1)=self.read_d(4)
+            (b,bb2)=self.read_d(4)
+            return(code,[a,b],0,bb+bb1+bb2)
         elif code == DVI.nop:
-            return(code,[],0)
+            return(code,[],0,bb)
         elif code == DVI.bop:
-            c0=self.read_d(4)
-            c1=self.read_d(4)
-            c2=self.read_d(4)
-            c3=self.read_d(4)
-            c4=self.read_d(4)
-            c5=self.read_d(4)
-            c6=self.read_d(4)
-            c7=self.read_d(4)
-            c8=self.read_d(4)
-            c9=self.read_d(4)
-            p=self.read_p()
-            return(code,[c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,p],0)
+            (c0,bb0)=self.read_d(4)
+            (c1,bb1)=self.read_d(4)
+            (c2,bb2)=self.read_d(4)
+            (c3,bb3)=self.read_d(4)
+            (c4,bb4)=self.read_d(4)
+            (c5,bb5)=self.read_d(4)
+            (c6,bb6)=self.read_d(4)
+            (c7,bb7)=self.read_d(4)
+            (c8,bb8)=self.read_d(4)
+            (c9,bb9)=self.read_d(4)
+            (p,bb10)=self.read_p()
+            return(code,[c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,p],0,bb+bb0+bb1+bb2+bb3+bb4+bb5+bb6+bb7+bb8+bb9+bb10)
         elif code == DVI.eop:
-            return(code,[],0)
+            return(code,[],0,bb)
         elif code == DVI.push:
-            return(code,[],0)
+            return(code,[],0,bb)
         elif code == DVI.pop:
-            return(code,[],0)
+            return(code,[],0,bb)
         elif DVI.right1 <= code and code <= DVI.right4:
-            (b,len_param)=self.read_dx(code,DVI.right1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.right1)
+            return(code,[b],len_param,bb+bb1)
         elif code == DVI.w0:
-            return(code,[0],0)
+            return(code,[0],0,bb)
         elif DVI.w1 <= code and code <= DVI.w4:
-            (b,len_param)=self.read_dx(code,DVI.w1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.w1)
+            return(code,[b],len_param,bb+bb1)
         elif code == DVI.x0:
-            return(code,[0],0)
+            return(code,[0],0,bb)
         elif DVI.x1 <= code and code <= DVI.x4:
-            (b,len_param)=self.read_dx(code,DVI.x1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.x1)
+            return(code,[b],len_param,bb+bb1)
         elif DVI.down1 <= code and code <= DVI.down4:
-            (b,len_param)=self.read_dx(code,DVI.down1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.down1)
+            return(code,[b],len_param,bb+bb1)
         elif code == DVI.y0:
-            return(code,[0],0)
+            return(code,[0],0,bb)
         elif DVI.y1 <= code and code <= DVI.y4:
-            (b,len_param)=self.read_dx(code,DVI.y1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.y1)
+            return(code,[b],len_param,bb+bb1)
         elif code == DVI.z0:
-            return(code,[0],0)
+            return(code,[0],0,bb)
         elif DVI.z1 <= code and code <= DVI.z4:
-            (b,len_param)=self.read_dx(code,DVI.z1)
-            return(code,[b],len_param)
+            (b,len_param,bb1)=self.read_dx(code,DVI.z1)
+            return(code,[b],len_param,bb+bb1)
         elif DVI.fnt_num_MIN <= code and code <= DVI.fnt_num_MAX: 
-            return(code,[code-DVI.fnt_num_MIN],0)
+            return(code,[code-DVI.fnt_num_MIN],0,bb)
         elif DVI.fnt1 <= code and code <= DVI.fnt4:
-            (k,len_param)=self.read_ux(code,DVI.fnt1)
-            return(code,[k],len_param)
+            (k,len_param,bb1)=self.read_ux(code,DVI.fnt1)
+            return(code,[k],len_param,bb+bb1)
         elif DVI.xxx1 <= code and code <= DVI.xxx4:
-            (k,len_param)=self.read_ux(code,DVI.xxx1)
-            x=self.read_str(k)
-            return(code,[k,x],len_param)
+            (k,len_param,bb1)=self.read_ux(code,DVI.xxx1)
+            (x,bb2)=self.read_str(k)
+            return(code,[k,x],len_param,bb+bb1+bb2)
         elif DVI.fnt_def1 <= code and code <= DVI.fnt_def4:
-            (k,len_param)=self.read_ux(code,DVI.fnt_def1)
-            c=self.read_u(4)
-            s=self.read_d(4)
-            d=self.read_d(4)
-            a=self.read_u(1)
-            l=self.read_u(1)
-            n=self.read_str(a+l)
-            return(code,[k,c,s,d,a,l,n],len_param)
+            (k,len_param,bb1)=self.read_ux(code,DVI.fnt_def1)
+            (c,bb2)=self.read_u(4)
+            (s,bb3)=self.read_d(4)
+            (d,bb4)=self.read_d(4)
+            (a,bb5)=self.read_u(1)
+            (l,bb6)=self.read_u(1)
+            (n,bb7)=self.read_str(a+l)
+            return(code,[k,c,s,d,a,l,n],len_param,bb+bb1+bb2+bb3+bb4+bb5+bb6+bb7)
         elif code == DVI.pre:
-            i=self.read_u(1)
-            num=self.read_u(4)
-            den=self.read_u(4)
-            mag=self.read_u(4)
-            k=self.read_u(1)
-            x=self.read_str(k)
-            return(code,[i,num,den,mag,k,x],0)
+            (i,bb1)=self.read_u(1)
+            (num,bb2)=self.read_u(4)
+            (den,bb3)=self.read_u(4)
+            (mag,bb4)=self.read_u(4)
+            (k,bb5)=self.read_u(1)
+            (x,bb6)=self.read_str(k)
+            return(code,[i,num,den,mag,k,x],0,bb+bb1+bb2+bb3+bb4+bb5+bb6)
         elif code == DVI.post:
-            p=self.read_p()
-            num=self.read_u(4)
-            den=self.read_u(4)
-            mag=self.read_u(4)
-            l=self.read_d(4)
-            u=self.read_d(4)
-            s=self.read_u(2)
-            t=self.read_u(2)
-            return(code,[p,num,den,mag,l,u,s,t],0)
+            (p,bb1)=self.read_p()
+            (num,bb2)=self.read_u(4)
+            (den,bb3)=self.read_u(4)
+            (mag,bb4)=self.read_u(4)
+            (l,bb5)=self.read_d(4)
+            (u,bb6)=self.read_d(4)
+            (s,bb7)=self.read_u(2)
+            (t,bb8)=self.read_u(2)
+            return(code,[p,num,den,mag,l,u,s,t],0,bb+bb1+bb2+bb3+bb4+bb5+bb6+bb7+bb8)
         elif code == DVI.post_post:
-            q=self.read_p()
-            i=self.read_u(1)
-            return(code,[q,i],0)
+            (q,bb1)=self.read_p()
+            (i,bb2)=self.read_u(1)
+            return(code,[q,i],0,bb+bb1+bb2)
         elif code == DVI.dir:
-            d=self.read_u(1)
-            return(code,[d],0)
-        return(code,None,None)
+            (d,bb1)=self.read_u(1)
+            return(code,[d],0,bb+bb1)
+        return(code,None,None,bb)
     
     def readCodeAndArg(self):
         """
         function to read and do one code.
         """
         r=None
-        (code,arg,version)=self.readCodeAndArgFromFile()
+        (code,arg,version,bb)=self.readCodeAndArgFromFile()
         if DVI.set_char_MIN <= code and code <= DVI.set4:
-            r=self.dvimachine.set(arg[0],version)
+            r=self.dvimachine.set(arg[0],version,bb)
         elif code == DVI.set_rule:
-            r=self.dvimachine.set_rule(arg[0],arg[1])
+            r=self.dvimachine.set_rule(arg[0],arg[1],bb)
         elif DVI.put1 <= code and code <= DVI.put4:
-            r=self.dvimachine.put(arg[0],version)
+            r=self.dvimachine.put(arg[0],version,bb)
         elif code == DVI.put_rule:
-            r=self.dvimachine.put_rule(arg[0],arg[1])
+            r=self.dvimachine.put_rule(arg[0],arg[1],bb)
         elif code == DVI.nop:
-            r=self.dvimachine.nop()
+            r=self.dvimachine.nop(bb)
         elif code == DVI.bop:
-            r=self.dvimachine.bop(arg[0:10],arg[10])
+            r=self.dvimachine.bop(arg[0:10],arg[10],bb)
         elif code == DVI.eop:
-            r=self.dvimachine.eop()
+            r=self.dvimachine.eop(bb)
         elif code == DVI.push:
-            r=self.dvimachine.push()
+            r=self.dvimachine.push(bb)
         elif code == DVI.pop:
-            r=self.dvimachine.pop()
+            r=self.dvimachine.pop(bb)
         elif DVI.right1 <= code and code <= DVI.right4:
-            r=self.dvimachine.right(arg[0],version)
+            r=self.dvimachine.right(arg[0],version,bb)
         elif DVI.w0 <= code and code <= DVI.w4:
-            r=self.dvimachine.w(arg[0],version)
+            r=self.dvimachine.w(arg[0],version,bb)
         elif DVI.x0 <= code and code <= DVI.x4:
-            r=self.dvimachine.x(arg[0],version)
+            r=self.dvimachine.x(arg[0],version,bb)
         elif DVI.down1 <= code and code <= DVI.down4:
-            r=self.dvimachine.down(arg[0],version)
+            r=self.dvimachine.down(arg[0],version,bb)
         elif DVI.y0 <= code and code <= DVI.y4:
-            r=self.dvimachine.y(arg[0],version)
+            r=self.dvimachine.y(arg[0],version,bb)
         elif DVI.z0 <= code and code <= DVI.z4:
-            r=self.dvimachine.z(arg[0],version)
+            r=self.dvimachine.z(arg[0],version,bb)
         elif DVI.fnt_num_MIN <= code and  code <= DVI.fnt4:
-            r=self.dvimachine.fnt(arg[0],version)
+            r=self.dvimachine.fnt(arg[0],version,bb)
         elif DVI.xxx1 <= code and code <= DVI.xxx4:
-            r=self.dvimachine.xxx(arg[0],arg[1],version)
+            r=self.dvimachine.xxx(arg[0],arg[1],version,bb)
         elif DVI.fnt_def1 <= code and code <= DVI.fnt_def4:
-            r=self.dvimachine.fnt_def(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],version)
+            r=self.dvimachine.fnt_def(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],version,bb)
         elif code == DVI.pre:
-            r=self.dvimachine.pre(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5])
+            r=self.dvimachine.pre(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],bb)
         elif code == DVI.post:
-            r=self.dvimachine.post(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7])
+            r=self.dvimachine.post(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],arg[7],bb)
         elif code == DVI.post_post:
-            r=self.dvimachine.post_post(arg[0],arg[1])
+            r=self.dvimachine.post_post(arg[0],arg[1],bb)
         elif code == DVI.dir:
-            r=self.dvimachine.d(arg[0])
-        return (code,arg,version,r)
+            r=self.dvimachine.d(arg[0],bb)
+        return (code,arg,version,r,bb)
 
     def readCodes(self):
         while True:
-            (code,arg,version,r)=self.readCodeAndArg()
+            (code,arg,version,r,bb)=self.readCodeAndArg()
             if code==DVI.post_post:
                 break
 
@@ -642,7 +646,7 @@ class DviStackMachine:
         """
         self.stackmemory.add_to_v(a)
     
-    def set(self,c,version):
+    def set(self,c,version,bb):
         """
         function for DVI.put.
         this function calls self.draw_char().
@@ -651,7 +655,7 @@ class DviStackMachine:
         width=self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
         self.add_to_h(width,call_from_set=True)
         
-    def set_rule(self,a,b):
+    def set_rule(self,a,b,bb):
         """
         function for DVI.set_rule.
         this function calls self.draw_box().
@@ -660,7 +664,7 @@ class DviStackMachine:
         self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
         self.add_to_h(b)
     
-    def put(self,c,version):
+    def put(self,c,version,bb):
         """
         function for DVI.put.
         this function calls self.draw_char().
@@ -668,7 +672,7 @@ class DviStackMachine:
         self.log("% put", c)
         self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
 
-    def put_rule(self,a,b):
+    def put_rule(self,a,b,bb):
         """
         function for DVI.put_rule
         this function calls self.draw_box().
@@ -677,13 +681,13 @@ class DviStackMachine:
         self.log("%%",a,b)
         self.draw_box(self.stackmemory.h,self.stackmemory.v,a,b)
 
-    def nop(self):
+    def nop(self,bb):
         """
         function for DVI.nop.
         """
         self.log("% nop")
     
-    def bop(self,cc,p):
+    def bop(self,cc,p,bb):
         """
         functio for DVI.bop.
         """
@@ -693,13 +697,13 @@ class DviStackMachine:
         self.log("%% counters:",cc)
         self.log("%% previous bop:", p)
         
-    def eop(self):
+    def eop(self,bb):
         """
         function for DVI.eop
         """
         self.log("% eop")
 
-    def push(self):
+    def push(self,bb):
         """
         funtion for stack.
         function for DVI.push.
@@ -707,7 +711,7 @@ class DviStackMachine:
         self.stackmemory.push()
         self.log("% push")
         
-    def pop(self):
+    def pop(self,bb):
         """
         funtion for stack.
         function for DVI.pop
@@ -715,7 +719,7 @@ class DviStackMachine:
         self.stackmemory.pop()
         self.log("% pop")
 
-    def right(self,b,version):
+    def right(self,b,version,bb):
         """
         funtion for stack.
         function for DVI.right*
@@ -723,7 +727,7 @@ class DviStackMachine:
         self.add_to_h(b)
         self.log("% right:", b)
 
-    def w(self,b,version):
+    def w(self,b,version,bb):
         """
         funtion for stack.
         function for DVI.w*
@@ -735,7 +739,7 @@ class DviStackMachine:
             self.add_to_h(b)
         self.log("% w:", self.stackmemory.w)
         
-    def x(self,b,version):
+    def x(self,b,version,bb):
         """
         funtion for stack.
         function for DVI.x*
@@ -747,7 +751,7 @@ class DviStackMachine:
             self.add_to_h(b)
         self.log("% x:", self.stackmemory.x)
 
-    def down(self,a,version):
+    def down(self,a,version,bb):
         """
         funtion for stack.
         function for DVI.down*
@@ -755,7 +759,7 @@ class DviStackMachine:
         self.add_to_v(a)
         self.log("% down:", a)
 
-    def y(self,a,version):
+    def y(self,a,version,bb):
         """
         funtion for stack.
         function for DVI.y*
@@ -767,7 +771,7 @@ class DviStackMachine:
             self.add_to_v(a)
         self.log("% y:", self.stackmemory.y)
 
-    def z(self,a,version):
+    def z(self,a,version,bb):
         """
         funtion for stack.
         function for DVI.z*
@@ -779,7 +783,7 @@ class DviStackMachine:
             self.add_to_v(a)
         self.log("% z:", self.stackmemory.z)
     
-    def fnt(self,x,version):
+    def fnt(self,x,version,bb):
         """
         function for DVI.fnt*
         """
@@ -787,7 +791,7 @@ class DviStackMachine:
         self.log("% fnt:", self.stackmemory.f)
 
 
-    def xxx(self,k,x,version):
+    def xxx(self,k,x,version,bb):
         """
         function for DVI.xxx*
         function for spectial
@@ -795,7 +799,7 @@ class DviStackMachine:
         self.log("%spectial", x)
 
 
-    def fnt_def(self,k,c,s,d,a,l,n,version):
+    def fnt_def(self,k,c,s,d,a,l,n,version,bb):
         """
         function for DVI.fnt_def**
         """
@@ -808,7 +812,7 @@ class DviStackMachine:
         self.log("%% name :",n[a:])
         self.fonts.fnt_def(k,n[:a],n[a:],s,d,c)
 
-    def pre(self,i,num,den,mag,k,x):
+    def pre(self,i,num,den,mag,k,x,bb):
         """
         function for DVI.pre.
         read preamble and check the version of dvi.
@@ -824,7 +828,7 @@ class DviStackMachine:
         self.log("%% Comment :",self.comment)
         return self.check_version_of_dvi(i)
         
-    def post(self,p,num,den,mag,l,u,s,t):
+    def post(self,p,num,den,mag,l,u,s,t,bb):
         """
         function for DVI.post.
         read postamble.
@@ -845,7 +849,7 @@ class DviStackMachine:
         self.log("%% num of pages =", self.total_pages)
         self.log("%% previous bop =", p)
     
-    def post_post(self,q,i):
+    def post_post(self,q,i,bb):
         """
         function for DVI.post_post.
         read postamble.
@@ -856,7 +860,7 @@ class DviStackMachine:
         self.log("%% self =",self.version)
         return self.check_version_of_dvi(i)
 
-    def d(self,d):
+    def d(self,d,bb):
         """
         function for DVI.d for pDVI format.
         """
