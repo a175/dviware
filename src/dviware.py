@@ -590,8 +590,12 @@ class FontDictionary:
         """
         translate c to unicode.
         """
-        return fontenc.T1[c]
-
+        if c<len(fontenc.T1):
+            return fontenc.T1[c]
+        else:
+            print("!!!!!!!!!!",c)
+            return ""
+        
     def get_width(self,c):
         """
         returns width of c.

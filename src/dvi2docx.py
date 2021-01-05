@@ -16,14 +16,15 @@ class DviDocxStackMachine(dviware.DviStackMachine):
 
     def add_mathimage(self):
         self.num_of_math = self.num_of_math+1
-        if self.is_display:
+        if not self.is_display:
             self.r=self.p.add_run()
             #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
             self.r=self.p.add_run()
-        elif self.is_display:
+        else:
             self.r=self.p.add_run()
             self.r.add_break()
+            self.r.add_text("    ")
             #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
             self.r.add_break()
@@ -409,7 +410,8 @@ def test():
             dvistackmachine=PickupMathStackMachine(outfile,debugmode=False)
             dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
             dviinterpreter.readCodes()
-    os.system("dvipng -T tight "+outfilename)
+    for i in range(dvistackmachine.total_pages):
+        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
     with open(filename, mode='r+b') as file:    
         dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
