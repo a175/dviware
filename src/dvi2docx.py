@@ -9,17 +9,26 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.document = docx.Document()
         self.p = None
         self.r = None
-        self.is_mathmode = False
+        self.is_mathmode = 0
+        self.is_display = False
         self.num_of_math = 0
         self.math_image_base_name = mathimagebasename
 
     def add_mathimage(self):
         self.num_of_math = self.num_of_math+1
-        self.r=self.p.add_run()
-        #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
-        self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
-        self.r=self.p.add_run()
-        
+        if self.is_display:
+            self.r=self.p.add_run()
+            #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
+            self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
+            self.r=self.p.add_run()
+        elif self.is_display:
+            self.r=self.p.add_run()
+            self.r.add_break()
+            #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
+            self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
+            self.r.add_break()
+            self.r=self.p.add_run()
+            
 
     def bop(self,cc,p,bb):
         """
@@ -28,7 +37,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         ans=super().bop(cc,p,bb)
         if self.p:
             self.document.add_page_break()
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.add_mathimage()
 
     def draw_char(self,h,v,c):
@@ -37,7 +46,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         """
         ans=super().draw_char(h,v,c)
         string=self.fonts.get_unicode(self.stackmemory.f,c)
-        if not self.is_mathmode:
+        if not self.is_mathmode > 0:
             if self.r:
                 self.r.add_text(string)
             else:
@@ -45,7 +54,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.r=self.p.add_run(string)
         return(ans)
 
-    def add_to_h(self,b,call_from_set=False):
+    def add_to_h(self,b):
         """
         add d to stackmemory.add_to_h.
         """
@@ -53,7 +62,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if b>0:
             if self.p:
                 if b>100000:
-                    self.r.add_text(" ")
+                    if not self.is_mathmode > 0:
+                        self.r.add_text(" ")
 
     def add_to_v(self,a):
         """
@@ -75,16 +85,20 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.p = self.document.add_paragraph()
                 self.r=self.p.add_run()
             elif lit.startswith("begin_math"):
-                self.is_mathmode=True
-                self.add_mathimage()
+                self.is_mathmode=self.is_mathmode+1
+                if self.is_mathmode==1:
+                    self.is_display=False
+                    self.add_mathimage()
             elif lit=="end_math":
-                self.is_mathmode=False
+                self.is_mathmode=self.is_mathmode-1
                 self.r=self.p.add_run()
             elif lit=="begin_display":
-                self.add_mathimage()
-                self.is_mathmode=True
+                self.is_mathmode=self.is_mathmode+1
+                if self.is_mathmode==1:
+                    self.is_display=True
+                    self.add_mathimage()
             elif lit=="end_display":
-                self.is_mathmode=False
+                self.is_mathmode=self.is_mathmode-1
                 self.r=self.p.add_run()
         return(ans)
 
@@ -93,7 +107,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
     def __init__(self,outfile,debugmode=False):
         super().__init__(debugmode)
         self.outfile = outfile
-        self.is_mathmode = False
+        self.is_mathmode = 0
 
     def begin_page(self):
         boppos=self.outfile.tell()
@@ -132,7 +146,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         FIXME TO MOVE
         """
         ans=super().set(c,version,bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
         
     def set_rule(self,a,b,bb):
@@ -142,7 +156,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         FIXME TO MOVE
         """
         ans=super().set_rule(a,b,bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
     
     def put(self,c,version,bb):
@@ -151,7 +165,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         this function calls self.draw_char().
         """
         ans=super().put(c,version,bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
     def put_rule(self,a,b,bb):
@@ -160,7 +174,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         this function calls self.draw_box().
         """
         ans=super().put_rule(a,b,bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
     def nop(self,bb):
@@ -168,7 +182,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         function for DVI.nop.
         """
         ans=super().nop(bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
         else:
             self.bytes_for_page=self.bytes_for_page+bb
@@ -183,7 +197,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         self.bytes_for_page=bytes(0)
         self.stack_depth=0
         self.stack_depth_for_bytes_for_page=0
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.begin_page()
                     
     def eop(self,bb):
@@ -191,7 +205,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         function for DVI.eop
         """
         ans=super().eop(bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.end_page()
 
     def push(self,bb):
@@ -202,7 +216,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         ans=super().push(bb)
         self.bytes_for_page=self.bytes_for_page+bb
         self.stack_depth_for_bytes_for_page=self.stack_depth_for_bytes_for_page+1
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
             self.stack_depth=self.stack_depth+1
     def pop(self,bb):
@@ -212,7 +226,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         self.bytes_for_page=self.bytes_for_page+bb
         self.stack_depth_for_bytes_for_page=self.stack_depth_for_bytes_for_page-1
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
             self.stack_depth=self.stack_depth-1
 
@@ -223,7 +237,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().right(b,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
     def w(self,b,version,bb):
@@ -233,7 +247,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().w(b,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
         
     def x(self,b,version,bb):
@@ -243,7 +257,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().x(b,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
     def down(self,a,version,bb):
@@ -253,7 +267,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().down(a,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
     def y(self,a,version,bb):
@@ -263,7 +277,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().y(a,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
         
     def z(self,a,version,bb):
@@ -273,7 +287,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().z(a,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
     
     def fnt(self,x,version,bb):
@@ -282,7 +296,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().fnt(x,version,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
         
@@ -296,19 +310,23 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         if x.startswith("texstructure:"):
             lit=x[13:]
             if lit.startswith("begin_math"):
-                self.is_mathmode=True
-                self.begin_page()
+                self.is_mathmode=self.is_mathmode+1
+                if self.is_mathmode==1:
+                    self.begin_page()
             elif lit=="end_math":
-                self.is_mathmode=False
-                self.end_page()
+                self.is_mathmode=self.is_mathmode-1
+                if self.is_mathmode==0:
+                    self.end_page()
             elif lit=="begin_display":
-                self.is_mathmode=True
-                self.begin_page()
+                self.is_mathmode=self.is_mathmode+1
+                if self.is_mathmode==1:
+                    self.begin_page()
             elif lit=="end_display":
-                self.is_mathmode=False
-                self.end_page()
+                self.is_mathmode=self.is_mathmode-1
+                if self.is_mathmode==0:
+                    self.end_page()
         else:
-            if self.is_mathmode:
+            if self.is_mathmode > 0:
                 self.outfile.write(bb)
         return(ans)
 
@@ -318,7 +336,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         FIXME
         """
         ans=super().fnt_def(k,c,s,d,a,l,n,version,bb)
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
         elif self.is_postemble: 
             self.outfile.write(bb)
@@ -336,7 +354,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         self.previous_bop=-1
         self.num_of_pages=0
         self.is_postemble=False
-        self.is_mathmode=False
+        self.is_mathmode=0
         self.queue_of_bytes=bytes(0)
         
     def post(self,p,num,den,mag,l,u,s,t,bb):
@@ -375,7 +393,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().d(d,bb)
         self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode:
+        if self.is_mathmode > 0:
             self.outfile.write(bb)
 
 
@@ -393,7 +411,7 @@ def test():
             dviinterpreter.readCodes()
     os.system("dvipng -T tight "+outfilename)
     with open(filename, mode='r+b') as file:    
-        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=True)
+        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
         dvistackmachine.document.save(sys.argv[1]+'.docx')

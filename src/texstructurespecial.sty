@@ -3,12 +3,45 @@
 %\usepackage{textcomp}
 %\usepackage{unicode-math}
 \usepackage{everyhook}
+
+
+\newif\if@nu@in@ams@display@math@
+\@nu@in@ams@display@math@false
+\renewenvironment{align}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\@ne\st@rredfalse\m@ne%
+  \@nu@in@ams@display@math@false%
+}{%
+  \math@cr \black@\totwidth@
+  \egroup
+  \ifingather@
+    \restorealignstate@
+    \egroup
+    \nonumber
+    \ifnum0=`{\fi\iffalse}\fi
+  \else
+    $$%
+  \fi
+  \ignorespacesafterend
+}
+\renewenvironment{align*}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\@ne\st@rredtrue\m@ne
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+
+
+
 \newcommand{\nu@xxx@BeginMath}{\special{texstructure:begin_math}}
 \newcommand{\nu@xxx@EndMath}{\special{texstructure:end_math}}
 \newcommand{\nu@xxx@BeginDisplay}{\special{texstructure:begin_display}}
 \newcommand{\nu@xxx@EndDisplay}{\special{texstructure:end_display}}
 \newcommand{\nu@xxx@Par}{\special{texstructure:par}}
 \PushPostHook{math}{\nu@xxx@BeginMath\aftergroup\nu@xxx@EndMath}
-\PushPostHook{display}{\nu@xxx@BeginDisplay\aftergroup\nu@xxx@EndDisplay}
+\PushPostHook{display}{\if@nu@in@ams@display@math@\else\nu@xxx@BeginDisplay\fi\aftergroup\nu@xxx@EndDisplay}
 \PushPostHook{par}{\nu@xxx@Par}
 
