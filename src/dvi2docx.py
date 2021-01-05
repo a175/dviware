@@ -27,7 +27,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         """
         ans=super().bop(cc,p,bb)
         if self.p:
-            document.add_page_break()
+            self.document.add_page_break()
         if self.is_mathmode:
             self.add_mathimage()
 
@@ -393,7 +393,7 @@ def test():
             dviinterpreter.readCodes()
     os.system("dvipng -T tight "+outfilename)
     with open(filename, mode='r+b') as file:    
-        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
+        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=True)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
         dvistackmachine.document.save(sys.argv[1]+'.docx')

@@ -1,4 +1,5 @@
 import sys
+import fontenc
 
 class DVI:
     """
@@ -589,7 +590,7 @@ class FontDictionary:
         """
         translate c to unicode.
         """
-        return chr(c)
+        return fontenc.T1[c]
 
     def get_width(self,c):
         """
