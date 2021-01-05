@@ -615,6 +615,12 @@ class DviStackMachine:
         if self.is_debugmode:
             print(*s)
 
+    def check_version_of_dvi(self,i):
+        """
+        Check version
+        """
+        return True
+
     def draw_box(self,h,v,a,b):
         """
         primitive function to draw a box.
@@ -656,6 +662,7 @@ class DviStackMachine:
         this function calls self.draw_char().
         """
         self.log("% set", c)
+        self.draw_char(self.stackmemory.h,self.stackmemory.v,c)
         self.add_width_to_h(c)
         
     def set_rule(self,a,b,bb):
@@ -869,12 +876,6 @@ class DviStackMachine:
         """
         self.stackmemory.set_direction(d)
         self.log("% d:", d)
-        
-    def check_version_of_dvi(self,ver):
-        """
-        return True if ver is acceptable version of DVI.
-        """
-        return True
 
 def test():
     if len(sys.argv)<2:

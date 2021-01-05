@@ -1,14 +1,25 @@
 import docx
 import sys
 import dviware
+import os
 
 class DviDocxStackMachine(dviware.DviStackMachine):
-    def __init__(self,debugmode=False):
+    def __init__(self,mathimagebasename,debugmode=False):
         super().__init__(debugmode)
         self.document = docx.Document()
         self.p = None
         self.r = None
         self.is_mathmode = False
+        self.num_of_math = 0
+        self.math_image_base_name = mathimagebasename
+
+    def add_mathimage(self):
+        self.num_of_math = self.num_of_math+1
+        self.r=self.p.add_run()
+        #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
+        self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
+        self.r=self.p.add_run()
+        
 
     def bop(self,cc,p,bb):
         """
@@ -17,6 +28,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         ans=super().bop(cc,p,bb)
         if self.p:
             document.add_page_break()
+        if self.is_mathmode:
+            self.add_mathimage()
 
     def draw_char(self,h,v,c):
         """
@@ -62,18 +75,14 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.p = self.document.add_paragraph()
                 self.r=self.p.add_run()
             elif lit.startswith("begin_math"):
-                mathnum=lit[10:]
                 self.is_mathmode=True
-                self.r=self.p.add_run()
-                self.r.add_text("[inline math"+mathnum+"]")
+                self.add_mathimage()
             elif lit=="end_math":
                 self.is_mathmode=False
                 self.r=self.p.add_run()
             elif lit=="begin_display":
-                mathnum=lit[13:]
+                self.add_mathimage()
                 self.is_mathmode=True
-                self.r=self.p.add_run()
-                self.r.add_text("[display math"+mathnum+"]")
             elif lit=="end_display":
                 self.is_mathmode=False
                 self.r=self.p.add_run()
@@ -382,12 +391,12 @@ def test():
             dvistackmachine=PickupMathStackMachine(outfile,debugmode=False)
             dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
             dviinterpreter.readCodes()
-        #"dvipng -T tight "+outfilename
-        #dvistackmachine=DviDocxStackMachine(debugmode=True)
-        #dvistackmachine=DviDocxStackMachine(debugmode=False)
-        #dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
-        #dviinterpreter.readCodes()
-        #dvistackmachine.document.save(sys.argv[1]+'.docx')
+    os.system("dvipng -T tight "+outfilename)
+    with open(filename, mode='r+b') as file:    
+        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
+        dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
+        dviinterpreter.readCodes()
+        dvistackmachine.document.save(sys.argv[1]+'.docx')
         
 if __name__=="__main__":
     test()
