@@ -115,7 +115,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         ans=super().xxx(k,x,version,bb)
         if x.startswith("texstructure:"):
             lit=x[13:]
-            if lit=="par":
+            if lit=="start_par":
                 if len(self.list_stack)>0:
                     (p,q)=self.list_stack.pop()
                     if p==0 and q>0:
@@ -126,7 +126,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 else:
                     self.add_new_paragraph()
                     self.list_stack.append((0,q))
-                    
+            elif lit.startswith("start_"):
+                self.add_new_paragraph()
             elif lit.startswith("begin_math"):
                 self.is_mathmode=self.is_mathmode+1
                 if self.is_mathmode==1:

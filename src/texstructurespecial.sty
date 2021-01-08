@@ -2,11 +2,13 @@
 %\usepackage{lmodern}
 %\usepackage{textcomp}
 %\usepackage{unicode-math}
-\usepackage{everyhook}
-
+\RequirePackage{everyhook}
+%\RequirePackage{amsmath}
 
 \newif\if@nu@in@ams@display@math@
 \@nu@in@ams@display@math@false
+
+\ifdefined\align
 \renewenvironment{align}{%
   \nu@xxx@BeginDisplay%
   \@nu@in@ams@display@math@true%
@@ -33,14 +35,13 @@
 }{%
   \endalign
 }
-
-
+\fi
 
 \newcommand{\nu@xxx@BeginMath}{\special{texstructure:begin_math}}
 \newcommand{\nu@xxx@EndMath}{\special{texstructure:end_math}}
 \newcommand{\nu@xxx@BeginDisplay}{\special{texstructure:begin_display}}
 \newcommand{\nu@xxx@EndDisplay}{\special{texstructure:end_display}}
-\newcommand{\nu@xxx@Par}{\special{texstructure:par}}
+\newcommand{\nu@xxx@Par}{\special{texstructure:start_par}}
 \newcommand{\nu@xxx@Begin@list}{\special{texstructure:begin_list}}
 \newcommand{\nu@xxx@End@list}{\special{texstructure:end_list}}
 \newcommand{\nu@xxx@Begin@trivlist}{\special{texstructure:begin_trivlist}}
@@ -57,3 +58,19 @@
 \renewcommand{\item}{\nu@xxx@item\nu@old@item}
 \let\nu@old@trivlist\trivlist
 \renewcommand{\trivlist}{\nu@xxx@Begin@trivlist\aftergroup\nu@xxx@End@trivlist\nu@old@trivlist}
+
+\ifdefined\section
+\newcommand{\nu@xxx@new@section}{\special{texstructure:start_section}}
+\let\nu@old@section\section
+\renewcommand{\section}{\nu@xxx@new@section\nu@old@section}
+\fi
+\ifdefined\subsection
+\newcommand{\nu@xxx@new@subsection}{\special{texstructure:start_subsection}}
+\let\nu@old@subsection\subsection
+\renewcommand{\subsection}{\nu@xxx@new@subsection\nu@old@subsection}
+\fi
+\ifdefined\subsubsection
+\newcommand{\nu@xxx@new@subsubsection}{\special{texstructure:start_subsubsection}}
+\let\nu@old@subsubsection\subsubsection
+\renewcommand{\subsubsection}{\nu@xxx@new@subsubsection\nu@old@subsubsection}
+\fi
