@@ -88,6 +88,13 @@ class FontAttribute:
             return FontAttribute("cm","Typewriter","","","typewriter","","","OT1")
         elif name.startswith("cmti"):
             return FontAttribute("cm","Text Italic","","","italic","","","OT1")
+
+        if name.startswith("cmmi"):
+            return FontAttribute("cm","Math Italic","","","italic","","","OML")
+
+        if name.startswith("cmsy"):
+            return FontAttribute("cm","Math Symbols","","","","","","OMS")
+
  
         if name.startswith("min"):
             return FontAttribute("min","Mincho","","","","","","JIS")
