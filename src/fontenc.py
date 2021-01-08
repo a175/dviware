@@ -59,7 +59,7 @@ class FontAttribute:
         if self.encoding == "JIS":
             return JIS[c]
         else:
-            return "[??"+self.family+":"+str(c)+"]"
+            return "[!?"+self.family+":"+str(c)+"]"
         
     @classmethod
     def get_from_name(cls, name):

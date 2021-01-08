@@ -22,12 +22,13 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if self.stackmemory.f!=-1:
             s=self.fonts.fonts[self.stackmemory.f].scaledsize
             self.r.font.size=docx.shared.Mm(self.get_dimension_as_float(s)/10000000)
-            n=self.fonts.fonts[self.stackmemory.f].name
-            self.r.font.name=n
             f=self.fonts.fonts[self.stackmemory.f].fontattribute
             self.r.font.italic=f.is_italic()
             self.r.font.bold=f.is_bold()
             self.r.font.small_caps=f.is_smallcaps()
+            if f.encoding != "":
+                n=self.fonts.fonts[self.stackmemory.f].name
+                self.r.font.name=n
 
     def add_new_paragraph(self):
         if not self.p_is_empty:
@@ -41,12 +42,12 @@ class DviDocxStackMachine(dviware.DviStackMachine):
     
     def add_mathimage(self):
         self.p_is_empty=False
-        if self.spaceque!=None:
-            self.r.add_text(self.spaceque)
-            self.spaceque=None
     
         self.num_of_math = self.num_of_math+1
         if not self.is_display:
+            if self.spaceque!=None:
+                self.r.add_text(self.spaceque)
+                self.spaceque=None
             self.r=self.p.add_run()
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
         else:
