@@ -812,9 +812,9 @@ class DviStackMachine:
     def xxx(self,k,x,version,bb):
         """
         function for DVI.xxx*
-        function for spetial
+        function for special
         """
-        self.log("%spetial", x)
+        self.log("%special", x)
 
 
     def fnt_def(self,k,c,s,d,a,l,n,version,bb):

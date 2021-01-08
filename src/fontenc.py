@@ -58,10 +58,8 @@ class FontAttribute:
             return chr(c)
         if self.encoding == "JIS":
             return JIS[c]
-        if self.family.startswith("msam"):
-            return "[??msam"+str(c)+"]"
-        if self.family.startswith("cmsy"):
-            return "[??cmsy"+str(c)+"]"
+        else:
+            return "[??"+self.family+":"+str(c)+"]"
         
     @classmethod
     def get_from_name(cls, name):

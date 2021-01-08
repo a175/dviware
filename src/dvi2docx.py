@@ -110,7 +110,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         
     def xxx(self,k,x,version,bb):
         """
-        function for spetial
+        function for special
         """
         ans=super().xxx(k,x,version,bb)
         if x.startswith("texstructure:"):
@@ -125,7 +125,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                         self.list_stack.append((p-1,q))
                 else:
                     self.add_new_paragraph()
-                    self.list_stack.append((0,q))
+
             elif lit.startswith("start_"):
                 self.add_new_paragraph()
             elif lit.startswith("begin_math"):
@@ -396,7 +396,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
     def xxx(self,k,x,version,bb):
         """
         function for DVI.xxx*
-        function for spetial
+        function for special
         FIXME
         """
         ans=super().xxx(k,x,version,bb)
