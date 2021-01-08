@@ -578,6 +578,7 @@ class FontList:
         """
         return self.fonts[fnt_num].get_width(c)
 
+
 class FontDictionary:
     def __init__(self,directory,name,s,d,c):
         self.directory=directory
@@ -585,16 +586,13 @@ class FontDictionary:
         self.scaledsize=s
         self.designsize=d
         self.checksum=c
+        self.fontattribute=fontenc.FontAttribute.get_from_name(name)
 
     def get_unicode(self,c):
         """
         translate c to unicode.
         """
-        if c<len(fontenc.T1):
-            return fontenc.T1[c]
-        else:
-            print("!!!!!!!!!!",c)
-            return ""
+        return self.fontattribute.get_unicode(c)
         
     def get_width(self,c):
         """
@@ -602,7 +600,6 @@ class FontDictionary:
         """
         return 0
 
-    
 class DviStackMachine:
     """
     Stack Machine for DVI.
@@ -612,13 +609,19 @@ class DviStackMachine:
         self.stackmemory=None
         self.is_debugmode=debugmode
         self.word=""
-        
+    
     def log(self,*s):
         """
         print log if is_debugmode
         """
         if self.is_debugmode:
             print(*s)
+
+    def get_dimension_as_float(self,d):
+        """
+        returns d*mag*num / den (10^-7 m).
+        """
+        return float(self.mag*self.num*d)/float(self.den)
 
     def check_version_of_dvi(self,i):
         """
@@ -809,9 +812,9 @@ class DviStackMachine:
     def xxx(self,k,x,version,bb):
         """
         function for DVI.xxx*
-        function for spectial
+        function for spetial
         """
-        self.log("%spectial", x)
+        self.log("%spetial", x)
 
 
     def fnt_def(self,k,c,s,d,a,l,n,version,bb):
@@ -888,8 +891,8 @@ def test():
         return
     filename=sys.argv[1]
     with open(filename, mode='r+b') as file:
-        #dvistackmachine=DviStackMachine(debugmode=True)
-        dvistackmachine=DviStackMachine(debugmode=False)
+        dvistackmachine=DviStackMachine(debugmode=True)
+        #dvistackmachine=DviStackMachine(debugmode=False)
         dviinterpreter=DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
 

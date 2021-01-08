@@ -13,27 +13,54 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.is_display = False
         self.num_of_math = 0
         self.math_image_base_name = mathimagebasename
+        self.list_stack=[]
+        self.spaceque=None
+        self.p_is_empty=False
 
+    def add_new_run_for_text(self):
+        self.r=self.p.add_run()
+        if self.stackmemory.f!=-1:
+            s=self.fonts.fonts[self.stackmemory.f].scaledsize
+            self.r.font.size=docx.shared.Mm(self.get_dimension_as_float(s)/10000000)
+            n=self.fonts.fonts[self.stackmemory.f].name
+            self.r.font.name=n
+            f=self.fonts.fonts[self.stackmemory.f].fontattribute
+            self.r.font.italic=f.is_italic()
+            self.r.font.bold=f.is_bold()
+            self.r.font.small_caps=f.is_smallcaps()
+
+    def add_new_paragraph(self):
+        if not self.p_is_empty:
+            self.p=self.document.add_paragraph()
+            self.add_new_run_for_text()
+            self.p_is_empty=True
+
+    def add_single_space(self):
+        if self.spaceque==None:
+            self.spaceque=" "
+    
     def add_mathimage(self):
+        self.p_is_empty=False
+        if self.spaceque!=None:
+            self.r.add_text(self.spaceque)
+            self.spaceque=None
+    
         self.num_of_math = self.num_of_math+1
         if not self.is_display:
             self.r=self.p.add_run()
-            #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
-            self.r=self.p.add_run()
         else:
             self.r=self.p.add_run()
             self.r.add_break()
-            self.r.add_text("    ")
-            #self.r.add_text("[math:"+self.math_image_base_name+str(self.num_of_math)+".png]")
+            self.r.add_text("      ")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
             self.r.add_break()
-            self.r=self.p.add_run()
+        self.add_new_run_for_text()
             
 
     def bop(self,cc,p,bb):
         """
-        functio for DVI.bop.
+        function for DVI.bop.
         """
         ans=super().bop(cc,p,bb)
         if self.p:
@@ -46,13 +73,17 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         add a character to paragraph as new run.
         """
         ans=super().draw_char(h,v,c)
+        self.p_is_empty=False
+        if self.spaceque!=None:
+            self.r.add_text(self.spaceque)
+            self.spaceque=None
         string=self.fonts.get_unicode(self.stackmemory.f,c)
         if not self.is_mathmode > 0:
             if self.r:
                 self.r.add_text(string)
             else:
-                self.p=self.document.add_paragraph()
-                self.r=self.p.add_run(string)
+                self.add_new_paragraph()
+                self.r.add_text(string)
         return(ans)
 
     def add_to_h(self,b):
@@ -64,7 +95,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             if self.p:
                 if b>100000:
                     if not self.is_mathmode > 0:
-                        self.r.add_text(" ")
+                        self.add_single_space()
 
     def add_to_v(self,a):
         """
@@ -73,18 +104,29 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         super().add_to_v(a)
         if a > 0:
             if self.p:
-                self.r.add_text(" ")
+                if not self.is_mathmode > 0:
+                    self.add_single_space()
 
+        
     def xxx(self,k,x,version,bb):
         """
-        function for spectial
+        function for spetial
         """
         ans=super().xxx(k,x,version,bb)
         if x.startswith("texstructure:"):
             lit=x[13:]
             if lit=="par":
-                self.p = self.document.add_paragraph()
-                self.r=self.p.add_run()
+                if len(self.list_stack)>0:
+                    (p,q)=self.list_stack.pop()
+                    if p==0 and q>0:
+                        self.add_new_paragraph()
+                        self.list_stack.append((0,q))
+                    else:
+                        self.list_stack.append((p-1,q))
+                else:
+                    self.add_new_paragraph()
+                    self.list_stack.append((0,q))
+                    
             elif lit.startswith("begin_math"):
                 self.is_mathmode=self.is_mathmode+1
                 if self.is_mathmode==1:
@@ -92,7 +134,6 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                     self.add_mathimage()
             elif lit=="end_math":
                 self.is_mathmode=self.is_mathmode-1
-                self.r=self.p.add_run()
             elif lit=="begin_display":
                 self.is_mathmode=self.is_mathmode+1
                 if self.is_mathmode==1:
@@ -100,7 +141,42 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                     self.add_mathimage()
             elif lit=="end_display":
                 self.is_mathmode=self.is_mathmode-1
-                self.r=self.p.add_run()
+            elif lit.startswith("begin_list"):
+                self.list_stack.append((0,0))
+                self.add_new_paragraph()
+
+            elif lit=="end_list":
+                self.list_stack.pop()
+                self.add_new_paragraph()
+
+            elif lit.startswith("begin_trivlist"):
+                self.list_stack.append((0,0))
+                self.add_new_paragraph()
+    
+            elif lit=="end_trivlist":
+                self.list_stack.pop()
+                self.r.add_break()
+                self.add_new_paragraph()
+
+            elif lit=="item":
+                (p,q)=self.list_stack.pop()
+                if q>0:
+                    self.add_new_paragraph()
+
+                q=q+1
+                p=1
+                self.list_stack.append((p,q))
+
+                    
+        return(ans)
+
+    def fnt(self,x,version,bb):
+        """
+        function for DVI.fnt*
+        """
+        ans=super().fnt(x,version,bb)
+        if not self.is_mathmode > 0:
+            self.add_new_run_for_text()
         return(ans)
 
 
@@ -109,6 +185,16 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         super().__init__(debugmode)
         self.outfile = outfile
         self.is_mathmode = 0
+
+    def is_acceptable_font(self,k):
+        """
+        Now we assume dvipng. So remove japanese.
+        """
+        if self.fonts.fonts[k].fontattribute.encoding=="JIS":
+            return False
+        if self.fonts.fonts[k].fontattribute.encoding=="U":
+            return False
+        return True
 
     def begin_page(self):
         boppos=self.outfile.tell()
@@ -148,7 +234,9 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().set(c,version,bb)
         if self.is_mathmode > 0:
-            self.outfile.write(bb)
+            if self.is_acceptable_font(self.stackmemory.f):
+                self.outfile.write(bb)
+
         
     def set_rule(self,a,b,bb):
         """
@@ -167,7 +255,8 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().put(c,version,bb)
         if self.is_mathmode > 0:
-            self.outfile.write(bb)
+            if self.is_acceptable_font(self.stackmemory.f):
+                self.outfile.write(bb)
 
     def put_rule(self,a,b,bb):
         """
@@ -296,15 +385,17 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         function for DVI.fnt*
         """
         ans=super().fnt(x,version,bb)
-        self.bytes_for_page=self.bytes_for_page+bb
-        if self.is_mathmode > 0:
-            self.outfile.write(bb)
+        if self.is_acceptable_font(x):
+            self.bytes_for_page=self.bytes_for_page+bb
+            if self.is_mathmode > 0:
+                self.outfile.write(bb)
+        return ans
 
         
     def xxx(self,k,x,version,bb):
         """
         function for DVI.xxx*
-        function for spectial
+        function for spetial
         FIXME
         """
         ans=super().xxx(k,x,version,bb)
@@ -331,19 +422,21 @@ class PickupMathStackMachine(dviware.DviStackMachine):
                 self.outfile.write(bb)
         return(ans)
 
+        
     def fnt_def(self,k,c,s,d,a,l,n,version,bb):
         """
         function for DVI.fnt_def**
         FIXME
         """
         ans=super().fnt_def(k,c,s,d,a,l,n,version,bb)
-        if self.is_mathmode > 0:
-            self.outfile.write(bb)
-        elif self.is_postemble: 
-            self.outfile.write(bb)
-        else:
-            self.queue_of_bytes=self.queue_of_bytes+bb
-
+        if self.is_acceptable_font(k):
+            if self.is_mathmode > 0:
+                self.outfile.write(bb)
+            elif self.is_postemble: 
+                self.outfile.write(bb)
+            else:
+                self.queue_of_bytes=self.queue_of_bytes+bb
+        return ans
 
     def pre(self,i,num,den,mag,k,x,bb):
         """
@@ -357,7 +450,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         self.is_postemble=False
         self.is_mathmode=0
         self.queue_of_bytes=bytes(0)
-        
+
     def post(self,p,num,den,mag,l,u,s,t,bb):
         """
         function for DVI.post.
@@ -410,8 +503,9 @@ def test():
             dvistackmachine=PickupMathStackMachine(outfile,debugmode=False)
             dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
             dviinterpreter.readCodes()
-    for i in range(dvistackmachine.total_pages):
-        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
+#    for i in range(dvistackmachine.total_pages):
+#        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
+    os.system("dvipng -T tight "+outfilename)
     with open(filename, mode='r+b') as file:    
         dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)

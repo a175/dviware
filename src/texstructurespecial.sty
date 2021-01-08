@@ -41,7 +41,19 @@
 \newcommand{\nu@xxx@BeginDisplay}{\special{texstructure:begin_display}}
 \newcommand{\nu@xxx@EndDisplay}{\special{texstructure:end_display}}
 \newcommand{\nu@xxx@Par}{\special{texstructure:par}}
+\newcommand{\nu@xxx@Begin@list}{\special{texstructure:begin_list}}
+\newcommand{\nu@xxx@End@list}{\special{texstructure:end_list}}
+\newcommand{\nu@xxx@Begin@trivlist}{\special{texstructure:begin_trivlist}}
+\newcommand{\nu@xxx@End@trivlist}{\special{texstructure:end_trivlist}}
+\newcommand{\nu@xxx@item}{\special{texstructure:item}}
 \PushPostHook{math}{\nu@xxx@BeginMath\aftergroup\nu@xxx@EndMath}
 \PushPostHook{display}{\if@nu@in@ams@display@math@\else\nu@xxx@BeginDisplay\fi\aftergroup\nu@xxx@EndDisplay}
 \PushPostHook{par}{\nu@xxx@Par}
 
+
+\let\nu@old@list\list
+\renewcommand{\list}{\nu@xxx@Begin@list\aftergroup\nu@xxx@End@list\nu@old@list}
+\let\nu@old@item\item
+\renewcommand{\item}{\nu@xxx@item\nu@old@item}
+\let\nu@old@trivlist\trivlist
+\renewcommand{\trivlist}{\nu@xxx@Begin@trivlist\aftergroup\nu@xxx@End@trivlist\nu@old@trivlist}
