@@ -55,7 +55,7 @@ python3 pathtosrc/dvi2docx.py hoge.dvi
 ```
 
 Open your docx file by Word, and modify:
-* replace ` ]` to `]`.
-* replace `[!? ...]` (unknown fonts) to better characters.
+* replace ` ]` (space+ket) to `]` (ket). (`\cite` makes this string.)
+* replace `[!? ...]` (bra+!+?+fontname+:+code(in 10digit)+bet) to better characters. (unknown fonts makes this string.)
 * remove or modify footnotes.
 * remove 'break page'.
