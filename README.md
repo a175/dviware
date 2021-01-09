@@ -8,6 +8,30 @@ The script dvi2docx converts from *.dvi to *.dvi.docx by
 python3 pathtosrc/dvi2docx.py input.dvi
 ```
 
+## Tips to convert
+
+Modify your tex source:
+* please insert `\usepackage[T1]{fontenc}` in preamble to use fontenc package.
+* please insert `\pagestyle{empty}` in preamble.
+* please insert `\thispagestyle{empty}` after `\maketitle` if  `\maketitle` exists.
+* please copy `src/texstructurespecial.sty` to your directory where tex source is. And do the following:
+* please insert `\usepackage{texstructurespecial}` before `\begin{document}`.
+* please insert `\indentedraggedright` after `\begin{document}`.
+
+Compile your tex source (e.g., hoge.tex) to a dvi file (e.g., hoge.dvi).
+
+Convert your dvi file (e.g., hoge.dvi) to a docx file (e.g., hoge.dvi.docx) by
+```
+python3 pathtosrc/dvi2docx.py hoge.dvi
+```
+
+Open your docx (e.g., hoge.dvi.docx) file by Word, and modify:
+* replace ` ]` (space+ket) to `]` (ket). (`\cite` makes this string.)
+* replace `[!?...]` (bra+!+?+fontname+:+codepoint(decimal)+ket) to better characters. (symbol fonts in text make this string.)
+* remove or modify footnotes.
+* remove 'break page'.
+
+## Note
 
 The DVI file for dvi2docx should be compiled with the latex style file,
 texstructurespecial.sty, in src.
@@ -34,28 +58,3 @@ At this moment, the following are not implemented:
 * page footers and headers.
 * alternative font names.
 * convert dvi files not in current directories.
-
-
-
-## Tips to convert
-
-Modify your tex source.:
-* please insert `\usepackage[T1]{fontenc}` in preamble to use fontenc package.
-* please insert `\pagestyle{empty}` in preamble.
-* please insert `\thispagestyle{empty}` after `\maketitle` if  `\maketitle` exists.
-* please copy `src/texstructurespecial.sty` to your directory where tex source is. And do the following:
-* please insert `\usepackage{texstructurespecial}` before `\begin{document}`.
-* please insert `\indentedraggedright` after `\begin{document}`.
-
-Compile your tex source (e.g., hoge.tex) to a dvi file (e.g., hoge.dvi).
-
-Convert your dvi file (e.g., hoge.dvi) to a docx file (e.g., hoge.dvi.docx) by
-```
-python3 pathtosrc/dvi2docx.py hoge.dvi
-```
-
-Open your docx (e.g., hoge.dvi.docx) file by Word, and modify:
-* replace ` ]` (space+ket) to `]` (ket). (`\cite` makes this string.)
-* replace `[!?...]` (bra+!+?+fontname+:+codepoint(decimal)+ket) to better characters. (unknown fonts make this string.)
-* remove or modify footnotes.
-* remove 'break page'.
