@@ -54,8 +54,8 @@ Convert your dvi file (e.g., hoge.dvi) to a docx file (e.g., hoge.dvi.docx) by
 python3 pathtosrc/dvi2docx.py hoge.dvi
 ```
 
-Open your docx file by Word, and modify:
+Open your docx (e.g., hoge.dvi.docx) file by Word, and modify:
 * replace ` ]` (space+ket) to `]` (ket). (`\cite` makes this string.)
-* replace `[!? ...]` (bra+!+?+fontname+:+codepoint(decimal)+bet) to better characters. (unknown fonts makes this string.)
+* replace `[!?...]` (bra+!+?+fontname+:+codepoint(decimal)+ket) to better characters. (unknown fonts make this string.)
 * remove or modify footnotes.
 * remove 'break page'.
