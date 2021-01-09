@@ -44,8 +44,8 @@ Modify your tex source.:
 * please insert `\pagestyle{empty}` in preamble.
 * please insert `\thispagestyle{empty}` after `\maketitle` if  `\maketitle` exists.
 * please copy `src/texstructurespecial.sty` to your directory where tex source is. And do the following:
-** please insert `\usepackage{texstructurespecial}` before `\begin{document}`.
-** please insert `\indentedraggedright` after `\begin{document}`.
+* please insert `\usepackage{texstructurespecial}` before `\begin{document}`.
+* please insert `\indentedraggedright` after `\begin{document}`.
 
 Compile your tex source (e.g., hoge.tex) to a dvi file (e.g., hoge.dvi).
 
