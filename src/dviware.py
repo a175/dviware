@@ -292,7 +292,8 @@ class DviInterpreter:
         function to read l bytes from file as a dimension.
         """
         bb=self.file.read(l)
-        return (int.from_bytes(bb,byteorder='big',signed=True),bb)
+        ans=int.from_bytes(bb,byteorder='big',signed=True)
+        return (ans,bb)
     
     def read_dx(self,code,base):
         """

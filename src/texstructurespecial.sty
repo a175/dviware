@@ -35,13 +35,104 @@
 }{%
   \endalign
 }
+\renewenvironment{gather}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@gather\st@rredfalse%
+  \@nu@in@ams@display@math@false%
+}{%
+  \math@cr \black@\totwidth@ \egroup
+  $$\ignorespacesafterend
+}
+
+\renewenvironment{gather*}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@gather\st@rredtrue%
+  \@nu@in@ams@display@math@false%
+}{%
+  \endgather
+}
+
+\renewenvironment{alignat}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\z@\st@rredfalse
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{alignat*}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\z@\st@rredtrue
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{xalignat}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\@ne\st@rredfalse
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{xalignat*}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\@ne\st@rredtrue
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{xxalignat}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\tw@\st@rredtrue
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{flalign}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\tw@\st@rredfalse\m@ne
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{flalign*}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@align\tw@\st@rredtrue\m@ne
+  \@nu@in@ams@display@math@false%
+}{%
+  \endalign
+}
+\renewenvironment{multline}{%
+  \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@multline\st@rredfalse
+  \@nu@in@ams@display@math@false%
+}{%
+  \iftagsleft@ \@xp\lendmultline@ \else \@xp\rendmultline@ \fi
+  \ignorespacesafterend
+}
+\renewenvironment{multline*}{%
+    \nu@xxx@BeginDisplay%
+  \@nu@in@ams@display@math@true%
+  \start@multline\st@rredtrue%
+  \@nu@in@ams@display@math@false%
+}{\endmultline}
+
 \fi
 
 \newcommand{\nu@xxx@BeginMath}{\special{texstructure:begin_math}}
 \newcommand{\nu@xxx@EndMath}{\special{texstructure:end_math}}
 \newcommand{\nu@xxx@BeginDisplay}{\special{texstructure:begin_display}}
 \newcommand{\nu@xxx@EndDisplay}{\special{texstructure:end_display}}
-\newcommand{\nu@xxx@Par}{\special{texstructure:start_par}}
+\newcommand{\nu@xxx@par}[1]{\special{texstructure:start_par:parindent=#1}}
 \newcommand{\nu@xxx@Begin@list}{\special{texstructure:begin_list}}
 \newcommand{\nu@xxx@End@list}{\special{texstructure:end_list}}
 \newcommand{\nu@xxx@Begin@trivlist}{\special{texstructure:begin_trivlist}}
@@ -49,7 +140,7 @@
 \newcommand{\nu@xxx@item}{\special{texstructure:item}}
 \PushPostHook{math}{\nu@xxx@BeginMath\aftergroup\nu@xxx@EndMath}
 \PushPostHook{display}{\if@nu@in@ams@display@math@\else\nu@xxx@BeginDisplay\fi\aftergroup\nu@xxx@EndDisplay}
-\PushPostHook{par}{\nu@xxx@Par}
+\PushPostHook{par}{\nu@xxx@par{\the\parindent}}
 
 
 \let\nu@old@list\list
@@ -74,3 +165,8 @@
 \let\nu@old@subsubsection\subsubsection
 \renewcommand{\subsubsection}{\nu@xxx@new@subsubsection\nu@old@subsubsection}
 \fi
+
+
+\newcommand\indentedraggedright{%
+  \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
+  \leftskip\z@skip}

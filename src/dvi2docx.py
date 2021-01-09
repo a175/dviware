@@ -17,6 +17,10 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.spaceque=None
         self.p_is_empty=False
 
+    def string2length(self,string):
+        if string.endswith("pt"):
+            return docx.shared.Pt(float(string[:-2]))
+
     def add_new_run_for_text(self):
         self.r=self.p.add_run()
         if self.stackmemory.f!=-1:
@@ -30,15 +34,19 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 n=self.fonts.fonts[self.stackmemory.f].name
                 self.r.font.name=n
 
-    def add_new_paragraph(self):
+    def add_new_paragraph(self,param=None):
         if not self.p_is_empty:
             self.p=self.document.add_paragraph()
+            if param:
+                if param.startswith("parindent="):
+                    indent=self.string2length(param[10:])
+                    self.p.paragraph_format.first_line_indent=indent
             self.add_new_run_for_text()
             self.p_is_empty=True
 
-    def add_single_space(self):
+    def add_single_space(self,space=" "):
         if self.spaceque==None:
-            self.spaceque=" "
+            self.spaceque=space
     
     def add_mathimage(self):
         self.p_is_empty=False
@@ -87,6 +95,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.r.add_text(string)
         return(ans)
 
+
     def add_to_h(self,b):
         """
         add d to stackmemory.add_to_h.
@@ -96,7 +105,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             if self.p:
                 if b>100000:
                     if not self.is_mathmode > 0:
-                        self.add_single_space()
+                        self.add_single_space(" ")
 
     def add_to_v(self,a):
         """
@@ -109,6 +118,14 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                     self.add_single_space()
 
         
+    def put(self,c,version,bb):
+        """
+        function for DVI.put.
+        this function calls self.draw_char().
+        """
+        ans=super().put(c,version,bb)
+        self.add_single_space("")
+
     def xxx(self,k,x,version,bb):
         """
         function for special
@@ -116,16 +133,17 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         ans=super().xxx(k,x,version,bb)
         if x.startswith("texstructure:"):
             lit=x[13:]
-            if lit=="start_par":
+            if lit.startswith("start_par"):
+                param=lit[10:]
                 if len(self.list_stack)>0:
                     (p,q)=self.list_stack.pop()
                     if p==0 and q>0:
-                        self.add_new_paragraph()
+                        self.add_new_paragraph(param)
                         self.list_stack.append((0,q))
                     else:
                         self.list_stack.append((p-1,q))
                 else:
-                    self.add_new_paragraph()
+                    self.add_new_paragraph(param)
 
             elif lit.startswith("start_"):
                 self.add_new_paragraph()
@@ -311,6 +329,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         if self.is_mathmode > 0:
             self.outfile.write(bb)
             self.stack_depth=self.stack_depth+1
+
     def pop(self,bb):
         """
         funtion for stack.
