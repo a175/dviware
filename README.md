@@ -18,7 +18,7 @@ Modify your tex source:
 * please insert `\usepackage{texstructurespecial}` before `\begin{document}`.
 * please insert `\indentedraggedright` after `\begin{document}`.
 
-Compile your tex source (e.g., hoge.tex) to a dvi file (e.g., hoge.dvi).
+Compile your tex source (e.g., hoge.tex) to a dvi file (e.g., hoge.dvi) by LaTeX (not pdflatex).
 
 Convert your dvi file (e.g., hoge.dvi) to a docx file (e.g., hoge.dvi.docx) by
 ```
