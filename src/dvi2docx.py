@@ -24,15 +24,12 @@ class DviDocxStackMachine(dviware.DviStackMachine):
     def add_new_run_for_text(self):
         self.r=self.p.add_run()
         if self.stackmemory.f!=-1:
-            s=self.fonts.fonts[self.stackmemory.f].scaledsize
-            self.r.font.size=docx.shared.Mm(self.get_dimension_as_float(s)/10000000)
-            f=self.fonts.fonts[self.stackmemory.f].fontattribute
-            self.r.font.italic=f.is_italic()
-            self.r.font.bold=f.is_bold()
-            self.r.font.small_caps=f.is_smallcaps()
-            if f.encoding != "":
-                n=self.fonts.fonts[self.stackmemory.f].name
-                self.r.font.name=n
+            s=self.fontregister.get_scaledsize(self.stackmemory.f)
+            self.r.font.size=docx.shared.Mm(self.get_dimension_as_float(s)/10000000)            
+            self.r.font.italic=self.fontregister.is_italic(self.stackmemory.f)
+            self.r.font.bold=self.fontregister.is_bold(self.stackmemory.f)
+            self.r.font.small_caps=self.fontregister.is_small_caps(self.stackmemory.f)
+            self.r.font.name=self.fontregister.get_name(self.stackmemory.f)
 
     def add_new_paragraph(self,param=None):
         if not self.p_is_empty:
@@ -86,7 +83,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if self.spaceque!=None:
             self.r.add_text(self.spaceque)
             self.spaceque=None
-        string=self.fonts.get_unicode(self.stackmemory.f,c)
+        string=self.fontregister.get_unicode(self.stackmemory.f,c)
         if not self.is_mathmode > 0:
             if self.r:
                 self.r.add_text(string)
@@ -210,9 +207,9 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         Now we assume dvipng. So remove japanese.
         """
-        if self.fonts.fonts[k].fontattribute.encoding=="JIS":
+        if self.fontregister.get_encoding(k)=="JIS":
             return False
-        if self.fonts.fonts[k].fontattribute.encoding=="U":
+        if self.fontregister.get_encoding(k)=="U":
             return False
         return True
 

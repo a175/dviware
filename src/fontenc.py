@@ -7,8 +7,9 @@ OT1=["\u0393", "\u0394", "\u0398", "\u039B", "\u039E", "\u03A0", "\u03A3", "\u03
 T1=["\u0060", "\u00B4", "\u02C6", "\u02DC", "\u00A8", "\u02DD", "\u02DA", "\u02C7", "\u02D8", "\u00AF", "\u02D9", "\u00B8", "\u02DB", "\u201A", "\u2039", "\u203A", "\u201C", "\u201D", "\u201E", "\u00AB", "\u00BB", "\u2013", "\u2014", "\u200B", "\u2080", "\u0131", "\u0237", "\uFB00", "\uFB01", "\uFB02", "\uFB03", "\uFB04", "\u0020", "\u0021", "\u0022", "\u0023", "\u0024", "\u0025", "\u0026", "\u2019", "\u0028", "\u0029", "\u002A", "\u002B", "\u002C", "\u002D", "\u002E", "\u002F", "\u0030", "\u0031", "\u0032", "\u0033", "\u0034", "\u0035", "\u0036", "\u0037", "\u0038", "\u0039", "\u003A", "\u003B", "\u003C", "\u003D", "\u003E", "\u003F", "\u0040", "\u0041", "\u0042", "\u0043", "\u0044", "\u0045", "\u0046", "\u0047", "\u0048", "\u0049", "\u004A", "\u004B", "\u004C", "\u004D", "\u004E", "\u004F", "\u0050", "\u0051", "\u0052", "\u0053", "\u0054", "\u0055", "\u0056", "\u0057", "\u0058", "\u0059", "\u005A", "\u005B", "\u005C", "\u005D", "\u005E", "\u005F", "\u2018", "\u0061", "\u0062", "\u0063", "\u0064", "\u0065", "\u0066", "\u0067", "\u0068", "\u0069", "\u006A", "\u006B", "\u006C", "\u006D", "\u006E", "\u006F", "\u0070", "\u0071", "\u0072", "\u0073", "\u0074", "\u0075", "\u0076", "\u0077", "\u0078", "\u0079", "\u007A", "\u007B", "\u007C", "\u007D", "\u007E", "\u00AD", "\u0102", "\u0104", "\u0106", "\u010C", "\u010E", "\u011A", "\u0118", "\u011E", "\u0139", "\u013D", "\u0141", "\u0143", "\u0147", "\u014A", "\u0150", "\u0154", "\u0158", "\u015A", "\u0160", "\u015E", "\u0164", "\u0162", "\u0170", "\u016E", "\u0178", "\u0179", "\u017D", "\u017B", "\u0132", "\u0130", "\u0111", "\u00A7", "\u0103", "\u0105", "\u0107", "\u010D", "\u010F", "\u011B", "\u0119", "\u011F", "\u013A", "\u013E", "\u0142", "\u0144", "\u0148", "\u014B", "\u0151", "\u0155", "\u0159", "\u015B", "\u0161", "\u015F", "\u0165", "\u0163", "\u0171", "\u016F", "\u00FF", "\u017A", "\u017E", "\u017C", "\u0133", "\u00A1", "\u00BF", "\u00A3", "\u00C0", "\u00C1", "\u00C2", "\u00C3", "\u00C4", "\u00C5", "\u00C6", "\u00C7", "\u00C8", "\u00C9", "\u00CA", "\u00CB", "\u00CC", "\u00CD", "\u00CE", "\u00CF", "\u00D0", "\u00D1", "\u00D2", "\u00D3", "\u00D4", "\u00D5", "\u00D6", "\u0152", "\u00D8", "\u00D9", "\u00DA", "\u00DB", "\u00DC", "\u00DD", "\u00DE", "\u1E9E", "\u00E0", "\u00E1", "\u00E2", "\u00E3", "\u00E4", "\u00E5", "\u00E6", "\u00E7", "\u00E8", "\u00E9", "\u00EA", "\u00EB", "\u00EC", "\u00ED", "\u00EE", "\u00EF", "\u00F0", "\u00F1", "\u00F2", "\u00F3", "\u00F4", "\u00F5", "\u00F6", "\u0153", "\u00F8", "\u00F9", "\u00FA", "\u00FB", "\u00FC", "\u00FD", "\u00FE", "\u00DF"]
 
 
-class FontAttribute:
-    def __init__(self,family,series,weight,width,shape,variant,glyphset,encoding):
+
+class FontInfo:
+    def __init__(self,family,series,weight,width,shape,variant,glyphset,encoding,name=None,directory=None,s=None,d=None,c=None):
         """
         family:typeface name,
         series:combination of weight and width
@@ -27,6 +28,13 @@ class FontAttribute:
         self.variant=variant
         self.glyphset=glyphset
         self.encoding=encoding
+        # The following for DVI
+        self.name=name
+        self.directory=directory
+        self.scaledsize=s
+        self.designsize=d
+        self.checksum=c
+
     def is_bold(self):
         if self.weight == "bold":
             return True
@@ -39,7 +47,7 @@ class FontAttribute:
         else:
             return False
 
-    def is_smallcaps(self):
+    def is_small_caps(self):
         if self.variant=="smallcaps":
             return True
         else:
@@ -59,62 +67,73 @@ class FontAttribute:
         if self.encoding == "JIS":
             return JIS[c]
         else:
-            return "[!?"+self.family+":"+str(c)+"]"
+            if self.name:
+                return "[!?"+self.name+":"+str(c)+"]"
+            else:
+                return "[!?"+self.family+":"+str(c)+"]"
+        
+    def get_width(self,c):
+        """
+        returns width of c.
+        """
+        return 0
+
+    
         
     @classmethod
-    def get_from_name(cls, name):
+    def get_from_name(cls, name,directory=None,s=None,d=None,c=None):
         if name.startswith("ecbx"):
-            return FontAttribute("ec","Bold Extend Roman","bold","extended","","","","T1")
+            return FontInfo("ec","Bold Extend Roman","bold","extended","","","","T1",name,directory,s,d,c)
         elif name.startswith("eccc"):
-            return FontAttribute("ec","Caps and Small Caps","","","","smallcaps","","T1")
+            return FontInfo("ec","Caps and Small Caps","","","","smallcaps","","T1",name,directory,s,d,c)
         elif name.startswith("ecrm"):
-            return FontAttribute("ec","Roman Medium","medium","","","","","T1")
+            return FontInfo("ec","Roman Medium","medium","","","","","T1",name,directory,s,d,c)
         elif name.startswith("cmr"):
-            return FontAttribute("ec","Roman","","","","","","T1")
+            return FontInfo("ec","Roman","","","","","","T1",name,directory,s,d,c)
         elif name.startswith("ecti"):
-            return FontAttribute("ec","Text Italic","","","italic","","","T1")
+            return FontInfo("ec","Text Italic","","","italic","","","T1",name,directory,s,d,c)
         elif name.startswith("ectt"):
-            return FontAttribute("ec","Typewriter Text","","","","typewriter","","T1")
+            return FontInfo("ec","Typewriter Text","","","","typewriter","","T1",name,directory,s,d,c)
         elif name.startswith("ecss"):
-            return FontAttribute("ec","Sans Serif","","","","","","OT1")
+            return FontInfo("ec","Sans Serif","","","","","","OT1",name,directory,s,d,c)
 
         if name.startswith("cmbx"):
-            return FontAttribute("cm","Bold Extended","bold","extended","","","","OT1")            
+            return FontInfo("cm","Bold Extended","bold","extended","","","","OT1",name,directory,s,d,c)            
         elif name.startswith("cmss"):
-            return FontAttribute("cm","SansSerif","","","","","","OT1")
+            return FontInfo("cm","SansSerif","","","","","","OT1",name,directory,s,d,c)
         elif name.startswith("cmcsc"):
-            return FontAttribute("cm","Small Caps","","","","smallcaps","","OT1")
+            return FontInfo("cm","Small Caps","","","","smallcaps","","OT1",name,directory,s,d,c)
         elif name.startswith("cmtt"):
-            return FontAttribute("cm","Typewriter","","","typewriter","","","OT1")
+            return FontInfo("cm","Typewriter","","","typewriter","","","OT1",name,directory,s,d,c)
         elif name.startswith("cmti"):
-            return FontAttribute("cm","Text Italic","","","italic","","","OT1")
+            return FontInfo("cm","Text Italic","","","italic","","","OT1",name,directory,s,d,c)
 
         if name.startswith("cmmi"):
-            return FontAttribute("cm","Math Italic","","","italic","","","OML")
+            return FontInfo("cm","Math Italic","","","italic","","","OML",name,directory,s,d,c)
 
         if name.startswith("cmsy"):
-            return FontAttribute("cm","Math Symbols","","","","","","OMS")
+            return FontInfo("cm","Math Symbols","","","","","","OMS",name,directory,s,d,c)
 
  
         if name.startswith("min"):
-            return FontAttribute("min","Mincho","","","","","","JIS")
+            return FontInfo("min","Mincho","","","","","","JIS",name,directory,s,d,c)
         elif name.startswith("umin"):
-            return FontAttribute("umin","Mincho","","","","","","U")
+            return FontInfo("umin","Mincho","","","","","","U",name,directory,s,d,c)
         elif name.startswith("jis"):
-            return FontAttribute("jis","Mincho","","","","","","JIS")
+            return FontInfo("jis","Mincho","","","","","","JIS",name,directory,s,d,c)
         elif name.startswith("upjisr-h"):
-            return FontAttribute("upjisr-h","Mincho","","","","","","U")
+            return FontInfo("upjisr-h","Mincho","","","","","","U",name,directory,s,d,c)
         if name.startswith("goth"):
-            return FontAttribute("goth","Gothic","","","","","","JIS")
+            return FontInfo("goth","Gothic","","","","","","JIS",name,directory,s,d,c)
         elif name.startswith("ugoth"):
-            return FontAttribute("ugoth","Gothic","","","","","","U")
+            return FontInfo("ugoth","Gothic","","","","","","U",name,directory,s,d,c)
         elif name.startswith("jisg"):
-            return FontAttribute("jisg","Gothic","","","","","","JIS")
+            return FontInfo("jisg","Gothic","","","","","","JIS",name,directory,s,d,c)
         elif name.startswith("upjisr-h"):
-            return FontAttribute("ujisg-h","Gothic","","","","","","U")
+            return FontInfo("ujisg-h","Gothic","","","","","","U",name,directory,s,d,c)
 
   
-        return FontAttribute(name,"","","","","","","")
+        return FontInfo("","","","","","","","",name,directory,s,d,c)
             
 # T1        
 # ecbi Bold Extended Text Italic

@@ -557,7 +557,8 @@ class DVIStackMemory:
         data=self.stack.pop()
         (self.h,self.v,self.w,self.x,self.y,self.z)=data
 
-class FontList:
+
+class FontRegister:
     def __init__(self):
         self.fonts={}
 
@@ -565,7 +566,7 @@ class FontList:
         """
         add a new font to list.
         """
-        self.fonts[k]=FontDictionary(directory,name,s,d,c)
+        self.fonts[k]=fontenc.FontInfo.get_from_name(name,directory,s,d,c)
 
     def get_unicode(self,fnt_num,c):
         """
@@ -579,37 +580,64 @@ class FontList:
         """
         return self.fonts[fnt_num].get_width(c)
 
+    def get_name(self,fnt_num):
+        """
+        returns scaledsize.
+        """
+        return self.fonts[fnt_num].name
+    
+    def get_scaledsize(self,fnt_num):
+        """
+        returns scaledsize.
+        """
+        return self.fonts[fnt_num].scaledsize
+    
+    def get_designsize(self,fnt_num):
+        """
+        returns designsize.
+        """
+        return self.fonts[fnt_num].designsize
+    
+    def get_checksum(self,fnt_num):    
+        """
+        returns checksum of tfm.
+        """
+        return self.fonts[fnt_num].checksum
 
-class FontDictionary:
-    def __init__(self,directory,name,s,d,c):
-        self.directory=directory
-        self.name=name
-        self.scaledsize=s
-        self.designsize=d
-        self.checksum=c
-        self.fontattribute=fontenc.FontAttribute.get_from_name(name)
+    def get_encoding(self,fnt_num):    
+        """
+        returns encoding.
+        """
+        return self.fonts[fnt_num].encoding
 
-    def get_unicode(self,c):
+    def is_italic(self,fnt_num):    
         """
-        translate c to unicode.
+        returns True if fnt_num is italic.
         """
-        return self.fontattribute.get_unicode(c)
-        
-    def get_width(self,c):
+        return self.fonts[fnt_num].is_italic()
+
+    def is_bold(self,fnt_num):    
         """
-        returns width of c.
+        returns True if fnt_num is bold.
         """
-        return 0
+        return self.fonts[fnt_num].is_bold()
+
+    def is_small_caps(self,fnt_num):    
+        """
+        returns True if fnt_num is small caps.
+        """
+        return self.fonts[fnt_num].is_small_caps()
+
+    
 
 class DviStackMachine:
     """
     Stack Machine for DVI.
     """
     def __init__(self,debugmode=False):
-        self.fonts=FontList()
+        self.fontregister=FontRegister()
         self.stackmemory=None
         self.is_debugmode=debugmode
-        self.word=""
     
     def log(self,*s):
         """
@@ -643,8 +671,9 @@ class DviStackMachine:
         primitive function to draw a character.
         """
         self.log("%% char at:", h, v)
-        string=self.fonts.get_unicode(self.stackmemory.f,c)
+        string=self.fontregister.get_unicode(self.stackmemory.f,c)
         self.log("%% char:", string)
+
 
     def add_to_h(self,b):
         """
@@ -656,7 +685,7 @@ class DviStackMachine:
         """
         add width of c to stackmemory.add_to_h.
         """
-        width=self.fonts.get_width(self.stackmemory.f,c)
+        width=self.fontregister.get_width(self.stackmemory.f,c)
         self.stackmemory.add_to_h(width)
     
     def add_to_v(self,a):
@@ -829,7 +858,7 @@ class DviStackMachine:
         self.log("%% design size =",d)
         self.log("%% dir :",n[:a])
         self.log("%% name :",n[a:])
-        self.fonts.fnt_def(k,n[:a],n[a:],s,d,c)
+        self.fontregister.fnt_def(k,n[:a],n[a:],s,d,c)
 
     def pre(self,i,num,den,mag,k,x,bb):
         """
