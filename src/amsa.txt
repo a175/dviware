@@ -3,649 +3,649 @@
 #\DeclareMathSymbol{\boxdot}{\mathbin}{AMSa}{"00}
 00="\u22A1"
 ⊡
-SQUARED DOT OPERATOR
+{SQUARED DOT OPERATOR}
 
 #\DeclareMathSymbol{\boxplus}{\mathbin}{AMSa}{"01}
 01="\u229E"
 ⊞
-SQUARED PLUS
+{SQUARED PLUS}
 
 #\DeclareMathSymbol{\boxtimes}{\mathbin}{AMSa}{"02}
 02="\u22A0"
 ⊠
-SQUARED TIMES
+{SQUARED TIMES}
 
 #\DeclareMathSymbol{\square}{\mathord}{AMSa}{"03}
 03="\u25A1"
 □
-WHITE SQUARE
+{WHITE SQUARE}
 
 #\DeclareMathSymbol{\blacksquare}{\mathord}{AMSa}{"04}
 04="\u25A0"
 ■
-BLACK SQUARE
+{BLACK SQUARE}
 
 #\DeclareMathSymbol{\centerdot}{\mathbin}{AMSa}{"05}
 05="\u2B1D"
 ⬝
-BLACK VERY SMALL SQUARE
+{BLACK VERY SMALL SQUARE}
 
 #\DeclareMathSymbol{\lozenge}{\mathord}{AMSa}{"06}
 06="\u25CA"
 ◊
-LOZENGE
+{LOZENGE}
 
 #\DeclareMathSymbol{\blacklozenge}{\mathord}{AMSa}{"07}
 07="\u29EB"
 ⧫
-BLACK LOZENGE
+{BLACK LOZENGE}
 
 #\DeclareMathSymbol{\circlearrowright}{\mathrel}{AMSa}{"08}
 08="\u21BB"
 ↻
-CLOCKWISE OPEN CIRCLE ARROW
+{CLOCKWISE OPEN CIRCLE ARROW}
 
 #\DeclareMathSymbol{\circlearrowleft}{\mathrel}{AMSa}{"09}
 09="\u21BA"
 ↺
-ANTICLOCKWISE OPEN CIRCLE ARROW
+{ANTICLOCKWISE OPEN CIRCLE ARROW}
 
 #\ams@DeclareMathSymbol{\rightleftharpoons}{\mathrel}{AMSa}{"0A}
 0A="\u21CC"
 ⇌
-RIGHTWARDS HARPOON OVER LEFTWARDSHARPOON
+{RIGHTWARDS HARPOON OVER LEFTWARDSHARPOON}
 
 #\DeclareMathSymbol{\leftrightharpoons}{\mathrel}{AMSa}{"0B}
 0B="\u21CB"
 ⇋
-LEFTWARDS HARPOON OVER RIGHTWARDSHARPOON
+{LEFTWARDS HARPOON OVER RIGHTWARDSHARPOON}
 
 #\DeclareMathSymbol{\boxminus}{\mathbin}{AMSa}{"0C}
 0C="\u229F"
 ⊟
-SQUARED MINUS
+{SQUARED MINUS}
 
 #\DeclareMathSymbol{\Vdash}{\mathrel}{AMSa}{"0D}
 0D="\u22A9"
 ⊩
-FORCES
+{FORCES}
 
 #\DeclareMathSymbol{\Vvdash}{\mathrel}{AMSa}{"0E}
 0E="\u22AA"
 ⊪
-TRIPLE VERTICAL BAR RIGHT TURNSTILE
+{TRIPLE VERTICAL BAR RIGHT TURNSTILE}
 
 #\DeclareMathSymbol{\vDash}{\mathrel}{AMSa}{"0F}
 0F="\u22A8"
 ⊨
-TRUE
+{TRUE}
 
 #\DeclareMathSymbol{\twoheadrightarrow}{\mathrel}{AMSa}{"10}
 10="\u21A0"
 ↠
-RIGHTWARDS TWO HEADED ARROW
+{RIGHTWARDS TWO HEADED ARROW}
 
 #\DeclareMathSymbol{\twoheadleftarrow}{\mathrel}{AMSa}{"11}
 11="\u219E"
 ↞
-LEFTWARDS TWO HEADED ARROW
+{LEFTWARDS TWO HEADED ARROW}
 
 #\DeclareMathSymbol{\leftleftarrows}{\mathrel}{AMSa}{"12}
 12="\u21C7"
 ⇇
-LEFTWARDS PAIRED ARROWS
+{LEFTWARDS PAIRED ARROWS}
 
 #\DeclareMathSymbol{\rightrightarrows}{\mathrel}{AMSa}{"13}
 13="\u21C9"
 ⇉
-RIGHTWARDS PAIRED ARROWS
+{RIGHTWARDS PAIRED ARROWS}
 
 #\DeclareMathSymbol{\upuparrows}{\mathrel}{AMSa}{"14}
 14="\u21C8"
 ⇈
-UPWARDS PAIRED ARROWS
+{UPWARDS PAIRED ARROWS}
 
 #\DeclareMathSymbol{\downdownarrows}{\mathrel}{AMSa}{"15}
 15="\u21CA"
 ⇊
-DOWNWARDS PAIRED ARROWS
+{DOWNWARDS PAIRED ARROWS}
 
 #\DeclareMathSymbol{\upharpoonright}{\mathrel}{AMSa}{"16}
 16="\u21BE"
 ↾
-UPWARDS HARPOON WITH BARBRIGHTWARDS
+{UPWARDS HARPOON WITH BARBRIGHTWARDS}
 
 #\DeclareMathSymbol{\downharpoonright}{\mathrel}{AMSa}{"17}
 17="\u21C2"
 ⇂
-DOWNWARDS HARPOON WITH BARBRIGHTWARDS
+{DOWNWARDS HARPOON WITH BARBRIGHTWARDS}
 
 #\DeclareMathSymbol{\upharpoonleft}{\mathrel}{AMSa}{"18}
 18="\u21BF"
 ↿
-UPWARDS HARPOON WITH BARB LEFTWARDS
+{UPWARDS HARPOON WITH BARB LEFTWARDS}
 
 #\DeclareMathSymbol{\downharpoonleft}{\mathrel}{AMSa}{"19}
 19="\u21C3"
 ⇃
-DOWNWARDS HARPOON WITH BARBLEFTWARDS
+{DOWNWARDS HARPOON WITH BARBLEFTWARDS}
 
 #\DeclareMathSymbol{\rightarrowtail}{\mathrel}{AMSa}{"1A}
 1A="\u21A3"
 ↣
-RIGHTWARDS ARROW WITH TAIL
+{RIGHTWARDS ARROW WITH TAIL}
 
 #\DeclareMathSymbol{\leftarrowtail}{\mathrel}{AMSa}{"1B}
 1B="\u21A2"
 ↢
-LEFTWARDS ARROW WITH TAIL
+{LEFTWARDS ARROW WITH TAIL}
 
 #\DeclareMathSymbol{\leftrightarrows}{\mathrel}{AMSa}{"1C}
 1C="\u21C6"
 ⇆
-LEFTWARDS ARROW OVER RIGHTWARDSARROW
+{LEFTWARDS ARROW OVER RIGHTWARDSARROW}
 
 #\DeclareMathSymbol{\rightleftarrows}{\mathrel}{AMSa}{"1D}
 1D="\u21C4"
 ⇄
-RIGHTWARDS ARROW OVER LEFTWARDSARROW
+{RIGHTWARDS ARROW OVER LEFTWARDSARROW}
 
 #\DeclareMathSymbol{\Lsh}{\mathrel}{AMSa}{"1E}
 1E="\u21B0"
 ↰
-UPWARDS ARROW WITH TIP LEFTWARDS
+{UPWARDS ARROW WITH TIP LEFTWARDS}
 
 #\DeclareMathSymbol{\Rsh}{\mathrel}{AMSa}{"1F}
 1F="\u21B1"
 ↱
-UPWARDS ARROW WITH TIP RIGHTWARDS
+{UPWARDS ARROW WITH TIP RIGHTWARDS}
 
 #\DeclareMathSymbol{\rightsquigarrow}{\mathrel}{AMSa}{"20}
 20="\u21DD"
 ⇝
-RIGHTWARDS SQUIGGLE ARROW
+{RIGHTWARDS SQUIGGLE ARROW}
 #\DeclareMathSymbol{\leftrightsquigarrow}{\mathrel}{AMSa}{"21}
 21="\u21AD"
 ↭
-LEFT RIGHT WAVE ARROW
+{LEFT RIGHT WAVE ARROW}
 
 #\DeclareMathSymbol{\looparrowleft}{\mathrel}{AMSa}{"22}
 22="\u21AB"
 ↫
-LEFTWARDS ARROW WITH LOOP
+{LEFTWARDS ARROW WITH LOOP}
 
 #\DeclareMathSymbol{\looparrowright}{\mathrel}{AMSa}{"23}
 23="\u21AC"
 ↬
-RIGHTWARDS ARROW WITH LOOP
+{RIGHTWARDS ARROW WITH LOOP}
 
 #\DeclareMathSymbol{\circeq}{\mathrel}{AMSa}{"24}
 24="\u2257"
 ≗
-RING EQUAL TO
+{RING EQUAL TO}
 
 #\DeclareMathSymbol{\succsim}{\mathrel}{AMSa}{"25}
 25="\u227F"
 ≿
-SUCCEEDS OR EQUIVALENT TO
+{SUCCEEDS OR EQUIVALENT TO}
 
 #\DeclareMathSymbol{\gtrsim}{\mathrel}{AMSa}{"26}
 26="\u2273"
 ≳
-GREATER-THAN OR EQUIVALENT TO
+{GREATER-THAN OR EQUIVALENT TO}
 
 #\DeclareMathSymbol{\gtrapprox}{\mathrel}{AMSa}{"27}
 27="\u2A86"
 ⪆
-GREATER-THAN OR APPROXIMATE
+{GREATER-THAN OR APPROXIMATE}
 
 #\DeclareMathSymbol{\multimap}{\mathrel}{AMSa}{"28}
 28="\u22B8"
 ⊸
-MULTIMAP
+{MULTIMAP}
 
 #\DeclareMathSymbol{\therefore}{\mathrel}{AMSa}{"29}
 29="\u2234"
 ∴
-THEREFORE
+{THEREFORE}
 
 #\DeclareMathSymbol{\because}{\mathrel}{AMSa}{"2A}
 2A="\u2235"
 ∵
-BECAUSE
+{BECAUSE}
 
 #\DeclareMathSymbol{\doteqdot}{\mathrel}{AMSa}{"2B}
 2B="\u2251"
 ≑
-GEOMETRICALLY EQUAL TO
+{GEOMETRICALLY EQUAL TO}
 
 #\DeclareMathSymbol{\triangleq}{\mathrel}{AMSa}{"2C}
 2C="\u225C"
 ≜
-DELTA EQUAL TO
+{DELTA EQUAL TO}
 
 #\DeclareMathSymbol{\precsim}{\mathrel}{AMSa}{"2D}
 2D="\u227E"
 ≾
-PRECEDES OR EQUIVALENT TO
+{PRECEDES OR EQUIVALENT TO}
 
 #\DeclareMathSymbol{\lesssim}{\mathrel}{AMSa}{"2E}
 2E="\u2272"
 ≲
-LESS-THAN OR EQUIVALENT TO
+{LESS-THAN OR EQUIVALENT TO}
 
 #\DeclareMathSymbol{\lessapprox}{\mathrel}{AMSa}{"2F}
 2F="\u2A85"
 ⪅
-LESS-THAN OR APPROXIMATE
+{LESS-THAN OR APPROXIMATE}
 
 #\DeclareMathSymbol{\eqslantless}{\mathrel}{AMSa}{"30}
 30="\u2A95"
 ⪕
-SLANTED EQUAL TO OR LESS-THAN
+{SLANTED EQUAL TO OR LESS-THAN}
 
 #\DeclareMathSymbol{\eqslantgtr}{\mathrel}{AMSa}{"31}
 31="\u2A96"
 ⪖
-SLANTED EQUAL TO OR GREATER-THAN
+{SLANTED EQUAL TO OR GREATER-THAN}
 
 #\DeclareMathSymbol{\curlyeqprec}{\mathrel}{AMSa}{"32}
 32="\u22DE"
 ⋞
-EQUAL TO OR PRECEDES
+{EQUAL TO OR PRECEDES}
 
 #\DeclareMathSymbol{\curlyeqsucc}{\mathrel}{AMSa}{"33}
 33="\u22DF"
 ⋟
-EQUAL TO OR SUCCEEDS
+{EQUAL TO OR SUCCEEDS}
 
 #\DeclareMathSymbol{\preccurlyeq}{\mathrel}{AMSa}{"34}
 34="\u227C"
 ≼
-PRECEDES OR EQUAL TO
+{PRECEDES OR EQUAL TO}
 
 #\DeclareMathSymbol{\leqq}{\mathrel}{AMSa}{"35}
 35="\u2266"
 ≦
-LESS-THAN OVER EQUAL TO
+{LESS-THAN OVER EQUAL TO}
 
 #\DeclareMathSymbol{\leqslant}{\mathrel}{AMSa}{"36}
 36="\u2A7D"
 ⩽
-LESS-THAN OR SLANTED EQUAL TO
+{LESS-THAN OR SLANTED EQUAL TO}
 
 #\DeclareMathSymbol{\lessgtr}{\mathrel}{AMSa}{"37}
 37="\u2276"
 ≶
-LESS-THAN OR GREATER-THAN
+{LESS-THAN OR GREATER-THAN}
 
 #\DeclareMathSymbol{\backprime}{\mathord}{AMSa}{"38}
 38="\u2035"
 ‵
-REVERSED PRIME
+{REVERSED PRIME}
 
 #\DeclareMathSymbol{\dabar@}{\mathord}{AMSa}{"39}
 #FIXME
 39="\u23AF"
 ⎯
-HORIZONTAL LINE EXTENSION
+{HORIZONTAL LINE EXTENSION}
 
 #\DeclareMathSymbol{\risingdotseq}{\mathrel}{AMSa}{"3A}
 3A="\u2253"
 ≓
-IMAGE OF OR APPROXIMATELY EQUAL TO
+{IMAGE OF OR APPROXIMATELY EQUAL TO}
 
 #\DeclareMathSymbol{\fallingdotseq}{\mathrel}{AMSa}{"3B}
 3B="\u2252"
 ≒
-APPROXIMATELY EQUAL TO OR THE IMAGE OF
+{APPROXIMATELY EQUAL TO OR THE IMAGE OF}
 
 #\DeclareMathSymbol{\succcurlyeq}{\mathrel}{AMSa}{"3C}
 3C="\u227D"
 ≽
-SUCCEEDS OR EQUAL TO
+{SUCCEEDS OR EQUAL TO}
 
 #\DeclareMathSymbol{\geqq}{\mathrel}{AMSa}{"3D}
 3D="\u2267"
 ≧
-GREATER-THAN OVER EQUAL TO
+{GREATER-THAN OVER EQUAL TO}
 
 #\DeclareMathSymbol{\geqslant}{\mathrel}{AMSa}{"3E}
 3E="\u2A7E"
 ⩾
-GREATER-THAN OR SLANTED EQUAL TO
+{GREATER-THAN OR SLANTED EQUAL TO}
 
 #\DeclareMathSymbol{\gtrless}{\mathrel}{AMSa}{"3F}
 2277
 ≷
-GREATER-THAN OR LESS-THAN
+{GREATER-THAN OR LESS-THAN}
 
 #\DeclareMathSymbol{\sqsubset}{\mathrel}{AMSa}{"40}
 40="\u228F"
 ⊏
-SQUARE IMAGE OF
+{SQUARE IMAGE OF}
 
 #\DeclareMathSymbol{\sqsupset}{\mathrel}{AMSa}{"41}
 41="\u2290"
 ⊐
-SQUARE ORIGINAL OF
+{SQUARE ORIGINAL OF}
 
 #\DeclareMathSymbol{\rhd}{\mathbin}{AMSa}{"42}
 42="\u22B3"
 ⊳
-CONTAINS AS NORMAL SUBGROUP
+{CONTAINS AS NORMAL SUBGROUP}
 
 #\DeclareMathSymbol{\lhd}{\mathbin}{AMSa}{"43}
 43="\u22B2"
 ⊲
-NORMAL SUBGROUP OF
+{NORMAL SUBGROUP OF}
 
 #\DeclareMathSymbol{\unrhd}{\mathbin}{AMSa}{"44}
 44="\u22B5"
 ⊵
-CONTAINS AS NORMAL SUBGROUP OR EQUALTO
+{CONTAINS AS NORMAL SUBGROUP OR EQUALTO}
 
 #\DeclareMathSymbol{\unlhd}{\mathbin}{AMSa}{"45}
 45="\u22B4"
 ⊴
-NORMAL SUBGROUP OF OR EQUAL TO
+{NORMAL SUBGROUP OF OR EQUAL TO}
 
 #\DeclareMathSymbol{\bigstar}{\mathord}{AMSa}{"46}
 2605
 ★
-BLACK STAR
+{BLACK STAR}
 
 #\DeclareMathSymbol{\between}{\mathrel}{AMSa}{"47}
 47="\u226C"
 ≬
-BETWEEN
+{BETWEEN}
 
 #\DeclareMathSymbol{\blacktriangledown}{\mathord}{AMSa}{"48}
 48="\u25BC"
 ▼
-black down-pointing triangle
+{black down-pointing triangle}
 
 #\DeclareMathSymbol{\blacktriangleright}{\mathrel}{AMSa}{"49}
 49="\u25B6"
 ▶
-black right-pointing triangle
+{black right-pointing triangle}
 
 #\DeclareMathSymbol{\blacktriangleleft}  {\mathrel}{AMSa}{"4A}
 4A="\u25C0"
 ◀
-black left-pointing triangle
+{black left-pointing triangle}
 
 #4B
 #FIXME
 48="\u27A4"
 ➤
-BLACK RIGHT­WARDS ARROWHEAD
+{BLACK RIGHT­WARDS ARROWHEAD}
 
 #4C
 #FIXME
 4C="\u2B9C"
 ⮜
-BLACK LEFT­WARDS EQUILATERAL ARROWHEAD
+{BLACK LEFT­WARDS EQUILATERAL ARROWHEAD}
 
 #\DeclareMathSymbol{\vartriangle}{\mathrel}{AMSa}{"4D}
 4D="\u25B3"
 △
-WHITE UP-POINTING TRIANGLE
+{WHITE UP-POINTING TRIANGLE}
 
 #\DeclareMathSymbol{\blacktriangle}{\mathord}{AMSa}{"4E}
 4E="\u25B2"
 ▲
-BLACK UP-POINTING TRIANGLE
+{BLACK UP-POINTING TRIANGLE}
 
 #\DeclareMathSymbol{\triangledown}{\mathord}{AMSa}{"4F}
 25BD
 ▽
-WHITE DOWN-POINTING TRIANGLE
+{WHITE DOWN-POINTING TRIANGLE}
 
 #\DeclareMathSymbol{\eqcirc}{\mathrel}{AMSa}{"50}
 50="\u2256"
 ≖
-RING IN EQUAL TO
+{RING IN EQUAL TO}
 
 #\DeclareMathSymbol{\lesseqgtr}{\mathrel}{AMSa}{"51}
 51="\u22DA"
 ⋚
-LESS-THAN EQUAL TO OR GREATER-THAN
+{LESS-THAN EQUAL TO OR GREATER-THAN}
 
 #\DeclareMathSymbol{\gtreqless}{\mathrel}{AMSa}{"52}
 52="\u22DB"
 ⋛
-GREATER-THAN EQUAL TO OR LESS-THAN
+{GREATER-THAN EQUAL TO OR LESS-THAN}
 
 #\DeclareMathSymbol{\lesseqqgtr}{\mathrel}{AMSa}{"53}
 53="\u2A8B"
 ⪋
-LESS-THAN ABOVE DOUBLE-LINE EQUALABOVE GREATER-THAN
+{LESS-THAN ABOVE DOUBLE-LINE EQUALABOVE GREATER-THAN}
 
 #\DeclareMathSymbol{\gtreqqless}{\mathrel}{AMSa}{"54}
 54="\u2A8C"
 ⪌
-GREATER-THAN ABOVE DOUBLE-LINE EQUALABOVE LESS-THAN
+{GREATER-THAN ABOVE DOUBLE-LINE EQUALABOVE LESS-THAN}
 
 
 #\edef\yen{\noexpand\mathhexbox{\hexnumber@\symAMSa}55}
 55="\u00A5"
 ¥
-YEN SIGN
+{YEN SIGN}
 
 #\DeclareMathSymbol{\Rrightarrow}{\mathrel}{AMSa}{"56}
 56="\u21DB"
 ⇛
-RIGHTWARDS TRIPLE ARROW
+{RIGHTWARDS TRIPLE ARROW}
 
 #\DeclareMathSymbol{\Lleftarrow}{\mathrel}{AMSa}{"57}
 57="\u21DA"
 ⇚
-LEFTWARDS TRIPLE ARROW
+{LEFTWARDS TRIPLE ARROW}
 
 #\edef\checkmark{\noexpand\mathhexbox{\hexnumber@\symAMSa}58}
 58="\u2713"
 ✓
-CHECK MARK
+{CHECK MARK}
 
 #\DeclareMathSymbol{\veebar}{\mathbin}{AMSa}{"59}
 59="\u22BB"
 ⊻
-XOR
+{XOR}
 
 #\DeclareMathSymbol{\barwedge}{\mathbin}{AMSa}{"5A}
 5A="\u22BC"
 ⊼
-NAND
+{NAND}
 
 #\DeclareMathSymbol{\doublebarwedge}{\mathbin}{AMSa}{"5B}
 5B="\u2A5E"
 ⩞
-LOGICAL AND WITH DOUBLE OVERBAR
+{LOGICAL AND WITH DOUBLE OVERBAR}
 
 #\DeclareMathSymbol{\angle}{\mathord}{AMSa}{"5C}
 5C="\u2220"
 ∠
-ANGLE
+{ANGLE}
 
 #\DeclareMathSymbol{\measuredangle}{\mathord}{AMSa}{"5D}
 5D="\u2221"
 ∡
-MEASURED ANGLE
+{MEASURED ANGLE}
 
 #DeclareMathSymbol{\sphericalangle}{\mathord}{AMSa}{"5E}
 5E="\u2222"
 ∢
-SPHERICAL ANGLE
+{SPHERICAL ANGLE}
 
 #\DeclareMathSymbol{\varpropto}{\mathrel}{AMSa}{"5F}
 #FIXME
 5F="\u221D"
 ∝
-PROPORTIONAL TO
+{PROPORTIONAL TO}
 
 #\DeclareMathSymbol{\smallsmile}{\mathrel}{AMSa}{"60}
 #FIXME
 60="\u2323"
 ⌣
-SMILE
+{SMILE}
 
 #\DeclareMathSymbol{\smallfrown}{\mathrel}{AMSa}{"61}
 61="\u2322"
 ⌢
-FROWN
+{FROWN}
 
 #\DeclareMathSymbol{\Subset}{\mathrel}{AMSa}{"62}
 62="\u22D0"
 ⋐
-DOUBLE SUBSET
+{DOUBLE SUBSET}
 
 #\DeclareMathSymbol{\Supset}{\mathrel}{AMSa}{"63}
 63="\u22D1"
 ⋑
-DOUBLE SUPERSET
+{DOUBLE SUPERSET}
 
 #\DeclareMathSymbol{\Cup}{\mathbin}{AMSa}{"64}
 64="\u22D3"
 ⋓
-DOUBLE UNION
+{DOUBLE UNION}
 
 #\DeclareMathSymbol{\Cap}{\mathbin}{AMSa}{"65}
 65="\u22D2"
 ⋒
-DOUBLE INTERSECTION
+{DOUBLE INTERSECTION}
 
 #\DeclareMathSymbol{\curlywedge}{\mathbin}{AMSa}{"66}
 66="\u22CF"
 ⋏
-CURLY LOGICAL AND
+{CURLY LOGICAL AND}
 
 #\DeclareMathSymbol{\curlyvee}{\mathbin}{AMSa}{"67}
 67="\u22CE"
 ⋎
-CURLY LOGICAL OR
+{CURLY LOGICAL OR}
 
 #\DeclareMathSymbol{\leftthreetimes}{\mathbin}{AMSa}{"68}
 68="\u22CB"
 ⋋
-LEFT SEMIDIRECT PRODUCT
+{LEFT SEMIDIRECT PRODUCT}
 
 #\DeclareMathSymbol{\rightthreetimes}{\mathbin}{AMSa}{"69}
 69="\u22CC"
 ⋌
-RIGHT SEMIDIRECT PRODUCT
+{RIGHT SEMIDIRECT PRODUCT}
 
 #\DeclareMathSymbol{\subseteqq}{\mathrel}{AMSa}{"6A}
 6A="\u2AC5"
 ⫅
-SUBSET OF ABOVE EQUALS SIGN
+{SUBSET OF ABOVE EQUALS SIGN}
 
 #\DeclareMathSymbol{\supseteqq}{\mathrel}{AMSa}{"6B}
 6B="\u2AC6"
 ⫆
-SUPERSET OF ABOVE EQUALS SIGN
+{SUPERSET OF ABOVE EQUALS SIGN}
 
 #\DeclareMathSymbol{\bumpeq}{\mathrel}{AMSa}{"6C}
 6C="\u224F"
 ≏
-DIFFERENCE BETWEEN
+{DIFFERENCE BETWEEN}
 
 #\DeclareMathSymbol{\Bumpeq}{\mathrel}{AMSa}{"6D}
 6D="\u224E"
 ≎
-GEOMETRICALLY EQUIVALENT TO
+{GEOMETRICALLY EQUIVALENT TO}
 
 #\DeclareMathSymbol{\lll}{\mathrel}{AMSa}{"6E}
 6E="\u22D8"
 ⋘
-VERY MUCH LESS-THAN
+{VERY MUCH LESS-THAN}
 
 #\DeclareMathSymbol{\ggg}{\mathrel}{AMSa}{"6F}
 6F="\u22D9"
 ⋙
-VERY MUCH GREATER-THAN
+{VERY MUCH GREATER-THAN}
 
 #\ams@DeclareMathDelimiter{\ulcorner}{\mathopen} {AMSa}{"70}{AMSa}{"70}
 #FIXME
 70="\u231C"
 ⌜
-TOP LEFT CORNER
+{TOP LEFT CORNER}
 
 #\ams@DeclareMathDelimiter{\urcorner}{\mathclose}{AMSa}{"71}{AMSa}{"71}
 #FIXME
 71="\u231D"
 ⌝
-TOP RIGHT CORNER
+{TOP RIGHT CORNER}
 
 #\edef\circledR{\noexpand\mathhexbox{\hexnumber@\symAMSa}72}
 72="\u00AE"
 ®
-REGISTERED SIGN
+{REGISTERED SIGN}
 
 #\DeclareMathSymbol{\circledS}     {\mathord}{AMSa}{"73}
 73="\u24C8"
 Ⓢ
-CIRCLED LATIN CAPITAL LETTER S
+{CIRCLED LATIN CAPITAL LETTER S}
 
 #\DeclareMathSymbol{\pitchfork}{\mathrel}{AMSa}{"74}
 74="\u22D4"
 ⋔
-PITCHFORK
+{PITCHFORK}
 
 #\DeclareMathSymbol{\dotplus}{\mathbin}{AMSa}{"75}
 75="\u2214"
 ∔
-DOT PLUS
+{DOT PLUS}
 
 #\DeclareMathSymbol{\backsim}{\mathrel}{AMSa}{"76}
 76="\u223D"
 ∽
-REVERSED TILDE
+{REVERSED TILDE}
 
 #\DeclareMathSymbol{\backsimeq}{\mathrel}{AMSa}{"77}
 77="\u22CD"
 ⋍
-REVERSED TILDE EQUALS
+{REVERSED TILDE EQUALS}
 
 #\ams@DeclareMathDelimiter{\llcorner}{\mathopen}{AMSa}{"78}{AMSa}{"78}
 #FIXME
 78="\u231E"
 ⌞
-BOTTOM LEFT CORNER
+{BOTTOM LEFT CORNER}
 
 #\ams@DeclareMathDelimiter{\lrcorner}{\mathclose}{AMSa}{"79}{AMSa}{"79}
 #FIXME
 79="\u231F"
 ⌟
-BOTTOM RIGHT CORNER
+{BOTTOM RIGHT CORNER}
 
 #\edef\maltese{\noexpand\mathhexbox{\hexnumber@\symAMSa}7A}
 7A="\u2720"
 ✠
-MALTESE CROSS
+{MALTESE CROSS}
 
 #\DeclareMathSymbol{\complement}{\mathord}{AMSa}{"7B}
 7B="\u2201"
 ∁
-COMPLEMENT
+{COMPLEMENT}
 
 #\DeclareMathSymbol{\intercal}{\mathbin}{AMSa}{"7C}
 7C="\u22BA"
 ⊺
-INTERCALATE
+{INTERCALATE}
 
 #\DeclareMathSymbol{\circledcirc}{\mathbin}{AMSa}{"7D}
 7D="\u229A"
 ⊚
-CIRCLED RING OPERATOR
+{CIRCLED RING OPERATOR}
 
 #\DeclareMathSymbol{\circledast}{\mathbin}{AMSa}{"7E}
 7E="\u229B"
 ⊛
-CIRCLED ASTERISK OPERATOR
+{CIRCLED ASTERISK OPERATOR}
 
 #\DeclareMathSymbol{\circleddash}{\mathbin}{AMSa}{"7F}
 7F="\u229D"
 ⊝
-CIRCLED DASH
+{CIRCLED DASH}
 

@@ -22,6 +22,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             return docx.shared.Pt(float(string[:-2]))
 
     def add_new_run_for_text(self):
+        if not self.p:
+            self.add_new_paragraph()
         self.r=self.p.add_run()
         if self.stackmemory.f!=-1:
             s=self.fontregister.get_scaledsize(self.stackmemory.f)
