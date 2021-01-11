@@ -1,0 +1,577 @@
+#FIXME 2C 2E 2F 5B 5C 5D 5E 67 70 71 73 74 7D 7E
+
+#\DeclareMathSymbol{\lvertneqq}{\mathrel}{AMSb}{"00}
+00="\u2268\uFE00"
+
+
+
+#\DeclareMathSymbol{\gvertneqq}{\mathrel}{AMSb}{"01}
+01="\u2269\uFE00"
+
+
+
+#\DeclareMathSymbol{\nleq}{\mathrel}{AMSb}{"02}
+02="\u2270"
+≰
+NEITHER LESS-THAN NOR EQUAL TO
+
+#\DeclareMathSymbol{\ngeq}{\mathrel}{AMSb}{"03}
+03="\u2271"
+≱
+NEITHER GREATER-THAN NOR EQUAL TO
+
+#\DeclareMathSymbol{\nless}{\mathrel}{AMSb}{"04}
+04="\u226E"
+≮
+NOT LESS-THAN
+
+#\DeclareMathSymbol{\ngtr}{\mathrel}{AMSb}{"05}
+05="\u226F"
+≯
+NOT GREATER-THAN
+
+#\DeclareMathSymbol{\nprec}{\mathrel}{AMSb}{"06}
+06="\u2280"
+⊀
+DOES NOT PRECEDE
+
+#\DeclareMathSymbol{\nsucc}{\mathrel}{AMSb}{"07}
+07="\u2281"
+⊁
+DOES NOT SUCCEED
+
+#\DeclareMathSymbol{\lneqq}{\mathrel}{AMSb}{"08}
+2268
+08="\u≨"
+LESS-THAN BUT NOT EQUAL TO
+
+#\DeclareMathSymbol{\gneqq}{\mathrel}{AMSb}{"09}
+09="\u2269"
+≩
+GREATER-THAN BUT NOT EQUAL TO
+
+#\DeclareMathSymbol{\nleqslant}{\mathrel}{AMSb}{"0A}
+0A="\u2A7D\u0338"
+⩽
+LESS-THAN OR SLANTED EQUAL TO
+
+#\DeclareMathSymbol{\ngeqslant}{\mathrel}{AMSb}{"0B}
+0B="\u2A7E\u0338"
+⩾
+GREATER-THAN OR SLANTED EQUAL TO
+
+#\DeclareMathSymbol{\lneq}{\mathrel}{AMSb}{"0C}
+0C="\u2A87"
+⪇
+LESS-THAN AND SINGLE-LINE NOT EQUAL TO
+
+#\DeclareMathSymbol{\gneq}{\mathrel}{AMSb}{"0D}
+0D="\u2A88"
+⪈
+GREATER-THAN AND SINGLE-LINE NOT EQUALTO
+
+#\DeclareMathSymbol{\npreceq}{\mathrel}{AMSb}{"0E}
+0E="\u2AAF\u0338"
+⪯
+PRECEDES ABOVE SINGLE-LINE EQUALS SIGN
+
+#\DeclareMathSymbol{\nsucceq}{\mathrel}{AMSb}{"0F}
+0F="\u2AB0\u0338"
+⪰
+SUCCEEDS ABOVE SINGLE-LINE EQUALS SIGN
+
+#\DeclareMathSymbol{\precnsim}{\mathrel}{AMSb}{"10}
+10="\u22E8"
+⋨
+PRECEDES BUT NOT EQUIVALENT TO
+
+#\DeclareMathSymbol{\succnsim}{\mathrel}{AMSb}{"11}
+11="\u22E9"
+⋩
+SUCCEEDS BUT NOT EQUIVALENT TO
+
+#\DeclareMathSymbol{\lnsim}{\mathrel}{AMSb}{"12}
+12="\u22E6"
+⋦
+LESS-THAN BUT NOT EQUIVALENT TO
+
+#\DeclareMathSymbol{\gnsim}{\mathrel}{AMSb}{"13}
+13="\u22E7"
+⋧
+GREATER-THAN BUT NOT EQUIVALENT TO
+
+#\DeclareMathSymbol{\nleqq}{\mathrel}{AMSb}{"14}
+14="\u2266\u0338"
+
+
+
+#\DeclareMathSymbol{\ngeqq}{\mathrel}{AMSb}{"15}
+15="\u2267\u0338"
+
+
+
+#\DeclareMathSymbol{\precneqq}{\mathrel}{AMSb}{"16}
+16="\u2AB5"
+⪵
+PRECEDES ABOVE NOT EQUAL TO
+
+#\DeclareMathSymbol{\succneqq}{\mathrel}{AMSb}{"17}
+17="\u2AB6"
+⪶
+SUCCEEDS ABOVE NOT EQUAL TO
+
+#\DeclareMathSymbol{\precnapprox}{\mathrel}{AMSb}{"18}
+18="\u2AB9"
+⪹
+PRECEDES ABOVE NOT ALMOST EQUAL TO
+
+#\DeclareMathSymbol{\succnapprox}{\mathrel}{AMSb}{"19}
+19="\u2ABA"
+⪺
+SUCCEEDS ABOVE NOT ALMOST EQUAL TO
+
+#\DeclareMathSymbol{\lnapprox}{\mathrel}{AMSb}{"1A}
+1A="\u2A89"
+⪉
+LESS-THAN AND NOT APPROXIMATE
+
+#\DeclareMathSymbol{\gnapprox}{\mathrel}{AMSb}{"1B}
+1B="\u2A8A"
+⪊
+GREATER-THAN AND NOT APPROXIMATE
+
+#\DeclareMathSymbol{\nsim}{\mathrel}{AMSb}{"1C}
+1C="\u2241"
+≁
+NOT TILDE
+
+\DeclareMathSymbol{\ncong}{\mathrel}{AMSb}{"1D}
+1D="\u2247"
+≇
+NEITHER APPROXIMATELY NOR ACTUALLYEQUAL TO
+
+#\DeclareMathSymbol{\diagup}{\mathord}{AMSb}{"1E}
+1E="\u27CB"
+⟋
+MATHEMATICAL RISING DIAGONAL
+
+#\DeclareMathSymbol{\diagdown}{\mathord}{AMSb}{"1F}
+1F="\u27CD"
+⟍
+MATHEMATICAL FALLING DIAGONAL
+
+#\DeclareMathSymbol{\varsubsetneq}{\mathrel}{AMSb}{"20}
+20="\u228A\uFE00"
+
+
+
+#\DeclareMathSymbol{\varsupsetneq}{\mathrel}{AMSb}{"21}
+21="\u228B\uFE00"
+
+
+
+#\DeclareMathSymbol{\nsubseteqq}{\mathrel}{AMSb}{"22}
+22="\u2AC5\u0338"
+
+
+
+#\DeclareMathSymbol{\nsupseteqq}{\mathrel}{AMSb}{"23}
+23="\u2AC6\u0338"
+
+
+
+#\DeclareMathSymbol{\subsetneqq}{\mathrel}{AMSb}{"24}
+24="\u2ACB"
+⫋
+SUBSET OF ABOVE NOT EQUAL TO
+
+#\DeclareMathSymbol{\supsetneqq}{\mathrel}{AMSb}{"25}
+25="\u2ACC"
+⫌
+SUPERSET OF ABOVE NOT EQUAL TO
+
+#\DeclareMathSymbol{\varsubsetneqq}{\mathrel}{AMSb}{"26}
+26="\u2ACB\uFE00"
+
+
+
+#\DeclareMathSymbol{\varsupsetneqq}{\mathrel}{AMSb}{"27}
+27="\u2ACC\uFE00"
+
+
+
+#\DeclareMathSymbol{\subsetneq}{\mathrel}{AMSb}{"28}
+28="\u228A"
+⊊
+SUBSET OF WITH NOT EQUAL TO
+
+#\DeclareMathSymbol{\supsetneq}{\mathrel}{AMSb}{"29}
+29="\u228B"
+⊋
+SUPERSET OF WITH NOT EQUAL TO
+
+#\DeclareMathSymbol{\nsubseteq}{\mathrel}{AMSb}{"2A}
+2A="\u2288"
+⊈
+NEITHER A SUBSET OF NOR EQUAL TO
+
+#\DeclareMathSymbol{\nsupseteq}{\mathrel}{AMSb}{"2B}
+2B="\u2289"
+⊉
+NEITHER A SUPERSET OF NOR EQUAL TO
+
+
+#\DeclareMathSymbol{\nparallel}{\mathrel}{AMSb}{"2C}
+#FIXME
+2C="\u2226"
+∦
+NOT PARALLEL TO
+
+#\DeclareMathSymbol{\nmid}{\mathrel}{AMSb}{"2D}
+2224
+∤
+DOES NOT DIVIDE
+
+#\DeclareMathSymbol{\nshortmid}{\mathrel}{AMSb}{"2E}
+#FIXME
+2E=""
+
+#\DeclareMathSymbol{\nshortparallel} {\mathrel}{AMSb}{"2F}
+#FIXME
+2F=""
+
+#\DeclareMathSymbol{\nvdash}{\mathrel}{AMSb}{"30}
+30="\u22AC"
+⊬
+DOES NOT PROVE
+
+#\DeclareMathSymbol{\nVdash}{\mathrel}{AMSb}{"31}
+31="\u22AE"
+⊮
+DOES NOT FORCE
+
+#\DeclareMathSymbol{\nvDash}{\mathrel}{AMSb}{"32}
+32="\u22AD"
+⊭
+NOT TRUE
+
+#\DeclareMathSymbol{\nVDash}{\mathrel}{AMSb}{"33}
+33="\u22AF"
+⊯
+NEGATED DOUBLE VERTICAL BAR DOUBLE
+
+#\DeclareMathSymbol{\ntrianglerighteq}{\mathrel}{AMSb}{"34}
+34="\u22EC"
+⋬
+NOT NORMAL SUBGROUP OF OR EQUAL TO
+
+#\DeclareMathSymbol{\ntrianglelefteq}{\mathrel}{AMSb}{"35}
+35="\u22ED"
+⋭
+DOES NOT CONTAIN AS NORMAL SUBGROUPOR EQUAL
+
+#\DeclareMathSymbol{\ntriangleleft}{\mathrel}{AMSb}{"36}
+36="\u22EA"
+⋪
+NOT NORMAL SUBGROUP OF
+
+#\DeclareMathSymbol{\ntriangleright}{\mathrel}{AMSb}{"37}
+37="\u22EB"
+⋫
+DOES NOT CONTAIN AS NORMAL SUBGROUP
+
+#\DeclareMathSymbol{\nleftarrow}{\mathrel}{AMSb}{"38}
+38="\u2190\u0338"
+
+
+
+#\DeclareMathSymbol{\nrightarrow}{\mathrel}{AMSb}{"39}
+39="\u2192\u0338"
+
+
+
+#\DeclareMathSymbol{\nLeftarrow}{\mathrel}{AMSb}{"3A}
+3A="\u21D0\u0338"
+
+
+
+#\DeclareMathSymbol{\nRightarrow}{\mathrel}{AMSb}{"3B}
+3B="\u21D2\u0338"
+
+
+
+#\DeclareMathSymbol{\nLeftrightarrow}{\mathrel}{AMSb}{"3C}
+3C="\u21D4\u0338"
+
+
+
+#\DeclareMathSymbol{\nleftrightarrow}{\mathrel}{AMSb}{"3D}
+3D="\u2194\u0338"
+
+
+
+#\DeclareMathSymbol{\divideontimes}{\mathbin}{AMSb}{"3E}
+3E="\u22C7"
+⋇
+DIVISION TIMES
+
+#\DeclareMathSymbol{\varnothing}{\mathord}{AMSb}{"3F}
+3F="\u2205"
+∅
+EMPTY SET
+
+#\DeclareMathSymbol{\nexists}{\mathord}{AMSb}{"40}
+40="\u2204"
+∄
+THERE DOES NOT EXIST
+
+41="\U0001D538"
+𝔸
+MATHEMATICAL DOUBLE-STRUCK CAPITAL A
+
+42="\U0001D539"
+𝔹
+MATHEMATICAL DOUBLE-STRUCK CAPITAL B
+
+43="\u2102"
+ℂ
+double-struck capital c
+
+44="\U0001D53B"
+𝔻
+MATHEMATICAL DOUBLE-STRUCK CAPITAL D
+
+45="\U0001D53C"
+𝔼
+MATHEMATICAL DOUBLE-STRUCK CAPITAL E
+
+46="\U0001D53D"
+𝔽
+MATHEMATICAL DOUBLE-STRUCK CAPITAL F
+
+47="\U0001D53E"
+𝔾
+MATHEMATICAL DOUBLE-STRUCK CAPITAL G
+
+48="\u210D"
+ℍ
+double-struck capital h
+
+49="\U0001D540"
+𝕀
+MATHEMATICAL DOUBLE-STRUCK CAPITAL I
+
+4A="\U0001D541"
+𝕁
+MATHEMATICAL DOUBLE-STRUCK CAPITAL J
+
+4B="\U0001D542"
+𝕂
+MATHEMATICAL DOUBLE-STRUCK CAPITAL K
+
+4C="\U0001D543"
+𝕃
+MATHEMATICAL DOUBLE-STRUCK CAPITAL L
+
+4D="\U0001D544"
+𝕄
+MATHEMATICAL DOUBLE-STRUCK CAPITAL M
+
+4E="\u2115"
+ℕ
+double-struck capital n
+
+4F="\U0001D546"
+𝕆
+MATHEMATICAL DOUBLE-STRUCK CAPITAL O
+
+50="\u2119"
+ℙ
+double-struck capital p
+
+51="\u211A"
+ℚ
+double-struck capital q
+
+52="\u211D"
+ℝ
+double-struck capital r
+
+53="\U0001D54A"
+𝕊
+MATHEMATICAL DOUBLE-STRUCK CAPITAL S
+
+54="\U0001D54B"
+𝕋
+MATHEMATICAL DOUBLE-STRUCK CAPITAL T
+
+55="\U0001D54C"
+𝕌
+MATHEMATICAL DOUBLE-STRUCK CAPITAL U
+
+56="\U0001D54D"
+𝕍
+MATHEMATICAL DOUBLE-STRUCK CAPITAL V
+
+57="\U0001D54E"
+𝕎
+MATHEMATICAL DOUBLE-STRUCK CAPITAL W
+
+58="\U0001D54F"
+𝕏
+MATHEMATICAL DOUBLE-STRUCK CAPITAL X
+
+59="\U0001D550"
+𝕐
+MATHEMATICAL DOUBLE-STRUCK CAPITAL Y
+
+5A="\u2124"
+ℤ
+double-struck capital z
+
+#\mathaccent"0\hexnumber@\symAMSb 5B{#1}%
+#FIXME
+5B=""
+5C=""
+
+#\mathaccent"0\hexnumber@\symAMSb 5D{#1}%
+#FIXME
+5D=""
+5E=""
+
+#\DeclareMathSymbol{\Finv}{\mathord}{AMSb}{"60}
+60="\u2132"
+Ⅎ
+TURNED CAPITAL F
+
+#\DeclareMathSymbol{\Game}{\mathord}{AMSb}{"61}
+61="\u2141"
+⅁
+TURNED SANS-SERIF CAPITAL G
+
+#\DeclareMathSymbol{\mho}{\mathord}{AMSb}{"66}
+66="\u2127"
+℧
+INVERTED OHM SIGN
+
+#\DeclareMathSymbol{\eth}{\mathord}{AMSb}{"67}
+#FIXME
+67=""
+
+#\DeclareMathSymbol{\eqsim}{\mathrel}{AMSb}{"68}
+68="\u2242"
+≂
+MINUS TILDE
+
+#\DeclareMathSymbol{\beth}{\mathord}{AMSb}{"69}
+69="\u2136"
+
+BET SYMBOL
+
+#\DeclareMathSymbol{\gimel}{\mathord}{AMSb}{"6A}
+6A="\u2137"
+
+GIMEL SYMBOL
+
+#\DeclareMathSymbol{\daleth}{\mathord}{AMSb}{"6B}
+6B="\u2138"
+
+DALET SYMBOL
+
+#\DeclareMathSymbol{\lessdot}{\mathbin}{AMSb}{"6C}
+6C="\u22D6"
+⋖
+LESS-THAN WITH DOT
+
+#\DeclareMathSymbol{\gtrdot}{\mathbin}{AMSb}{"6D}
+6D="\u22D7"
+⋗
+GREATER-THAN WITH DOT
+
+#\DeclareMathSymbol{\ltimes}{\mathbin}{AMSb}{"6E}
+6E="\u22C9"
+⋉
+LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
+
+#\DeclareMathSymbol{\rtimes}{\mathbin}{AMSb}{"6F}
+6F="\u22CA"
+⋊
+RIGHT NORMAL FACTOR SEMIDIRECTPRODUCT
+
+#\DeclareMathSymbol{\shortmid}{\mathrel}{AMSb}{"70}
+#FIXME
+70=""
+
+#\DeclareMathSymbol{\shortparallel}{\mathrel}{AMSb}{"71}
+#FIXME
+71=""
+
+#\DeclareMathSymbol{\smallsetminus}{\mathbin}{AMSb}{"72}
+72="\uFE68"
+﹨
+SMALL REVERSE SOLIDUS
+
+
+#\DeclareMathSymbol{\thicksim}       {\mathrel}{AMSb}{"73}
+#FIXME
+73=""
+
+#\DeclareMathSymbol{\thickapprox}    {\mathrel}{AMSb}{"74}
+#FIXME
+74=""
+
+#\DeclareMathSymbol{\approxeq}{\mathrel}{AMSb}{"75}
+75="\u224A"
+≊
+ALMOST EQUAL OR EQUAL TO
+
+#\DeclareMathSymbol{\succapprox}{\mathrel}{AMSb}{"76}
+76="\u2AB8"
+⪸
+SUCCEEDS ABOVE ALMOST EQUAL TO
+
+#\DeclareMathSymbol{\precapprox}{\mathrel}{AMSb}{"77}
+77="\u2AB7"
+⪷
+PRECEDES ABOVE ALMOST EQUAL TO
+
+#\DeclareMathSymbol{\curvearrowleft}{\mathrel}{AMSb}{"78}
+78="\u21B6"
+↶
+ANTICLOCKWISE TOP SEMICIRCLE ARROW
+
+#\DeclareMathSymbol{\curvearrowright}{\mathrel}{AMSb}{"79}
+79="\u21B7"
+↷
+CLOCKWISE TOP SEMICIRCLE ARROW
+
+#\DeclareMathSymbol{\digamma}{\mathord}{AMSb}{"7A}
+7A="\u03DC"
+Ϝ
+GREEK LETTER DIGAMMA
+
+#\DeclareMathSymbol{\varkappa}{\mathord}{AMSb}{"7B}
+7B="\U0001D718"
+𝜘
+MATHEMATICAL ITALIC KAPPA SYMBOL
+
+#\DeclareMathSymbol{\Bbbk}{\mathord}{AMSb}{"7C}
+7C="\U0001D55C"
+𝕜
+MATHEMATICAL DOUBLE-STRUCK SMALL K
+
+#\DeclareMathSymbol{\hslash}         {\mathord}{AMSb}{"7D}
+#FIXME
+7D=""
+
+#\DeclareMathSymbol{\hbar}{\mathord}{AMSb}{"7E}
+#FIXME
+7E=""
+
+#\DeclareMathSymbol{\backepsilon}{\mathrel}{AMSb}{"7F}
+7F="\u03F6"
+϶
+greek reversed lunate epsilon symbol
+
+
+
