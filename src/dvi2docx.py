@@ -517,7 +517,7 @@ def test():
         print("usage: python3 "+sys.argv[0]+" dvifile")
         return
     filename=sys.argv[1]
-    with open(filename, mode='r+b') as file:
+    with open(filename, mode='rb') as file:
         outfilename=sys.argv[1]+'.math.dvi'
         with open(outfilename, mode='w+b') as outfile:            
             dvistackmachine=PickupMathStackMachine(outfile,debugmode=False)
@@ -526,7 +526,7 @@ def test():
 #    for i in range(dvistackmachine.total_pages):
 #        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
     os.system("dvipng -T tight "+outfilename)
-    with open(filename, mode='r+b') as file:    
+    with open(filename, mode='rb') as file:    
         dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()

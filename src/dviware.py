@@ -920,7 +920,7 @@ def test():
         print("usage: python3 "+sys.argv[0]+" dvifile")
         return
     filename=sys.argv[1]
-    with open(filename, mode='r+b') as file:
+    with open(filename, mode='rb') as file:
         dvistackmachine=DviStackMachine(debugmode=True)
         #dvistackmachine=DviStackMachine(debugmode=False)
         dviinterpreter=DviInterpreter(file,dvistackmachine)
