@@ -38,20 +38,23 @@ def read_word(file):
 
 
 class Tfm:
-    def __init__(self):
-        self.header=Header()
-        self.char_info=CharInfo()
-        self.width=IntegerWords()
-        self.height=IntegerWords()
-        self.depth=IntegerWords()
-        self.italic=IntegerWords()
-        self.lig_kern=LigKern()
-        self.kern=IntegerWords()
-        self.exten=Exten()
-        self.param=Param()
+    def __init__(self,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param):
+        self.header=header
+        self.charinfo=charinfo
+        self.width=width
+        self.height=height
+        self.depth=depth
+        self.italic=italic
+        self.ligkern=ligkern
+        self.kern=kern
+        self.exten=exten
+        self.param=param
 
-    
-    def set_by_file(self,file):
+            
+        
+
+    @classmethod
+    def set_by_file(cls,file):
         lf=read_half_word(file)
         lh=read_half_word(file)
         bc=read_half_word(file)
@@ -64,12 +67,18 @@ class Tfm:
         nk=read_half_word(file)
         ne=read_half_word(file)
         np=read_half_word(file)
-        self.header=Header.get_from_file(file,lh)
-        self.charinfo=CharInfo.get_from_file(file,ec-bc+1)
-        self.width=IntegerWords.get_from_file(file,nw)
-        self.height=IntegerWords.get_from_file(file,nh)
-        self.depth=IntegerWords.get_from_file(file,nd)
-        self.italic=IntegerWords.get_from_file(file,ni)
+        header=Header.get_from_file(file,lh)
+        charinfo=CharInfo.get_from_file(file,ec-bc+1)
+        width=IntegerWords.get_from_file(file,nw)
+        height=IntegerWords.get_from_file(file,nh)
+        depth=IntegerWords.get_from_file(file,nd)
+        italic=IntegerWords.get_from_file(file,ni)
+        ligkern=LigKern.get_from_file(file,nl)
+        kern=IntegerWords.get_from_file(file,nk)
+        exten=IntegerWords.get_from_file(file,ne)
+        param=Param.get_from_file(file,np)
+
+        return cls(header,charinfo,width,height,depth,italic,ligkern,kern,exten,param)
         
 class Header:
     ROMAN=0
@@ -133,7 +142,7 @@ class Header:
 
 class CharInfo:
     def __init__(self,c):
-        self.charinfowords=c
+        self.data=c
 
     @classmethod
     def get_from_file(cls,file,lh):
@@ -185,9 +194,15 @@ class IntegerWords:
 
     
 class LigKern:
-    def __init__(self):
-        self.data=[]
+    def __init__(self,d):
+        self.data=d
 
+    @classmethod
+    def get_from_file(cls,file,l):
+        c=[]
+        for i in range(l):
+            c.append(LigKernWord.get_from_file(file))
+        return cls(c)
     
 class LigKernWord:
     def __init__(self,skip,next_char,op_byte,reminder):
@@ -195,19 +210,40 @@ class LigKernWord:
         self.next_char
         self.op_byte=op_byte
         self.reminder=reminder
+    @classmethod
+    def get_from_file(cls,file):
+        skip=read_quarter_word(file)
+        next_char=read_quarter_word(file)
+        op_byte=read_quarter_word(file)
+        reminder=read_quarter_word(file)
+        return cls(skip,next_char,op_byte,reminder)
 
 class Exten:
-    def __init__(self):
-        self.data=[]
+    def __init__(self,d):
+        self.data=d
 
+    @classmethod
+    def get_from_file(cls,file,l):
+        c=[]
+        for i in range(l):
+            c.append(ExtenWord.get_from_file(file))
+        return cls(c)
 
 class ExtenWord:
-    def __init__(self,h,m,b,c):
-        self.h=h
-        self.m=m
-        self.b=b
-        self.c=c
+    def __init__(self,t,m,b,r):
+        self.top=t
+        self.mid=m
+        self.bot=b
+        self.rep=r
 
+    @classmethod
+    def get_from_file(cls,file):
+        t=read_quarter_word(file)
+        m=read_quarter_word(file)
+        b=read_quarter_word(file)
+        r=read_quarter_word(file)
+        return cls(t,m,b,r)
+    
 class Param:
     def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,extra_space):
         self.slant=slant
@@ -222,3 +258,14 @@ class Param:
         #For TeX math extension
         #default_rule_thickness, big_op_spacing1, big_op_spacing5
 
+    @classmethod
+    def get_from_file(cls,file,l):
+        print(l)
+        slant=read_quarter_word(file)
+        space=read_quarter_word(file)
+        space_stretch=read_quarter_word(file)
+        space_shrink=read_quarter_word(file)
+        x_height=read_quarter_word(file)
+        quad=read_quarter_word(file)
+        extra_space=read_quarter_word(file)
+        return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space)
