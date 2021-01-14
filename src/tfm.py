@@ -75,8 +75,12 @@ class Tfm:
 
 
     @classmethod
-    def get_from_file(cls,file):
-        lf=read_half_word(file)
+    def get_from_file(cls,file,first_half_word=None):
+        if first_half_word == None:
+            lf=read_half_word(file)
+        else:
+            lf=first_half_word
+
         lh=read_half_word(file)
         
         bc=read_half_word(file)
@@ -130,8 +134,12 @@ class Jfm(Tfm):
         return (w,ds)
 
     @classmethod
-    def get_from_file(cls,file):
-        jfm_id = read_half_word(file)
+    def get_from_file(cls,file,first_half_word == None):
+        if first_half_word == None:
+            jfm_id=read_half_word(file)
+        else:
+            jfm_id=first_half_word
+
         jfm_nt = read_half_word(file)
         
         lf=read_half_word(file)
