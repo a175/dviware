@@ -15,6 +15,14 @@ def read_words_as_bytes(file,l):
     bb=file.read(4*l)
     return (bb)
 
+def read_three_quarter_word_as_jfm_endian(file):
+    """
+    function to read 3 bytes from file as an unsigned int with endian such that 0xABcdfe for cdfeAB.
+    """
+    bb=file.read(3)
+    bbb=bb[2:]+bb[:2]
+    return (int.from_bytes(bbb,byteorder='big',signed=False))
+
 def read_quarter_word(file):
     """
     function to read 1 bytes from file as an unsigned int.
@@ -98,8 +106,52 @@ class Tfm:
         else:
             param=Param.get_from_file(file,np)
 
-        return cls(ec,bc,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param)
+        return cls(header,charinfo,width,height,depth,italic,ligkern,kern,exten,param)
+
+class Jfm(Tfm):
+    def __init__(self,header,chartype,charinfo,width,height,depth,italic,gluekern,kern,glue,param):
+        super().__init__(header,charinfo,width,height,depth,italic,None,kern,None,param)
+        self.chartype=chartype
+        self.gulekern=gluekern
+        self.glue=glue
+    
+    @classmethod
+    def get_from_file(cls,file):
+        jfm_id = read_half_word(file)
+        jfm_nt = read_half_word(file)
         
+        lf=read_half_word(file)
+        lh=read_half_word(file)
+        
+        bc=read_half_word(file)
+        ec=read_half_word(file)
+        
+        nw=read_half_word(file)
+        nh=read_half_word(file)
+        
+        nd=read_half_word(file)
+        ni=read_half_word(file)
+        
+        nl=read_half_word(file)
+        nk=read_half_word(file)
+        
+        ng=read_half_word(file)
+        np=read_half_word(file)
+
+        header=Header.get_from_file(file,lh)
+        chartype=CharType.get_from_file(file,jfm_nt)
+        charinfo=CharInfo.get_from_file(file,bc,ec)
+        width=IntegerWords.get_from_file(file,nw)
+        height=IntegerWords.get_from_file(file,nh)
+        depth=IntegerWords.get_from_file(file,nd)
+        italic=IntegerWords.get_from_file(file,ni)        
+        gluekern=GlueKern.get_from_file(file,nl)
+        kern=IntegerWords.get_from_file(file,nk)
+        glue=Glue.get_from_file(file,ng)
+        param=JfmParam.get_from_file(file,np)
+
+        return cls(header,chartype,charinfo,width,height,depth,italic,gluekern,kern,glue,param)
+    
 class Header:
     ROMAN=0
     ITALIC=1
@@ -213,6 +265,29 @@ class CharInfoWord:
         remainder=read_quarter_word(file)
         return cls(width_index,height_index,depth_index,italic_index,tag,remainder)
 
+class CharType:
+    def __init__(self,data):
+        self.data=data
+
+    @classmethod
+    def get_from_file(cls,file,l):
+        d=[]
+        for i in range(l):
+            d.append(CharTypeWord(file))
+        return cls(d)
+
+
+class CharTypeWord:
+    def __init__(self,c,ctype):
+        self.c=c
+        self.ctype=ctype
+    
+    @classmethod
+    def get_from_file(cls,file):
+        c=read_three_quarter_word_as_jfm_endian(file)
+        ctype=read_quarter_word(file)
+        return cls(c,ctype)
+    
 class IntegerWords:
     def __init__(self,data):
         self.data=data
@@ -252,6 +327,56 @@ class LigKernWord:
         op_byte=read_quarter_word(file)
         reminder=read_quarter_word(file)
         return cls(skip,next_char,op_byte,reminder)
+
+class GlueKern:
+    def __init__(self,d):
+        self.data=d
+
+    @classmethod
+    def get_from_file(cls,file,l):
+        c=[]
+        for i in range(l):
+            c.append(GlueKernWord.get_from_file(file))
+        return cls(c)
+
+class GlueKernWord:
+    def __init__(self,skip,char_type,op_byte,reminder):
+        self.skip=skip
+        self.char_type=char_type
+        self.op_byte=op_byte
+        self.reminder=reminder
+    @classmethod
+    def get_from_file(cls,file):
+        skip=read_quarter_word(file)
+        char_type=read_quarter_word(file)
+        op_byte=read_quarter_word(file)
+        reminder=read_quarter_word(file)
+        return cls(skip,char_type,op_byte,reminder)
+
+class Glue:
+    def __init__(self,d):
+        self.data=d
+
+    @classmethod
+    def get_from_file(cls,file,l):
+        c=[]
+        for i in range(l//3):
+            c.append(GlueKernWord.get_from_file(file))
+        return cls(c)
+
+class GlueTripleWord:
+    def __init__(self,width,stretch,shrink):
+        self.width=width
+        self.stretch=stretch
+        self.shrink=shrink
+
+    @classmethod
+    def get_from_file(cls,file):
+        width=read_quarter_word(file)
+        stretch=read_quarter_word(file)
+        shrink=read_quarter_word(file)
+        return cls(width,stretch,shrink)
+
 
 class Exten:
     def __init__(self,d):
@@ -387,6 +512,36 @@ class ParamMathExtension(Param):
             xxx=read_words_as_bytes(file,l-13)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,default_rule_thickness,big_op_spacing1,big_op_spacing2,big_op_spacing3,big_op_spacing4,big_op_spacing5,xxx)
         
+class JfmParam:
+    def __init__(self,slant,kanji_space,kanji_space_stretch,kanji_space_shrink,zh,zw,xkanji_space,xkanji_space_stretch,xkanji_space_shrink,xxx):
+        self.slant=slant
+        self.kanji_space=kanji_space
+        self.kanji_space_stretch=kanji_space_stretch
+        self.kanji_space_shrink=kanji_space_shrink
+        self.zh=zh
+        self.zw=zw
+        self.xkanji_space=xkanji_space
+        self.xkanji_space_stretch=xkanji_space_stretch
+        self.xkanji_space_shrink=xkanji_space_shrink
+        self.xxx=xxx
+
+    @classmethod
+    def get_from_file(cls,file,l):
+        slant=read_quarter_word(file)
+        kanji_space=read_quarter_word(file)
+        kanji_space_stretch=read_quarter_word(file)
+        kanji_space_shrink=read_quarter_word(file)
+        zh=read_quarter_word(file)
+        zw=read_quarter_word(file)
+        xkanji_space=read_quarter_word(file)
+        xkanji_space_stretch=read_quarter_word(file)
+        xkanji_space_shrink=read_quarter_word(file)
+
+        if l==9:
+            xxx=None
+        else:
+            xxx=read_words_as_bytes(file,l-7)            
+        return cls(slant,kanji_space,kanji_space_stretch,kanji_space_shrink,zh,zw,xkanji_space,xkanji_space_stretch,xkanji_space_shrink,xxx)
 
 
 def test():
