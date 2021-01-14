@@ -581,7 +581,7 @@ def test():
     filename=sys.argv[1]
     with open(filename, mode='rb') as file:
         tfm=Tfm.get_from_file(file)
-        print(tfm.get_width(11))
+        print(tfm.header.encodingschema)
         
 if __name__ == "__main__":
     test()

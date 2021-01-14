@@ -14,7 +14,6 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.num_of_math = 0
         self.math_image_base_name = mathimagebasename
         self.list_stack=[]
-        self.spaceque=None
         self.p_is_empty=False
 
     def string2length(self,string):
@@ -43,18 +42,16 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             self.add_new_run_for_text()
             self.p_is_empty=True
 
-    def add_single_space(self,space=" "):
-        if self.spaceque==None:
-            self.spaceque=space
-    
-    def add_mathimage(self):
+    def add_space_if_necessary(self,h,v):
+        if h-self.cursor_h>100000 or v-self.cursor_v>0:
+            self.r.add_text(" ")
+        
+    def add_mathimage(self,h,v):
         self.p_is_empty=False
     
         self.num_of_math = self.num_of_math+1
         if not self.is_display:
-            if self.spaceque!=None:
-                self.r.add_text(self.spaceque)
-                self.spaceque=None
+            self.add_space_if_necessary(h,v)
             self.r=self.p.add_run()
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
         else:
@@ -71,10 +68,12 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         function for DVI.bop.
         """
         ans=super().bop(cc,p,bb)
+        self.cursor_h=0
+        self.cursor_v=0
         if self.p:
             self.document.add_page_break()
         if self.is_mathmode > 0:
-            self.add_mathimage()
+            self.add_mathimage(self.stackmemory.h,self.stackmemory.v)
 
     def draw_char(self,h,v,c):
         """
@@ -82,39 +81,19 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         """
         ans=super().draw_char(h,v,c)
         self.p_is_empty=False
-        if self.spaceque!=None:
-            self.r.add_text(self.spaceque)
-            self.spaceque=None
         string=self.fontregister.get_unicode(self.stackmemory.f,c)
         if not self.is_mathmode > 0:
             if self.r:
+                self.add_space_if_necessary(h,v)
                 self.r.add_text(string)
             else:
                 self.add_new_paragraph()
                 self.r.add_text(string)
+
+        width=self.fontregister.get_width(self.stackmemory.f,c)
+        self.cursor_h=self.stackmemory.h+width
+        self.cursor_v=self.stackmemory.v
         return(ans)
-
-
-    def add_to_h(self,b):
-        """
-        add d to stackmemory.add_to_h.
-        """
-        super().add_to_h(b)
-        if b>0:
-            if self.p:
-                if b>100000:
-                    if not self.is_mathmode > 0:
-                        self.add_single_space(" ")
-
-    def add_to_v(self,a):
-        """
-        add a to stackmemory.add_to_v.
-        """
-        super().add_to_v(a)
-        if a > 0:
-            if self.p:
-                if not self.is_mathmode > 0:
-                    self.add_single_space()
 
         
     def put(self,c,version,bb):
@@ -123,7 +102,6 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         this function calls self.draw_char().
         """
         ans=super().put(c,version,bb)
-        self.add_single_space("")
 
     def xxx(self,k,x,version,bb):
         """
@@ -150,15 +128,21 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.is_mathmode=self.is_mathmode+1
                 if self.is_mathmode==1:
                     self.is_display=False
-                    self.add_mathimage()
+                    self.add_mathimage(self.stackmemory.h,self.stackmemory.v)
             elif lit=="end_math":
+                if self.is_mathmode==1:
+                    self.cursor_h=self.stackmemory.h
+                    self.cursor_v=self.stackmemory.v
                 self.is_mathmode=self.is_mathmode-1
             elif lit=="begin_display":
                 self.is_mathmode=self.is_mathmode+1
                 if self.is_mathmode==1:
                     self.is_display=True
-                    self.add_mathimage()
+                    self.add_mathimage(self.stackmemory.h,self.stackmemory.v)
             elif lit=="end_display":
+                if self.is_mathmode==1:
+                    self.cursor_h=self.stackmemory.h
+                    self.cursor_v=self.stackmemory.v
                 self.is_mathmode=self.is_mathmode-1
             elif lit.startswith("begin_list"):
                 self.list_stack.append((0,0))
