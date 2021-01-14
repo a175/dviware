@@ -16,7 +16,7 @@ Modify your tex source:
 * please insert `\thispagestyle{empty}` after `\maketitle` if  `\maketitle` exists  (to omit page numbers in header or footer).
 * please copy `src/texstructurespecial.sty` to your directory where tex source is. And do the following:
 * please insert `\usepackage{texstructurespecial}` before `\begin{document}` (to embed structures of text as special).
-* please insert `\indentedraggedright` after `\begin{document}` (to change from "justified" alignment to "ragged right" alignment for avoiding line-breaks in inline mathmode).
+* please insert `\indentedraggedright` after `\begin{document}` (to change from "justified" alignment to "ragged right" alignment for avoiding hyphenation and line-breaks in inline mathmode).
 
 If ams-latex is used, then 
 * please add the option `reqno` to `\documentclass`.
