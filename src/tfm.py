@@ -1,5 +1,8 @@
 import sys
 
+
+UNIT=2**12
+
 def read_words_as_str(file,l):
     """
     function to read 4*l bytes from file as a string.
@@ -70,6 +73,7 @@ class Tfm:
         ds=self.header.get_design_size()
         return (w,ds)
 
+
     @classmethod
     def get_from_file(cls,file):
         lf=read_half_word(file)
@@ -115,6 +119,16 @@ class Jfm(Tfm):
         self.gulekern=gluekern
         self.glue=glue
     
+    def get_width(self,c):
+        """
+        returns pair of width of character c and design size
+        """
+        ctype=self.chartype.get_chartype(c)
+        wi=self.charinfo.get_width_index(ctype)
+        w=self.width.get_data_at(wi)
+        ds=self.header.get_design_size()
+        return (w,ds)
+
     @classmethod
     def get_from_file(cls,file):
         jfm_id = read_half_word(file)
@@ -174,7 +188,7 @@ class Header:
         self.face=face
         self.x3=x3
 
-    def get_designsize(self):
+    def get_design_size(self):
         return self.designsize
     
     @classmethod
@@ -269,11 +283,17 @@ class CharType:
     def __init__(self,data):
         self.data=data
 
+    def get_chartype(self,c):
+        for ctw in self.data:
+            if ctw.is_for(c):
+                return ctw.get_ctype()
+        return 0
+
     @classmethod
     def get_from_file(cls,file,l):
         d=[]
         for i in range(l):
-            d.append(CharTypeWord(file))
+            d.append(CharTypeWord.get_from_file(file))
         return cls(d)
 
 
@@ -281,7 +301,16 @@ class CharTypeWord:
     def __init__(self,c,ctype):
         self.c=c
         self.ctype=ctype
-    
+
+    def is_for(self,c):
+        if self.c==c:
+            return True
+        else:
+            return False
+
+    def get_ctype(self):
+        return self.c
+
     @classmethod
     def get_from_file(cls,file):
         c=read_three_quarter_word_as_jfm_endian(file)
@@ -551,8 +580,9 @@ def test():
         return
     filename=sys.argv[1]
     with open(filename, mode='rb') as file:
-        Tfm.get_from_file(file)
-
+        tfm=Tfm.get_from_file(file)
+        print(tfm.get_width(11))
+        
 if __name__ == "__main__":
     test()
 
