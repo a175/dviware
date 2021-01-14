@@ -4,8 +4,8 @@ import dviware
 import os
 
 class DviDocxStackMachine(dviware.DviStackMachine):
-    def __init__(self,mathimagebasename,debugmode=False):
-        super().__init__(debugmode)
+    def __init__(self,mathimagebasename,texmfpaths=[],debugmode=False):
+        super().__init__(texmfpaths,debugmode)
         self.document = docx.Document()
         self.p = None
         self.r = None
@@ -184,8 +184,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
 
 
 class PickupMathStackMachine(dviware.DviStackMachine):
-    def __init__(self,outfile,debugmode=False):
-        super().__init__(debugmode)
+    def __init__(self,outfile,texmfpaths=[],debugmode=False):
+        super().__init__(texmfpaths,debugmode)
         self.outfile = outfile
         self.is_mathmode = 0
 
@@ -504,14 +504,14 @@ def test():
     with open(filename, mode='rb') as file:
         outfilename=sys.argv[1]+'.math.dvi'
         with open(outfilename, mode='w+b') as outfile:            
-            dvistackmachine=PickupMathStackMachine(outfile,debugmode=False)
+            dvistackmachine=PickupMathStackMachine(outfile,texmfpaths=texmfpaths,debugmode=False)
             dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
             dviinterpreter.readCodes()
 #    for i in range(dvistackmachine.total_pages):
 #        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
     os.system("dvipng -T tight "+outfilename)
     with open(filename, mode='rb') as file:    
-        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',debugmode=False)
+        dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',texmfpaths=texmfpaths,debugmode=False)
         dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
         dvistackmachine.document.save(sys.argv[1]+'.docx')

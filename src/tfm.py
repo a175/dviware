@@ -138,7 +138,8 @@ class Jfm(Tfm):
         """
         returns pair of width of character c and design size
         """
-        ctype=self.chartype.get_chartype(c)
+        cx=c % 16777216
+        ctype=self.chartype.get_chartype(cx)
         wi=self.charinfo.get_width_index(ctype)
         w=self.width.get_data_at(wi)
         ds=self.header.get_design_size()
@@ -596,35 +597,36 @@ class JfmParam:
 
 
 
-def search_tfm_file_path(tfm,texmfpath):
-    lsr=os.path.join(texmfpath,"ls-R")
-    if os.path.exists(lsr):
-        with open(lsr) as file:
-            d=""
-            for l in file:
-                line=l.strip()
-                if line.startswith("./"):
-                    d=line[2:-1]
-                if line==tfm:
-                    return(os.path.join(texmfpath,d,tfm))
-    else:
-        fontdir=os.path.join(texmfpath,"fonts","tfm")
-        if os.path.exists(fontdir):
-            for d1 in os.listdir(fontdir):
-                fontdir1=os.path.join(fontdir,d1)
-                if os.path.isdir(fontdir1):
-                    for d2 in os.listdir(fontdir1):
-                        fontdir2=os.path.join(fontdir1,d2)
-                        if os.path.isdir(fontdir2):
-                            for f in os.listdir(fontdir2):
-                                if f==tfm:
-                                    return os.path.join(fontdir2,f)
+def search_tfm_file_path(tfm,texmfpaths):
+    for texmfpath in texmfpaths:
+        lsr=os.path.join(texmfpath,"ls-R")
+        if os.path.exists(lsr):
+            with open(lsr) as file:
+                d=""
+                for l in file:
+                    line=l.strip()
+                    if line.startswith("./"):
+                        d=line[2:-1]
+                    if line==tfm:
+                        return(os.path.join(texmfpath,d,tfm))
+        else:
+            fontdir=os.path.join(texmfpath,"fonts","tfm")
+            if os.path.exists(fontdir):
+                for d1 in os.listdir(fontdir):
+                    fontdir1=os.path.join(fontdir,d1)
+                    if os.path.isdir(fontdir1):
+                        for d2 in os.listdir(fontdir1):
+                            fontdir2=os.path.join(fontdir1,d2)
+                            if os.path.isdir(fontdir2):
+                                for f in os.listdir(fontdir2):
+                                    if f==tfm:
+                                        return os.path.join(fontdir2,f)
     return None
 
-def search_and_get_by_name(fontname,designsize,checksum,texmfpath):
-    filename=search_tfm_file_path(fontname+".tfm",texmfpath)
+def search_and_get_by_name(name,directory,designsize,checksum,texmfpaths):
+    fontname=directory+name
+    filename=search_tfm_file_path(fontname+".tfm",texmfpaths)
     if filename != None:
-        print(filename)
         with open(filename, mode='rb') as file:
             fh=read_half_word(file)        
             if fh == 11 or fh == 9:
@@ -642,8 +644,8 @@ def test():
         print("e.g.:  cmr10 /usr/share/texlive/texmf-dist/")
         return
     
-    tfm=search_and_get_by_name(sys.argv[1],10,0,sys.argv[2])
-    print(tfm.get_checksum())
+    tfm=search_and_get_by_name(sys.argv[1],"",10,0,[sys.argv[2]])
+    print(tfm,tfm.get_checksum())
         
 if __name__ == "__main__":
     test()

@@ -1,5 +1,6 @@
 import sys
 import fontenc
+import tfm
 
 class DVI:
     """
@@ -559,15 +560,18 @@ class DVIStackMemory:
 
 
 class FontRegister:
-    def __init__(self):
+    def __init__(self,texmfpaths=[]):
         self.fonts={}
-
+        self.tfms={}
+        self.texmfpaths=texmfpaths
+        
     def fnt_def(self,k,directory,name,s,d,c):
         """
         add a new font to list.
         """
         self.fonts[k]=fontenc.FontInfo.get_from_name(name,directory,s,d,c)
-
+        self.tfms[k]=tfm.search_and_get_by_name(name,directory,d,c,self.texmfpaths)
+        
     def get_unicode(self,fnt_num,c):
         """
         returns unicode string of c as fnt_num.
@@ -578,7 +582,7 @@ class FontRegister:
         """
         returns width of c.
         """
-        return self.fonts[fnt_num].get_width(c)
+        return self.tfms[fnt_num].get_width(c)
 
     def get_name(self,fnt_num):
         """
@@ -634,8 +638,8 @@ class DviStackMachine:
     """
     Stack Machine for DVI.
     """
-    def __init__(self,debugmode=False):
-        self.fontregister=FontRegister()
+    def __init__(self,texmfpaths=None,debugmode=False):
+        self.fontregister=FontRegister(texmfpaths)
         self.stackmemory=None
         self.is_debugmode=debugmode
     
@@ -917,11 +921,16 @@ class DviStackMachine:
 
 def test():
     if len(sys.argv)<2:
-        print("usage: python3 "+sys.argv[0]+" dvifile")
+        print("usage: python3 "+sys.argv[0]+" dvifile [texmfpath]")
+        print("texmfpath.. e.g.:  /usr/share/texlive/texmf-dist/")
         return
     filename=sys.argv[1]
+    if len(sys.argv) >= 2:
+        texmfpaths=[sys.argv[2]]
+    else:
+        texmfpaths=[]
     with open(filename, mode='rb') as file:
-        dvistackmachine=DviStackMachine(debugmode=True)
+        dvistackmachine=DviStackMachine(texmfpaths=texmfpaths,debugmode=True)
         #dvistackmachine=DviStackMachine(debugmode=False)
         dviinterpreter=DviInterpreter(file,dvistackmachine)
         dviinterpreter.readCodes()
