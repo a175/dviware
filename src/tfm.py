@@ -1,5 +1,5 @@
 import sys
-
+import os
 
 UNIT=2**12
 
@@ -49,7 +49,16 @@ def read_word(file):
 
 
 
+class ZeroTfm:
+    def __init__(self,fontname,design_size):
+        self.fontname=fontname
+        self.design_size=design_size
 
+    def get_width(self,c):
+        return (0,self.design_size)
+
+    def get_checksum(self):
+        return 0
 
 class Tfm:
     def __init__(self,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param):
@@ -73,7 +82,9 @@ class Tfm:
         ds=self.header.get_design_size()
         return (w,ds)
 
-
+    def get_checksum(self):
+        return self.header.get_checksum()
+        
     @classmethod
     def get_from_file(cls,file,first_half_word=None):
         if first_half_word == None:
@@ -134,7 +145,7 @@ class Jfm(Tfm):
         return (w,ds)
 
     @classmethod
-    def get_from_file(cls,file,first_half_word == None):
+    def get_from_file(cls,file,first_half_word = None):
         if first_half_word == None:
             jfm_id=read_half_word(file)
         else:
@@ -198,6 +209,9 @@ class Header:
 
     def get_design_size(self):
         return self.designsize
+
+    def get_checksum(self):
+        return self.checksum
     
     @classmethod
     def int_to_face(cls,d):
@@ -581,15 +595,55 @@ class JfmParam:
         return cls(slant,kanji_space,kanji_space_stretch,kanji_space_shrink,zh,zw,xkanji_space,xkanji_space_stretch,xkanji_space_shrink,xxx)
 
 
+
+def search_tfm_file_path(tfm,texmfpath):
+    lsr=os.path.join(texmfpath,"ls-R")
+    if os.path.exists(lsr):
+        with open(lsr) as file:
+            d=""
+            for l in file:
+                line=l.strip()
+                if line.startswith("./"):
+                    d=line[2:-1]
+                if line==tfm:
+                    return(os.path.join(texmfpath,d,tfm))
+    else:
+        fontdir=os.path.join(texmfpath,"fonts","tfm")
+        if os.path.exists(fontdir):
+            for d1 in os.listdir(fontdir):
+                fontdir1=os.path.join(fontdir,d1)
+                if os.path.isdir(fontdir1):
+                    for d2 in os.listdir(fontdir1):
+                        fontdir2=os.path.join(fontdir1,d2)
+                        if os.path.isdir(fontdir2):
+                            for f in os.listdir(fontdir2):
+                                if f==tfm:
+                                    return os.path.join(fontdir2,f)
+    return None
+
+def search_and_get_by_name(fontname,designsize,checksum,texmfpath):
+    filename=search_tfm_file_path(fontname+".tfm",texmfpath)
+    if filename != None:
+        print(filename)
+        with open(filename, mode='rb') as file:
+            fh=read_half_word(file)        
+            if fh == 11 or fh == 9:
+                tfm=Jfm.get_from_file(file,fh)
+            else:
+                tfm=Tfm.get_from_file(file,fh)
+            cs=tfm.get_checksum()
+            if cs==checksum or cs==0 or checksum==0:
+                return tfm
+    return ZeroTfm(fontname,designsize)
+
 def test():
-    if len(sys.argv)<2:
-        print("usage: python3 "+sys.argv[0]+" tfm")
-        print("e.g.:  "+"/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm")
+    if len(sys.argv)<3:
+        print("usage: python3 "+sys.argv[0]+" font texmfpath")
+        print("e.g.:  cmr10 /usr/share/texlive/texmf-dist/")
         return
-    filename=sys.argv[1]
-    with open(filename, mode='rb') as file:
-        tfm=Tfm.get_from_file(file)
-        print(tfm.header.encodingschema)
+    
+    tfm=search_and_get_by_name(sys.argv[1],10,0,sys.argv[2])
+    print(tfm.get_checksum())
         
 if __name__ == "__main__":
     test()
