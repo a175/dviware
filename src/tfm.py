@@ -53,8 +53,14 @@ class Tfm:
         self.exten=exten
         self.param=param
 
-            
-        
+    def get_width(self,c):
+        """
+        returns pair of width of character c and design size
+        """
+        wi=self.charinfo.get_width_index(c)
+        w=self.width.get_data_at(wi)
+        ds=self.header.get_design_size()
+        return (w,ds)
 
     @classmethod
     def get_from_file(cls,file):
@@ -77,7 +83,7 @@ class Tfm:
         np=read_half_word(file)
 
         header=Header.get_from_file(file,lh)
-        charinfo=CharInfo.get_from_file(file,ec-bc+1)
+        charinfo=CharInfo.get_from_file(file,bc,ec)
         width=IntegerWords.get_from_file(file,nw)
         height=IntegerWords.get_from_file(file,nh)
         depth=IntegerWords.get_from_file(file,nd)
@@ -92,7 +98,7 @@ class Tfm:
         else:
             param=Param.get_from_file(file,np)
 
-        return cls(header,charinfo,width,height,depth,italic,ligkern,kern,exten,param)
+        return cls(ec,bc,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param)
         
 class Header:
     ROMAN=0
@@ -116,6 +122,9 @@ class Header:
         self.face=face
         self.x3=x3
 
+    def get_designsize(self):
+        return self.designsize
+    
     @classmethod
     def int_to_face(cls,d):
         if d % 2 == 0:
@@ -155,15 +164,21 @@ class Header:
         return cls(checksum,designsize,encodingschema,fontfamily,seven_bit_safe_flag,x1,x2,face,x3)
 
 class CharInfo:
-    def __init__(self,c):
+    def __init__(self,c,bc):
         self.data=c
+        self.bc=bc
 
+    def get_width_index(self,c):
+        ci=self.data[c-self.bc]
+        return ci.get_width_index()
+        
     @classmethod
-    def get_from_file(cls,file,lh):
+    def get_from_file(cls,file,bc,ec):
+        l=ec-bc+1
         c=[]
-        for i in range(lh):
+        for i in range(l):
             c.append(CharInfoWord.get_from_file(file))
-        return cls(c)
+        return cls(c,bc)
 
 class CharInfoWord:
     def __init__(self,width_index,height_index,depth_index,italic_index,tag,remainder):
@@ -173,7 +188,10 @@ class CharInfoWord:
         self.italic_index=italic_index
         self.tag=tag
         self.remainder=remainder
-    
+
+    def get_width_index(self):
+        return self.width_index
+        
     @classmethod
     def int_to_height_depth(cls,d):
         depth=d % 16
@@ -199,6 +217,9 @@ class IntegerWords:
     def __init__(self,data):
         self.data=data
 
+    def get_data_at(self,i):
+        return self.data[i]
+    
     @classmethod
     def get_from_file(cls,file,l):
         d=[]
@@ -268,10 +289,6 @@ class Param:
         self.quad=quad
         self.extra_space=extra_space
         self.xxx=xxx
-        #For TeX math symbols
-        #num1, num2, num3, demon1. demon2, sup1, sup2, sup3, sub1, sub2, supdrop, subdrop, dimen1, dimen2, axis_height
-        #For TeX math extension
-        #default_rule_thickness, big_op_spacing1,..., big_op_spacing5
 
     @classmethod
     def get_from_file(cls,file,l):
