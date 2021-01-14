@@ -108,7 +108,7 @@ class Tfm:
         
         ne=read_half_word(file)
         np=read_half_word(file)
-
+        
         header=Header.get_from_file(file,lh)
         charinfo=CharInfo.get_from_file(file,bc,ec)
         width=IntegerWords.get_from_file(file,nw)
@@ -457,10 +457,10 @@ class ExtenWord:
         return cls(t,m,b,r)
     
 class Param:
-    def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,extra_space,xxx):
+    def __init__(self,slant,space,space_strech,space_shrink,x_height,quad,extra_space,xxx):
         self.slant=slant
         self.space=space
-        self.space_stretch=space_stretch
+        self.space_strech=space_strech
         self.space_shrink=space_shrink
         self.x_height=x_height
         self.quad=quad
@@ -469,13 +469,13 @@ class Param:
 
     @classmethod
     def get_from_file(cls,file,l):
-        slant=read_quarter_word(file)
-        space=read_quarter_word(file)
-        space_stretch=read_quarter_word(file)
-        space_shrink=read_quarter_word(file)
-        x_height=read_quarter_word(file)
-        quad=read_quarter_word(file)
-        extra_space=read_quarter_word(file)
+        slant=read_word(file)
+        space=read_word(file)
+        space_stretch=read_word(file)
+        space_shrink=read_word(file)
+        x_height=read_word(file)
+        quad=read_word(file)
+        extra_space=read_word(file)
         if l==7:
             xxx=None
         else:
@@ -504,28 +504,28 @@ class ParamMathSymbols(Param):
     
     @classmethod
     def get_from_file(cls,file,l):
-        slant=read_quarter_word(file)
-        space=read_quarter_word(file)
-        space_stretch=read_quarter_word(file)
-        space_shrink=read_quarter_word(file)
-        x_height=read_quarter_word(file)
-        quad=read_quarter_word(file)
-        extra_space=read_quarter_word(file)
-        num1=read_quarter_word(file)
-        num2=read_quarter_word(file)
-        num3=read_quarter_word(file)
-        demon1=read_quarter_word(file)
-        demon2=read_quarter_word(file)
-        sup1=read_quarter_word(file)
-        sup2=read_quarter_word(file)
-        sup3=read_quarter_word(file)
-        sub1=read_quarter_word(file)
-        sub2=read_quarter_word(file)
-        supdrop=read_quarter_word(file)
-        subdrop=read_quarter_word(file)
-        dimen1=read_quarter_word(file)
-        dimen2=read_quarter_word(file)
-        axis_height=read_quarter_word(file)
+        slant=read_word(file)
+        space=read_word(file)
+        space_stretch=read_word(file)
+        space_shrink=read_word(file)
+        x_height=read_word(file)
+        quad=read_word(file)
+        extra_space=read_word(file)
+        num1=read_word(file)
+        num2=read_word(file)
+        num3=read_word(file)
+        demon1=read_word(file)
+        demon2=read_word(file)
+        sup1=read_word(file)
+        sup2=read_word(file)
+        sup3=read_word(file)
+        sub1=read_word(file)
+        sub2=read_word(file)
+        supdrop=read_word(file)
+        subdrop=read_word(file)
+        dimen1=read_word(file)
+        dimen2=read_word(file)
+        axis_height=read_word(file)
         if l==22:
             xxx=None
         else:
@@ -545,19 +545,19 @@ class ParamMathExtension(Param):
 
     @classmethod
     def get_from_file(cls,file,l):
-        slant=read_quarter_word(file)
-        space=read_quarter_word(file)
-        space_stretch=read_quarter_word(file)
-        space_shrink=read_quarter_word(file)
-        x_height=read_quarter_word(file)
-        quad=read_quarter_word(file)
-        extra_space=read_quarter_word(file)
-        default_rule_thickness=read_quarter_word(file)
-        big_op_spacing1=read_quarter_word(file)
-        big_op_spacing2=read_quarter_word(file)
-        big_op_spacing3=read_quarter_word(file)
-        big_op_spacing4=read_quarter_word(file)
-        big_op_spacing5=read_quarter_word(file)
+        slant=read_word(file)
+        space=read_word(file)
+        space_stretch=read_word(file)
+        space_shrink=read_word(file)
+        x_height=read_word(file)
+        quad=read_word(file)
+        extra_space=read_word(file)
+        default_rule_thickness=read_word(file)
+        big_op_spacing1=read_word(file)
+        big_op_spacing2=read_word(file)
+        big_op_spacing3=read_word(file)
+        big_op_spacing4=read_word(file)
+        big_op_spacing5=read_word(file)
         if l==13:
             xxx=None
         else:
@@ -579,15 +579,15 @@ class JfmParam:
 
     @classmethod
     def get_from_file(cls,file,l):
-        slant=read_quarter_word(file)
-        kanji_space=read_quarter_word(file)
-        kanji_space_stretch=read_quarter_word(file)
-        kanji_space_shrink=read_quarter_word(file)
-        zh=read_quarter_word(file)
-        zw=read_quarter_word(file)
-        xkanji_space=read_quarter_word(file)
-        xkanji_space_stretch=read_quarter_word(file)
-        xkanji_space_shrink=read_quarter_word(file)
+        slant=read_word(file)
+        kanji_space=read_word(file)
+        kanji_space_stretch=read_word(file)
+        kanji_space_shrink=read_word(file)
+        zh=read_word(file)
+        zw=read_word(file)
+        xkanji_space=read_word(file)
+        xkanji_space_stretch=read_word(file)
+        xkanji_space_shrink=read_word(file)
 
         if l==9:
             xxx=None
@@ -646,6 +646,8 @@ def test():
     
     tfm=search_and_get_by_name(sys.argv[1],"",10,0,[sys.argv[2]])
     print(tfm,tfm.get_checksum())
+    print(tfm.header.fontfamily)
+    print(tfm.param.space,tfm.param.space_strech,tfm.param.space_shrink,tfm.param.x_height,tfm.param.quad,tfm.param.extra_space)
         
 if __name__ == "__main__":
     test()
