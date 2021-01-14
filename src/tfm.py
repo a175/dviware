@@ -60,6 +60,9 @@ class ZeroTfm:
     def get_checksum(self):
         return 0
 
+    def get_minimum_space_between_word(self):
+        return 0
+
 class Tfm:
     def __init__(self,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param):
         self.header=header
@@ -84,7 +87,10 @@ class Tfm:
 
     def get_checksum(self):
         return self.header.get_checksum()
-        
+
+    def get_minimum_space_between_word(self):
+        return self.param.space-self.param.space_shrink
+
     @classmethod
     def get_from_file(cls,file,first_half_word=None):
         if first_half_word == None:
@@ -144,6 +150,11 @@ class Jfm(Tfm):
         w=self.width.get_data_at(wi)
         ds=self.header.get_design_size()
         return (w,ds)
+
+    def get_minimum_space_between_word(self):
+        kk=self.param.kanji_space+self.param.kanji_space_stretch
+        ke=self.param.xkanji_space+self.param.xkanji_space_stretch
+        return max(kk,ke)+100
 
     @classmethod
     def get_from_file(cls,file,first_half_word = None):
@@ -647,6 +658,7 @@ def test():
     tfm=search_and_get_by_name(sys.argv[1],"",10,0,[sys.argv[2]])
     print(tfm,tfm.get_checksum())
     print(tfm.header.fontfamily)
+    print(tfm.header.designsize)
     print(tfm.param.space,tfm.param.space_strech,tfm.param.space_shrink,tfm.param.x_height,tfm.param.quad,tfm.param.extra_space)
         
 if __name__ == "__main__":
