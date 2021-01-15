@@ -580,12 +580,17 @@ class FontRegister:
         """
         return self.fonts[fnt_num].get_unicode(c)
 
-    def get_width(self,fnt_num,c):
+    def get_width(self,fnt_num,c,unitsize=None):
         """
         returns width of c.
         """
+        if unitsize==None:
+            num=DVI.SP_NUM
+            den=DVI.SP_DEN
+        else:
+            (num,den)=unitsize
         (width,designsize)=self.tfms[fnt_num].get_width_sp(c)
-        return width*designsize
+        return width*designsize*num*DVI.SP_DEN // (tfm.UNIT*den*DVI.SP_NUM)
 
     def get_minimum_space_between_word(self,fnt_num):
         """
@@ -683,7 +688,7 @@ class DviStackMachine:
         """
         if fnt_num==None:
             fnt_num=self.stackmemory.f
-        return self.fontregister.get_width(fnt_num,c)
+        return self.fontregister.get_width(fnt_num,c,(self.num,self.den))
 
     def get_font_encoding(self,fnt_num=None):
         """
