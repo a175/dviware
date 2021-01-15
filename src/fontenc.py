@@ -80,13 +80,6 @@ class FontInfo:
             else:
                 return "[!?"+self.family+":"+str(c)+"]"
         
-    def get_width(self,c):
-        """
-        returns width of c.
-        """
-        return 0
-
-    
         
     @classmethod
     def get_from_name(cls, name,directory=None,s=None,d=None,c=None):

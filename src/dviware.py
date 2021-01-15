@@ -266,6 +266,8 @@ class DVI:
     post_post = 249
     dir = 255
 
+    SP_NUM=25400000
+    SP_DEN=473628672
 
 class DviInterpreter:
     def __init__(self,file,dvimachine):
@@ -582,7 +584,7 @@ class FontRegister:
         """
         returns width of c.
         """
-        return self.tfms[fnt_num].get_width(c)
+        return self.tfms[fnt_num].get_width_sp(c)
 
     def get_name(self,fnt_num):
         """

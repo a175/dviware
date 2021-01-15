@@ -54,7 +54,7 @@ class ZeroTfm:
         self.fontname=fontname
         self.design_size=design_size
 
-    def get_width(self,c):
+    def get_width_sp(self,c):
         return (0,self.design_size)
 
     def get_checksum(self):
@@ -76,7 +76,7 @@ class Tfm:
         self.exten=exten
         self.param=param
 
-    def get_width(self,c):
+    def get_width_sp(self,c):
         """
         returns pair of width of character c and design size
         """
@@ -140,7 +140,7 @@ class Jfm(Tfm):
         self.gulekern=gluekern
         self.glue=glue
     
-    def get_width(self,c):
+    def get_width_sp(self,c):
         """
         returns pair of width of character c and design size
         """
