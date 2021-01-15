@@ -43,7 +43,13 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             self.p_is_empty=True
 
     def add_space_if_necessary(self,h,v):
-        if h-self.cursor_h>100000 or v-self.cursor_v>0:
+        
+        #if h-self.cursor_h>100000 or v-self.cursor_v>0:
+        #th=self.get_minimum_space_between_word()
+        th=10000
+        if th == None:
+            return
+        if h-self.cursor_h>=th or th-self.cursor_v>0:
             self.r.add_text(" ")
         
     def add_mathimage(self,h,v):

@@ -595,7 +595,7 @@ class ParamTeXMathItalic(Param):
         if l==6:
             xxx=None
         else:
-            xxx=read_words_as_bytes(file,l-6)            
+            xxx=read_words_as_bytes(file,l-6)
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,xxx)
         
 class JfmParam:

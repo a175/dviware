@@ -587,6 +587,13 @@ class FontRegister:
         (width,designsize)=self.tfms[fnt_num].get_width_sp(c)
         return width*designsize
 
+    def get_minimum_space_between_word(self,fnt_num):
+        """
+        returns minimum space between word.
+        """
+        width=self.tfms[fnt_num].get_minimum_space_between_word()
+        return width
+    
     def get_name(self,fnt_num):
         """
         returns scaledsize.
@@ -687,6 +694,16 @@ class DviStackMachine:
             fnt_num=self.stackmemory.f
         return self.fontregister.get_encoding(fnt_num)
 
+    def get_minimum_space_between_word(self,fnt_num=None):
+        """
+        returns minumum space between words..
+        If fnt_num is None, then fnt_num is current font.
+        """
+        if fnt_num==None:
+            fnt_num=self.stackmemory.f
+        if fnt_num < 0:
+            return None
+        return self.fontregister.get_minimum_space_between_word(fnt_num)
 
     def get_dimension_as_float(self,d):
         """
