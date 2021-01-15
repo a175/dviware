@@ -62,7 +62,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         else:
             self.r=self.p.add_run()
             self.r.add_break()
-            self.r.add_text("      ")
+            self.r.add_text("        ")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
             self.r.add_break()
         self.add_new_run_for_text()
