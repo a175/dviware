@@ -498,12 +498,18 @@ class PickupMathStackMachine(dviware.DviStackMachine):
 
 def test():
     if len(sys.argv)<2:
-        print("usage: python3 "+sys.argv[0]+" dvifile")
+        print("usage: python3 "+sys.argv[0]+" dvifile [texmfpath]")
+        print("texmfpath.. e.g.:  /usr/share/texlive/texmf-dist/")
         return
     filename=sys.argv[1]
+    if len(sys.argv) > 2:
+        texmfpaths=[sys.argv[2]]
+    else:
+        texmfpaths=[]
+
     with open(filename, mode='rb') as file:
         outfilename=sys.argv[1]+'.math.dvi'
-        with open(outfilename, mode='w+b') as outfile:            
+        with open(outfilename, mode='w+b') as outfile:
             dvistackmachine=PickupMathStackMachine(outfile,texmfpaths=texmfpaths,debugmode=False)
             dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
             dviinterpreter.readCodes()

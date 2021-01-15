@@ -584,7 +584,8 @@ class FontRegister:
         """
         returns width of c.
         """
-        return self.tfms[fnt_num].get_width_sp(c)
+        (width,designsize)=self.tfms[fnt_num].get_width_sp(c)
+        return width*designsize
 
     def get_name(self,fnt_num):
         """
@@ -927,7 +928,7 @@ def test():
         print("texmfpath.. e.g.:  /usr/share/texlive/texmf-dist/")
         return
     filename=sys.argv[1]
-    if len(sys.argv) >= 2:
+    if len(sys.argv) > 2:
         texmfpaths=[sys.argv[2]]
     else:
         texmfpaths=[]
