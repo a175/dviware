@@ -125,9 +125,12 @@ class Tfm:
         kern=IntegerWords.get_from_file(file,nk)
         exten=IntegerWords.get_from_file(file,ne)
         if header.encodingschema.startswith("TeX math symbols"):
-            param=ParamMathSymbols.get_from_file(file,np)
+            param=ParamTeXMathSymbols.get_from_file(file,np)
         elif header.encodingschema.startswith("TeX math extension"):
-            param=ParamMathExtension.get_from_file(file,np)
+            param=ParamTeXMathExtension.get_from_file(file,np)
+        elif header.encodingschema.startswith("TeX math italic"):
+            param=ParamTeXMathItalic.get_from_file(file,np)
+            
         else:
             param=Param.get_from_file(file,np)
 
@@ -493,10 +496,11 @@ class Param:
             xxx=read_words_as_bytes(file,l-7)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,xxx)
 
-class ParamMathSymbols(Param):
+class ParamTeXMathSymbols(Param):
     #For TeX math symbols
     def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,extra_space,num1, num2, num3, demon1, demon2, sup1, sup2, sup3, sub1, sub2, supdrop, subdrop, dimen1, dimen2, axis_height,xxx):
         super().__init__(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,xxx)
+        self.math_space=self.extra_space
         self.num1=num1
         self.num2=num2
         self.num3=num3
@@ -543,7 +547,7 @@ class ParamMathSymbols(Param):
             xxx=read_words_as_bytes(file,l-22)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,num1, num2, num3, demon1, demon2, sup1, sup2, sup3, sub1, sub2, supdrop, subdrop, dimen1, dimen2, axis_height,xxx)
 
-class ParamMathExtension(Param):
+class ParamTeXMathExtension(Param):
     #For TeX math extension
     def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,extra_space,default_rule_thickness,big_op_spacing1,big_op_spacing2,big_op_spacing3,big_op_spacing4,big_op_spacing5,xxx):
         super().__init__(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,xxx)
@@ -574,6 +578,25 @@ class ParamMathExtension(Param):
         else:
             xxx=read_words_as_bytes(file,l-13)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,default_rule_thickness,big_op_spacing1,big_op_spacing2,big_op_spacing3,big_op_spacing4,big_op_spacing5,xxx)
+        
+class ParamTeXMathItalic(Param):
+    #For TeX math extension
+    def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,xxx):
+        super().__init__(slant,space,space_stretch,space_shrink,x_height,quad,None,xxx)
+
+    @classmethod
+    def get_from_file(cls,file,l):
+        slant=read_word(file)
+        space=read_word(file)
+        space_stretch=read_word(file)
+        space_shrink=read_word(file)
+        x_height=read_word(file)
+        quad=read_word(file)
+        if l==6:
+            xxx=None
+        else:
+            xxx=read_words_as_bytes(file,l-6)            
+        return cls(slant,space,space_stretch,space_shrink,x_height,quad,xxx)
         
 class JfmParam:
     def __init__(self,slant,kanji_space,kanji_space_stretch,kanji_space_shrink,zh,zw,xkanji_space,xkanji_space_stretch,xkanji_space_shrink,xxx):
@@ -637,6 +660,7 @@ def search_tfm_file_path(tfm,texmfpaths):
 def search_and_get_by_name(name,directory,designsize,checksum,texmfpaths):
     fontname=directory+name
     filename=search_tfm_file_path(fontname+".tfm",texmfpaths)
+    print(filename)
     if filename != None:
         with open(filename, mode='rb') as file:
             fh=read_half_word(file)        
