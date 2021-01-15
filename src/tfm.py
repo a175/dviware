@@ -42,10 +42,10 @@ def read_half_word(file):
 
 def read_word(file):
     """
-    function to read 4 bytes from file as an unsigned int.
+    function to read 4 bytes from file as an signed int.
     """
     bb=file.read(4)
-    return (int.from_bytes(bb,byteorder='big',signed=False))
+    return (int.from_bytes(bb,byteorder='big',signed=True))
 
 
 
