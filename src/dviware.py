@@ -269,7 +269,7 @@ class DVI:
     SP_NUM=25400000
     SP_DEN=473628672
 
-class DviInterpreter:
+class DviParser:
     def __init__(self,file,dvimachine):
         self.file=file
         self.dvimachine=dvimachine
@@ -434,7 +434,7 @@ class DviInterpreter:
             return(code,[d],0,bb+bb1)
         return(code,None,None,bb)
     
-    def readCodeAndArg(self):
+    def parse_one_code(self):
         """
         function to read and do one code.
         """
@@ -486,9 +486,9 @@ class DviInterpreter:
             r=self.dvimachine.d(arg[0],bb)
         return (code,arg,version,r,bb)
 
-    def readCodes(self):
+    def parse(self):
         while True:
-            (code,arg,version,r,bb)=self.readCodeAndArg()
+            (code,arg,version,r,bb)=self.parse_one_code()
             if code==DVI.post_post:
                 break
 
@@ -986,8 +986,8 @@ def test():
     with open(filename, mode='rb') as file:
         dvistackmachine=DviStackMachine(texmfpaths=texmfpaths,debugmode=True)
         #dvistackmachine=DviStackMachine(debugmode=False)
-        dviinterpreter=DviInterpreter(file,dvistackmachine)
-        dviinterpreter.readCodes()
+        dviparser=DviParser(file,dvistackmachine)
+        dviparser.parse()
 
 if __name__=="__main__":
     test()

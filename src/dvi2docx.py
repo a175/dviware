@@ -517,15 +517,15 @@ def test():
         outfilename=sys.argv[1]+'.math.dvi'
         with open(outfilename, mode='w+b') as outfile:
             dvistackmachine=PickupMathStackMachine(outfile,texmfpaths=texmfpaths,debugmode=False)
-            dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
-            dviinterpreter.readCodes()
+            dviinterpreter=dviware.DviParser(file,dvistackmachine)
+            dviinterpreter.parse()
 #    for i in range(dvistackmachine.total_pages):
 #        os.system("dvipng -T tight -pp "+str(i+1)+" "+outfilename)
     os.system("dvipng -T tight "+outfilename)
     with open(filename, mode='rb') as file:    
         dvistackmachine=DviDocxStackMachine(sys.argv[1]+'.math',texmfpaths=texmfpaths,debugmode=False)
-        dviinterpreter=dviware.DviInterpreter(file,dvistackmachine)
-        dviinterpreter.readCodes()
+        dviinterpreter=dviware.DviParser(file,dvistackmachine)
+        dviinterpreter.parse()
         dvistackmachine.document.save(sys.argv[1]+'.docx')
         
 if __name__=="__main__":
