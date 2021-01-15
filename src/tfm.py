@@ -62,6 +62,12 @@ class ZeroTfm:
     def get_minimum_space_between_word(self):
         return (0,self.design_size)
 
+    def get_bc(self):
+        return 0
+
+    def get_len(self):
+        return 0
+
 class Tfm:
     def __init__(self,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param):
         self.header=header
@@ -84,12 +90,22 @@ class Tfm:
         ds=self.header.get_design_size()
         return (w,ds)
 
+    def get_tag(self,c):
+        t=self.charinfo.get_tag(c)
+        return t
+
     def get_checksum(self):
         return self.header.get_checksum()
 
     def get_minimum_space_between_word(self):
         ds=self.header.get_design_size()
         return (self.param.space-self.param.space_shrink,ds)
+
+    def get_bc(self):
+        return self.charinfo.bc
+
+    def get_len(self):
+        return self.charinfo.get_len()
 
     @classmethod
     def get_from_file(cls,file,first_half_word=None):
@@ -276,6 +292,13 @@ class CharInfo:
         ci=self.data[c-self.bc]
         return ci.get_width_index()
         
+    def get_tag(self,c):
+        ci=self.data[c-self.bc]
+        return ci.get_tag()
+
+    def get_len(self):
+        return len(self.data)
+
     @classmethod
     def get_from_file(cls,file,bc,ec):
         l=ec-bc+1
@@ -295,6 +318,9 @@ class CharInfoWord:
 
     def get_width_index(self):
         return self.width_index
+        
+    def get_tag(self):
+        return self.tag
         
     @classmethod
     def int_to_height_depth(cls,d):
@@ -683,7 +709,11 @@ def test():
     print(tfm,tfm.get_checksum())
     print(tfm.header.fontfamily)
     print(tfm.header.designsize)
-    print(tfm.param.space,tfm.param.space_strech,tfm.param.space_shrink,tfm.param.x_height,tfm.param.quad,tfm.param.extra_space)
+    bc=tfm.get_bc()
+    for i in range(tfm.get_len()):
+        c=bc+i
+        print(hex(c),'=',c,tfm.get_width_sp(c),tfm.get_tag(c))
+    #print(tfm.param.space,tfm.param.space_strech,tfm.param.space_shrink,tfm.param.x_height,tfm.param.quad,tfm.param.extra_space)
         
 if __name__ == "__main__":
     test()
