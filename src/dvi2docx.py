@@ -81,7 +81,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         """
         ans=super().draw_char(h,v,c)
         self.p_is_empty=False
-        string=self.fontregister.get_unicode(self.stackmemory.f,c)
+        string=self.get_unicode(c)
         if not self.is_mathmode > 0:
             if self.r:
                 self.add_space_if_necessary(h,v)
@@ -90,7 +90,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
                 self.add_new_paragraph()
                 self.r.add_text(string)
 
-        width=self.fontregister.get_width(self.stackmemory.f,c)
+        width=self.get_width(c)
         self.cursor_h=self.stackmemory.h+width
         self.cursor_v=self.stackmemory.v
         return(ans)
@@ -189,13 +189,13 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         self.outfile = outfile
         self.is_mathmode = 0
 
-    def is_acceptable_font(self,k):
+    def is_acceptable_font(self,fnt_num=None):
         """
         Now we assume dvipng. So remove japanese.
         """
-        if self.fontregister.get_encoding(k)=="JIS":
+        if self.get_font_encoding(fnt_num)=="JIS":
             return False
-        if self.fontregister.get_encoding(k)=="U":
+        if self.get_font_encoding(fnt_num)=="U":
             return False
         return True
 
@@ -237,7 +237,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().set(c,version,bb)
         if self.is_mathmode > 0:
-            if self.is_acceptable_font(self.stackmemory.f):
+            if self.is_acceptable_font():
                 self.outfile.write(bb)
 
         
@@ -258,7 +258,7 @@ class PickupMathStackMachine(dviware.DviStackMachine):
         """
         ans=super().put(c,version,bb)
         if self.is_mathmode > 0:
-            if self.is_acceptable_font(self.stackmemory.f):
+            if self.is_acceptable_font():
                 self.outfile.write(bb)
 
     def put_rule(self,a,b,bb):

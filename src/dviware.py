@@ -653,6 +653,41 @@ class DviStackMachine:
         if self.is_debugmode:
             print(*s)
 
+    def add_new_font(self,k,directory,name,s,d,c):
+        """
+        Add new font at k. 
+        This is called by fnt_def
+        """
+        self.fontregister.fnt_def(k,directory,name,s,d,c)
+
+    def get_unicode(self,c,fnt_num=None):
+        """
+        returns unicode of character c in the font fnt_num.
+        If fnt_num is None, then fnt_num is current font.
+        """
+        if fnt_num==None:
+            fnt_num=self.stackmemory.f
+        return self.fontregister.get_unicode(fnt_num,c)
+
+    def get_width(self,c,fnt_num=None):
+        """
+        returns width of character c in the font fnt_num.
+        If fnt_num is None, then fnt_num is current font.
+        """
+        if fnt_num==None:
+            fnt_num=self.stackmemory.f
+        return self.fontregister.get_width(fnt_num,c)
+
+    def get_font_encoding(self,fnt_num=None):
+        """
+        returns font encoding e.g., OT1.
+        If fnt_num is None, then fnt_num is current font.
+        """
+        if fnt_num==None:
+            fnt_num=self.stackmemory.f
+        return self.fontregister.get_encoding(fnt_num)
+
+
     def get_dimension_as_float(self,d):
         """
         returns d*mag*num / den (10^-7 m).
@@ -672,15 +707,14 @@ class DviStackMachine:
         self.log("%% box at:", h, v)
         self.log("%% box size:", a, b)
         print("box of size ",a,b)
-    
+
     def draw_char(self,h,v,c):
         """
         primitive function to draw a character.
         """
         self.log("%% char at:", h, v)
-        string=self.fontregister.get_unicode(self.stackmemory.f,c)
+        string=self.get_unicode(c)
         self.log("%% char:", string)
-
 
     def add_to_h(self,b):
         """
@@ -692,9 +726,9 @@ class DviStackMachine:
         """
         add width of c to stackmemory.add_to_h.
         """
-        width=self.fontregister.get_width(self.stackmemory.f,c)
+        width=self.get_width(c)
         self.stackmemory.add_to_h(width)
-    
+
     def add_to_v(self,a):
         """
         add a to stackmemory.add_to_v.
@@ -865,8 +899,8 @@ class DviStackMachine:
         self.log("%% design size =",d)
         self.log("%% dir :",n[:a])
         self.log("%% name :",n[a:])
-        self.fontregister.fnt_def(k,n[:a],n[a:],s,d,c)
-
+        self.add_new_font(k,n[:a],n[a:],s,d,c)
+        
     def pre(self,i,num,den,mag,k,x,bb):
         """
         function for DVI.pre.
