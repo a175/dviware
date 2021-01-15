@@ -400,7 +400,7 @@ class DviParser:
             return(code,[k,x],len_param,bb+bb1+bb2)
         elif DVI.fnt_def1 <= code and code <= DVI.fnt_def4:
             (k,len_param,bb1)=self.read_ux(code,DVI.fnt_def1)
-            (c,bb2)=self.read_u(4)
+            (c,bb2)=self.read_d(4)
             (s,bb3)=self.read_d(4)
             (d,bb4)=self.read_d(4)
             (a,bb5)=self.read_u(1)
@@ -592,12 +592,20 @@ class FontRegister:
         (width,designsize)=self.tfms[fnt_num].get_width_sp(c)
         return width*designsize*num*DVI.SP_DEN // (tfm.UNIT*den*DVI.SP_NUM)
 
-    def get_minimum_space_between_word(self,fnt_num):
+    def get_minimum_space_between_word(self,fnt_num,unitsize=None):
         """
         returns minimum space between word.
         """
-        width=self.tfms[fnt_num].get_minimum_space_between_word()
-        return width
+        """
+        returns width of c.
+        """
+        if unitsize==None:
+            num=DVI.SP_NUM
+            den=DVI.SP_DEN
+        else:
+            (num,den)=unitsize
+        (width,designsize)=self.tfms[fnt_num].get_minimum_space_between_word()
+        return width*designsize*num*DVI.SP_DEN // (tfm.UNIT*den*DVI.SP_NUM)
     
     def get_name(self,fnt_num):
         """
@@ -708,7 +716,7 @@ class DviStackMachine:
             fnt_num=self.stackmemory.f
         if fnt_num < 0:
             return None
-        return self.fontregister.get_minimum_space_between_word(fnt_num)
+        return self.fontregister.get_minimum_space_between_word(fnt_num,(self.num,self.den))
 
     def get_dimension_as_float(self,d):
         """

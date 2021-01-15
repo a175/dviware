@@ -48,7 +48,6 @@ def read_word(file):
     return (int.from_bytes(bb,byteorder='big',signed=True))
 
 
-
 class ZeroTfm:
     def __init__(self,fontname,design_size):
         self.fontname=fontname
@@ -61,7 +60,7 @@ class ZeroTfm:
         return 0
 
     def get_minimum_space_between_word(self):
-        return 0
+        return (0,self.design_size)
 
 class Tfm:
     def __init__(self,header,charinfo,width,height,depth,italic,ligkern,kern,exten,param):
@@ -89,7 +88,8 @@ class Tfm:
         return self.header.get_checksum()
 
     def get_minimum_space_between_word(self):
-        return self.param.space-self.param.space_shrink
+        ds=self.header.get_design_size()
+        return (self.param.space-self.param.space_shrink,ds)
 
     @classmethod
     def get_from_file(cls,file,first_half_word=None):
@@ -157,7 +157,8 @@ class Jfm(Tfm):
     def get_minimum_space_between_word(self):
         kk=self.param.kanji_space+self.param.kanji_space_stretch
         ke=self.param.xkanji_space+self.param.xkanji_space_stretch
-        return max(kk,ke)+100
+        ds=self.header.get_design_size()        
+        return (max(kk,ke)+100,ds)
 
     @classmethod
     def get_from_file(cls,file,first_half_word = None):
@@ -660,7 +661,6 @@ def search_tfm_file_path(tfm,texmfpaths):
 def search_and_get_by_name(name,directory,designsize,checksum,texmfpaths):
     fontname=directory+name
     filename=search_tfm_file_path(fontname+".tfm",texmfpaths)
-    print(filename)
     if filename != None:
         with open(filename, mode='rb') as file:
             fh=read_half_word(file)        

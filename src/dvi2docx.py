@@ -43,9 +43,8 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             self.p_is_empty=True
 
     def add_space_if_necessary(self,h,v):
-        
-        #if h-self.cursor_h>100000 or v-self.cursor_v>0:
         #th=self.get_minimum_space_between_word()
+        #print(th, h-self.cursor_h,h-self.cursor_h>=10000,h-self.cursor_h>=th)
         th=10000
         if th == None:
             return
