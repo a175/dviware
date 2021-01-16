@@ -1,6 +1,9 @@
 import sys
 import os
 
+"""
+denominator of fixed word
+"""
 DEN=2**12
 
 def read_words_as_str(file,l):
@@ -53,14 +56,17 @@ class ZeroTfm:
         self.fontname=fontname
         self.design_size=design_size
 
+    def get_design_size_sp(self):
+        return (0,(1,1))
+    
     def get_width_sp(self,c):
-        return (0,self.design_size)
+        return (0,(1,1))
+
+    def get_minimum_space_between_word_sp(self):
+        return (0,(1,1))
 
     def get_checksum(self):
         return 0
-
-    def get_minimum_space_between_word(self):
-        return (0,self.design_size)
 
     def get_bc(self):
         return 0
@@ -82,12 +88,17 @@ class Tfm:
         self.param=param
 
     def get_design_size_sp(self):
+        """
+        returns pair of designsize and (num,den)
+        such that designsize*num/den is design size in sp.
+        """
         ds=self.header.get_design_size()
         return (ds,(1,DEN))
     
     def get_width_sp(self,c):
         """
-        returns pair of width of character c and design size
+        returns pair of width and (num,den)
+        such that width*num/den is width of character c in sp.
         """
         wi=self.charinfo.get_width_index(c)
         w=self.width.get_data_at(wi)
@@ -96,6 +107,10 @@ class Tfm:
         return (w,(ds*num,den*DEN))
 
     def get_minimum_space_between_word_sp(self):
+        """
+        returns pair of width and (num,den)
+        such that width*num/den is width of minimum space in sp.
+        """
         (ds,scale)=self.get_design_size_sp()
         (num,den)=scale
         return (self.param.space-self.param.space_shrink,(ds*num,den*DEN))
@@ -164,7 +179,8 @@ class Jfm(Tfm):
     
     def get_width_sp(self,c):
         """
-        returns pair of width of character c and design size
+        returns pair of width of character c and (num,den)
+        such that width*num/den is width in sp.
         """
         cx=c % 16777216
         ctype=self.chartype.get_chartype(cx)
@@ -174,11 +190,16 @@ class Jfm(Tfm):
         return (w,ds)
 
     def get_minimum_space_between_word_sp(self):
+        """
+        returns pair of width and (num,den)
+        such that width*num/den is width of minimum space in sp.
+        Usually Japanese language has no space between words.
+        """
         kk=self.param.kanji_space+self.param.kanji_space_stretch
         ke=self.param.xkanji_space+self.param.xkanji_space_stretch
         (ds,scale)=self.get_design_size_sp()
         (num,den)=scale
-        return (max(kk,ke)+100,(ds*num,den*DEN))
+        return (max(kk,ke)+2*den*DEN,(ds*num,den*DEN))
 
     @classmethod
     def get_from_file(cls,file,first_half_word = None):
