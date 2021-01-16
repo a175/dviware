@@ -144,9 +144,6 @@ class Tfm:
             param=ParamTeXMathSymbols.get_from_file(file,np)
         elif header.encodingschema.startswith("TeX math extension"):
             param=ParamTeXMathExtension.get_from_file(file,np)
-        elif header.encodingschema.startswith("TeX math italic"):
-            param=ParamTeXMathItalic.get_from_file(file,np)
-            
         else:
             param=Param.get_from_file(file,np)
 
@@ -510,17 +507,44 @@ class Param:
 
     @classmethod
     def get_from_file(cls,file,l):
-        slant=read_word(file)
-        space=read_word(file)
-        space_stretch=read_word(file)
-        space_shrink=read_word(file)
-        x_height=read_word(file)
-        quad=read_word(file)
-        extra_space=read_word(file)
-        if l==7:
+        if l > 0:
+            slant=read_word(file)
+        else:
+            slant=0
+        l=l-1
+        if l > 0:
+            space=read_word(file)
+        else:
+            space=0
+        l=l-1
+        if l > 0:            
+            space_stretch=read_word(file)
+        else:
+            space_stretch=0
+        l=l-1
+        if l > 0:
+            space_shrink=read_word(file)
+        else:
+            space_shrink=0
+        l=l-1
+        if l > 0:
+            x_height=read_word(file)
+        else:
+            x_height=0
+        l=l-1
+        if l > 0:
+            quad=read_word(file)
+        else:
+            quad=0
+        l=l-1
+        if l > 0:
+            extra_space=read_word(file)
+        else:
+            extra_space=0
+        if l>0:
             xxx=None
         else:
-            xxx=read_words_as_bytes(file,l-7)            
+            xxx=read_words_as_bytes(file,l)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,xxx)
 
 class ParamTeXMathSymbols(Param):
@@ -606,24 +630,6 @@ class ParamTeXMathExtension(Param):
             xxx=read_words_as_bytes(file,l-13)            
         return cls(slant,space,space_stretch,space_shrink,x_height,quad,extra_space,default_rule_thickness,big_op_spacing1,big_op_spacing2,big_op_spacing3,big_op_spacing4,big_op_spacing5,xxx)
         
-class ParamTeXMathItalic(Param):
-    #For TeX math extension
-    def __init__(self,slant,space,space_stretch,space_shrink,x_height,quad,xxx):
-        super().__init__(slant,space,space_stretch,space_shrink,x_height,quad,None,xxx)
-
-    @classmethod
-    def get_from_file(cls,file,l):
-        slant=read_word(file)
-        space=read_word(file)
-        space_stretch=read_word(file)
-        space_shrink=read_word(file)
-        x_height=read_word(file)
-        quad=read_word(file)
-        if l==6:
-            xxx=None
-        else:
-            xxx=read_words_as_bytes(file,l-6)
-        return cls(slant,space,space_stretch,space_shrink,x_height,quad,xxx)
         
 class JfmParam:
     def __init__(self,slant,kanji_space,kanji_space_stretch,kanji_space_shrink,zh,zw,xkanji_space,xkanji_space_stretch,xkanji_space_shrink,xxx):
