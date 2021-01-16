@@ -1,7 +1,7 @@
 import sys
 import os
 
-UNIT=2**12
+DEN=2**12
 
 def read_words_as_str(file,l):
     """
