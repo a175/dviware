@@ -589,23 +589,22 @@ class FontRegister:
             den=DVI.SP_DEN
         else:
             (num,den)=unitsize
-        (width,designsize)=self.tfms[fnt_num].get_width_sp(c)
-        return width*designsize*num*DVI.SP_DEN // (tfm.DEN*tfm.DEN*den*DVI.SP_NUM)
+        (width,scale)=self.tfms[fnt_num].get_width_sp(c)
+        (snum,sden)=scale
+        return width*snum*num*DVI.SP_DEN // (sden*den*DVI.SP_NUM)
 
     def get_minimum_space_between_word(self,fnt_num,unitsize=None):
         """
         returns minimum space between word.
-        """
-        """
-        returns width of c.
         """
         if unitsize==None:
             num=DVI.SP_NUM
             den=DVI.SP_DEN
         else:
             (num,den)=unitsize
-        (width,designsize)=self.tfms[fnt_num].get_minimum_space_between_word()
-        return width*designsize*num*DVI.SP_DEN // (tfm.DEN*tfm.DEN*den*DVI.SP_NUM)
+        (width,scale)=self.tfms[fnt_num].get_minimum_space_between_word_sp()
+        (snum,sden)=scale
+        return width*snum*num*DVI.SP_DEN // (sden*den*DVI.SP_NUM)
     
     def get_name(self,fnt_num):
         """

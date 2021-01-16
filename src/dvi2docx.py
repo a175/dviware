@@ -46,6 +46,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         if self.p_is_empty:
             return
         th=self.get_minimum_space_between_word()
+        print(th,h-self.cursor_h)
         #th=10000
         if th == None:
             return

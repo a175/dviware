@@ -81,14 +81,24 @@ class Tfm:
         self.exten=exten
         self.param=param
 
+    def get_design_size_sp(self):
+        ds=self.header.get_design_size()
+        return (ds,(1,DEN))
+    
     def get_width_sp(self,c):
         """
         returns pair of width of character c and design size
         """
         wi=self.charinfo.get_width_index(c)
         w=self.width.get_data_at(wi)
-        ds=self.header.get_design_size()
-        return (w,ds)
+        (ds,scale)=self.get_design_size_sp()
+        (num,den)=scale
+        return (w,(ds*num,den*DEN))
+
+    def get_minimum_space_between_word_sp(self):
+        (ds,scale)=self.get_design_size_sp()
+        (num,den)=scale
+        return (self.param.space-self.param.space_shrink,(ds*num,den*DEN))
 
     def get_tag(self,c):
         t=self.charinfo.get_tag(c)
@@ -96,10 +106,6 @@ class Tfm:
 
     def get_checksum(self):
         return self.header.get_checksum()
-
-    def get_minimum_space_between_word(self):
-        ds=self.header.get_design_size()
-        return (self.param.space-self.param.space_shrink,ds)
 
     def get_bc(self):
         return self.charinfo.bc
@@ -167,11 +173,12 @@ class Jfm(Tfm):
         ds=self.header.get_design_size()
         return (w,ds)
 
-    def get_minimum_space_between_word(self):
+    def get_minimum_space_between_word_sp(self):
         kk=self.param.kanji_space+self.param.kanji_space_stretch
         ke=self.param.xkanji_space+self.param.xkanji_space_stretch
-        ds=self.header.get_design_size()        
-        return (max(kk,ke)+100,ds)
+        (ds,scale)=self.get_design_size_sp()
+        (num,den)=scale
+        return (max(kk,ke)+100,(ds*num,den*DEN))
 
     @classmethod
     def get_from_file(cls,file,first_half_word = None):
