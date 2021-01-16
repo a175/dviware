@@ -605,7 +605,7 @@ class FontRegister:
         else:
             (num,den)=unitsize
         (width,designsize)=self.tfms[fnt_num].get_minimum_space_between_word()
-        return width*designsize*num*DVI.SP_DEN // (tfm.UNIT*den*DVI.SP_NUM)
+        return width*designsize*num*DVI.SP_DEN // (tfm.UNIT*tfm.UNIT*den*DVI.SP_NUM)
     
     def get_name(self,fnt_num):
         """

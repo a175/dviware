@@ -43,17 +43,16 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             self.p_is_empty=True
 
     def add_space_if_necessary(self,h,v):
-        #th=self.get_minimum_space_between_word()
-        #print(th, h-self.cursor_h,h-self.cursor_h>=10000,h-self.cursor_h>=th)
-        th=10000
+        if self.p_is_empty:
+            return
+        th=self.get_minimum_space_between_word()
+        #th=10000
         if th == None:
             return
         if h-self.cursor_h>=th or th-self.cursor_v>0:
             self.r.add_text(" ")
         
     def add_mathimage(self,h,v):
-        self.p_is_empty=False
-    
         self.num_of_math = self.num_of_math+1
         if not self.is_display:
             self.add_space_if_necessary(h,v)
@@ -65,6 +64,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             self.r.add_text("        ")
             self.r.add_picture(self.math_image_base_name+str(self.num_of_math)+".png")
             self.r.add_break()
+        self.p_is_empty=False    
         self.add_new_run_for_text()
             
 
@@ -85,7 +85,6 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         add a character to paragraph as new run.
         """
         ans=super().draw_char(h,v,c)
-        self.p_is_empty=False
         string=self.get_unicode(c)
         if not self.is_mathmode > 0:
             if self.r:
@@ -94,10 +93,10 @@ class DviDocxStackMachine(dviware.DviStackMachine):
             else:
                 self.add_new_paragraph()
                 self.r.add_text(string)
-
         width=self.get_width(c)
         self.cursor_h=self.stackmemory.h+width
         self.cursor_v=self.stackmemory.v
+        self.p_is_empty=False
         return(ans)
 
         
