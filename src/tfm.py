@@ -63,7 +63,7 @@ class ZeroTfm:
         return (0,(1,1))
 
     def get_minimum_space_between_word_sp(self):
-        return (0,(1,1))
+        return (10000,(1,1))
 
     def get_checksum(self):
         return 0
