@@ -4,7 +4,7 @@ import os
 """
 denominator of fixed word
 """
-DEN=2**12
+DEN=2**20
 
 def read_words_as_str(file,l):
     """
