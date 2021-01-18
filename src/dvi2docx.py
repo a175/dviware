@@ -26,7 +26,11 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         self.r=self.p.add_run()
         if self.stackmemory.f!=-1:
             s=self.fontregister.get_scaledsize(self.stackmemory.f)
-            self.r.font.size=docx.shared.Mm(self.get_dimension_as_float(s)/10000000)            
+            #fs=s*self.mag*self.num/(self.den*(10**7)*(10**3))
+            #print(s,s/(2**16),self.mag,self.num,self.den)
+            #self.r.font.size=docx.shared.Mm(fs)            
+            fs=s/(2**16)
+            self.r.font.size=docx.shared.Pt(fs)            
             self.r.font.italic=self.fontregister.is_italic(self.stackmemory.f)
             self.r.font.bold=self.fontregister.is_bold(self.stackmemory.f)
             self.r.font.small_caps=self.fontregister.is_small_caps(self.stackmemory.f)

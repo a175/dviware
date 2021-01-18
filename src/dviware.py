@@ -717,12 +717,6 @@ class DviStackMachine:
             return None
         return self.fontregister.get_minimum_space_between_word(fnt_num,(self.num,self.den))
 
-    def get_dimension_as_float(self,d):
-        """
-        returns d*mag*num / den (10^-7 m).
-        """
-        return float(self.mag*self.num*d)/float(self.den)
-
     def check_version_of_dvi(self,i):
         """
         Check version
