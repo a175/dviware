@@ -52,6 +52,7 @@ class DviDocxStackMachine(dviware.DviStackMachine):
         th=self.get_minimum_space_between_word()
         if th == None:
             return
+        th=10000
         if h-self.cursor_h>=th or th-self.cursor_v>0:
             self.r.add_text(" ")
         
