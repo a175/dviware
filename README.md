@@ -8,6 +8,17 @@ The script dvi2docx converts from *.dvi to *.dvi.docx by
 python3 pathtosrc/dvi2docx.py input.dvi
 ```
 
+## requirement
+
+This script needs `docx` module.  
+We can install the module by pip3 as
+```
+pip3 install --user python-docx
+```
+Note that the package name is `python-docx`.  
+The package `docx` is older versions, which does now work with current python3.
+Please use the package `python-docx`, not `docx`.
+
 ## Tips to convert
 
 Modify your tex source:
