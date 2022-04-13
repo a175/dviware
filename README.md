@@ -38,7 +38,10 @@ Convert your dvi file (e.g., hoge.dvi) to a docx file (e.g., hoge.dvi.docx) by
 ```
 python3 pathtosrc/dvi2docx.py hoge.dvi
 ```
-
+If you know a path for texmf, e.g., `/usr/share/texlive/texmf-dist/`, then you can give the path by
+```
+python3 pathtosrc/dvi2docx.py hoge.dvi /usr/share/texlive/texmf-dist/
+```
 Open your docx (e.g., hoge.dvi.docx) file by Word, and modify:
 * replace ` ]` (space+ket) to `]` (ket). (`\cite` makes this string.)
 * replace `[!?...]` (bra+!+?+fontname+:+codepoint(decimal)+ket) to better characters. (symbol fonts in text make this string.)
